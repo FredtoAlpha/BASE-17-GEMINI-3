@@ -2,37 +2,21 @@
  * ===================================================================
  * 🆔 GÉNÉRATEUR D'IDENTIFIANTS (Format Historique & Compatible)
  * ===================================================================
- * Scanne les onglets selon le niveau et génère les IDs au format :
- * [NOM_ONGLET][1000 + INDEX] -> Ex: 6°51001
+ * Scanne les onglets sources et génère les IDs au format :
+ * [NOM_ONGLET][1000 + INDEX] -> Ex: 6°51001 ou ECOLE11001
  * Ce format texte est CRITIQUE pour la compatibilité du système.
+ *
+ * Pattern accepté : ECOLE1, 6°1, GAMARRA°4, etc.
+ * (Même pattern que COMPTER.gs, LEGACY_Context.gs, etc.)
  */
 
 function genererNomPrenomEtID() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ui = SpreadsheetApp.getUi();
-  const configSheet = ss.getSheetByName('_CONFIG');
 
-  // 1. RÉCUPÉRER LE CONTEXTE (Pour ne pas traiter les mauvais onglets)
-  let niveauCible = "";
-  if (configSheet) {
-      const data = configSheet.getDataRange().getValues();
-      for(let i=0; i<data.length; i++) {
-          if(data[i][0] === 'NIVEAU') {
-              niveauCible = String(data[i][1]).trim();
-              break;
-          }
-      }
-  }
-
-  Logger.log(`📌 Génération ID pour niveau : ${niveauCible}`);
-
-  // 2. DÉTERMINER LE FILTRE DES ONGLETS
-  // On cible les onglets sources potentiels selon le niveau
-  let regexSource;
-  if (niveauCible === "5°" || niveauCible === "5e") regexSource = /^6[°e]\d+$/;
-  else if (niveauCible === "4°" || niveauCible === "4e") regexSource = /^5[°e]\d+$/;
-  else if (niveauCible === "3°" || niveauCible === "3e") regexSource = /^4[°e]\d+$/;
-  else regexSource = null; // Pour 6e ou autre, on est plus large
+  // PATTERN UNIVERSEL (Identique à COMPTER.gs & LEGACY_Context.gs)
+  // Accepte: ECOLE1, ECOLE2, 6°1, 5°2, GAMARRA°4, ALBEXT°7, etc.
+  const sourcePattern = /^(ECOLE\d+|[A-Za-z0-9_-]+°\d+)$/;
 
   const sheets = ss.getSheets().filter(s => {
     const name = s.getName();
@@ -40,13 +24,12 @@ function genererNomPrenomEtID() {
     if (name.startsWith('_') || name === 'ACCUEIL' || name === 'CONSOLIDATION') return false;
     if (name.endsWith('TEST') || name.endsWith('FIN') || name.endsWith('DEF')) return false;
 
-    // Filtre contexte
-    if (regexSource) return regexSource.test(name);
-    return true;
+    // Filtre : doit matcher le pattern universel des onglets sources
+    return sourcePattern.test(name);
   });
 
   if (sheets.length === 0) {
-    ui.alert(`⚠️ Aucun onglet source trouvé pour le niveau ${niveauCible}.`);
+    ui.alert(`⚠️ Aucun onglet source trouvé (ex: ECOLE1, 6°1, GAMARRA°4).`);
     return;
   }
 
