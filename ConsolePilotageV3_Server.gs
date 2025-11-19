@@ -69,20 +69,20 @@ function v3_runInitializationWithForm(formData) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const config = getConfig();
 
-    // 1. Vérifier le mot de passe
-    if (formData.adminPassword !== config.ADMIN_PASSWORD) {
+    // 1. Vérifier le mot de passe (cherche d'abord ADMIN_PASSWORD, sinon ADMIN_PASSWORD_DEFAULT)
+    const expectedPassword = config.ADMIN_PASSWORD || CONFIG.ADMIN_PASSWORD_DEFAULT || "admin123";
+    if (formData.adminPassword !== expectedPassword) {
       return {
         success: false,
         error: "Mot de passe administrateur incorrect"
       };
     }
 
-    // 2. Valider les données
-    const niveauxValides = ["6°", "5°", "4°", "3°"];
-    if (!niveauxValides.includes(formData.niveau)) {
+    // 2. Valider les données (Validation OUVERTE - accepte n'importe quel niveau)
+    if (!formData.niveau || formData.niveau.trim() === "") {
       return {
         success: false,
-        error: "Niveau invalide. Valeurs acceptées: 6°, 5°, 4°, 3°"
+        error: "Niveau scolaire requis"
       };
     }
 
@@ -100,15 +100,18 @@ function v3_runInitializationWithForm(formData) {
       };
     }
 
-    // 3. Nettoyer les LV2 et Options
+    // 3. Nettoyer les LV2, Options, et Dispositifs
     const lv2Array = nettoyerListeInput(formData.lv2);
     const optArray = nettoyerListeInput(formData.opt);
+    // Nouveau : On traite aussi les dispositifs
+    const dispoArray = nettoyerListeInput(formData.dispo);
 
     Logger.log(`V3 Init - Niveau: ${formData.niveau}`);
     Logger.log(`V3 Init - Sources: ${formData.nbSources}`);
     Logger.log(`V3 Init - Destinations: ${formData.nbDest}`);
     Logger.log(`V3 Init - LV2: ${lv2Array.join(', ')}`);
     Logger.log(`V3 Init - Options: ${optArray.join(', ')}`);
+    Logger.log(`V3 Init - Dispositifs: ${dispoArray.join(', ')}`);
 
     // 4. Vérifier si déjà initialisé (silencieux, pas de popup)
     const structureSheet = ss.getSheetByName(config.SHEETS.STRUCTURE);
@@ -118,7 +121,7 @@ function v3_runInitializationWithForm(formData) {
 
     // 5. Appeler la fonction d'initialisation principale SANS POPUPS
     // On appelle directement initialiserSysteme() au lieu de ouvrirInitialisation()
-    initialiserSysteme(formData.niveau, formData.nbSources, formData.nbDest, lv2Array, optArray);
+    initialiserSysteme(formData.niveau, formData.nbSources, formData.nbDest, lv2Array, optArray, dispoArray);
 
     return {
       success: true,
@@ -466,5 +469,97 @@ function v3_getStructureInfo() {
       success: false,
       error: e.message || 'Erreur lors de la lecture de _STRUCTURE'
     };
+  }
+}
+
+/**
+ * ===================================================================
+ * PHASE 3 : ÉDITEUR DE STRUCTURE INTÉGRÉ
+ * ===================================================================
+ */
+
+/**
+ * Récupère les données pour l'éditeur de structure intégré (Phase 3)
+ */
+function v3_getStructureDataForEditor() {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const config = getConfig(); // Lit _CONFIG pour avoir les options/LV2 définies en Phase 1
+
+    // 1. Récupérer les options actives
+    const lv2List = (config.LV2 || "").split(',').map(s => s.trim()).filter(Boolean);
+    const optList = (config.OPT || "").split(',').map(s => s.trim()).filter(Boolean);
+
+    // 2. Générer le squelette basé sur la config Init
+    const niveau = config.NIVEAU || "Niveau";
+    const nbDest = parseInt(config.NB_DEST) || 6;
+
+    const classesGenerated = [];
+    for(let i=1; i<=nbDest; i++) {
+       classesGenerated.push({
+         name: `${niveau}${i}`,
+         capacity: 30,
+         quotas: {} // Vide par défaut
+       });
+    }
+
+    return {
+      success: true,
+      lv2: lv2List,
+      options: optList,
+      classes: classesGenerated
+    };
+
+  } catch (e) {
+    Logger.log("Erreur v3_getStructureDataForEditor: " + e.toString());
+    return { success: false, error: e.toString() };
+  }
+}
+
+/**
+ * Sauvegarde la structure depuis l'éditeur intégré
+ */
+function v3_saveStructureFromEditor(data) {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName('_STRUCTURE');
+
+    // Si pas de feuille, on la recrée (sécurité)
+    if (!sheet) {
+      sheet = ss.insertSheet('_STRUCTURE');
+    }
+
+    // On réécrit le sheet proprement
+    sheet.clear();
+
+    const headers = ["Type", "Nom Classe", "Capacité Max", "Options (Quotas)"];
+    sheet.appendRow(headers);
+    sheet.getRange(1,1,1,4).setFontWeight("bold").setBackground("#d3d3d3");
+
+    // Construire les lignes
+    const rows = [];
+    data.classes.forEach(cls => {
+        // Construire la chaîne d'options : "ITA=5,LATIN=2"
+        let optsParts = [];
+        if (cls.quotas) {
+            for (const [key, val] of Object.entries(cls.quotas)) {
+                if (val > 0) optsParts.push(`${key}=${val}`);
+            }
+        }
+
+        // Ligne pour la classe (Type TEST pour le moteur)
+        rows.push(["TEST", cls.name, cls.capacity, optsParts.join(',')]);
+    });
+
+    if(rows.length > 0) {
+        sheet.getRange(2, 1, rows.length, 4).setValues(rows);
+    }
+
+    Logger.log("Structure enregistrée avec succès");
+    return { success: true, message: "Structure enregistrée !" };
+
+  } catch(e) {
+    Logger.log("Erreur v3_saveStructureFromEditor: " + e.toString());
+    return { success: false, error: e.toString() };
   }
 }

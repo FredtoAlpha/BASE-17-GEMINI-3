@@ -3,265 +3,393 @@
 <head>
     <base target="_top">
     <meta charset="UTF-8">
-    <title>CONSOLE EXPERT V3</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;900&display=swap" rel="stylesheet">
+    <title>PILOTAGE EXPERT V3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
     <style>
         :root {
-            --primary: #6366f1; --bg-dark: #0f172a; --text-white: #f8fafc;
-            --success: #22c55e; --warning: #eab308;
+            --primary: #6366f1; --bg-dark: #0f172a; --text: #f8fafc; --card: #1e293b;
+            --success: #22c55e; --warning: #eab308; --danger: #ef4444;
         }
-        body {
-            font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-white);
-            margin: 0; height: 100vh; overflow: hidden;
-            display: grid; grid-template-columns: 320px 1fr;
-        }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-dark); color: var(--text); margin: 0; height: 100vh; display: grid; grid-template-columns: 280px 1fr 300px; overflow: hidden; }
 
-        /* TYPOGRAPHIE XXL */
-        h1 { font-size: 32px; font-weight: 900; margin-bottom: 20px; letter-spacing: -1px; }
-        h2 { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 15px; text-transform: uppercase; }
+        /* SIDEBAR */
+        .sidebar { background: #020617; padding: 20px; border-right: 1px solid #334155; display: flex; flex-direction: column; }
+        .brand { font-size: 20px; font-weight: 800; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; color: white; }
+        .nav-item { padding: 15px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; color: #94a3b8; font-weight: 600; transition: 0.2s; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: white; }
+        .nav-item.active { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
 
-        label { font-size: 14px; font-weight: 800; color: #94a3b8; margin-bottom: 8px; display: block; text-transform: uppercase; }
+        /* MAIN */
+        .main { padding: 40px; overflow-y: auto; }
+        .phase { display: none; animation: fadeIn 0.3s; }
+        .phase.active { display: block; }
+        .card { background: var(--card); padding: 30px; border-radius: 16px; border: 1px solid #334155; margin-bottom: 20px; }
 
-        input, select {
-            width: 100%; padding: 16px; font-size: 16px; font-weight: 700;
-            background: #1e293b; border: 2px solid #334155; color: white; border-radius: 8px;
-            margin-bottom: 20px; box-sizing: border-box;
-        }
-        input:focus, select:focus { border-color: var(--primary); outline: none; }
+        h1 { font-size: 28px; font-weight: 900; margin-bottom: 10px; }
+        h2 { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 20px; text-transform: uppercase; }
+        label { display: block; font-size: 12px; font-weight: 700; color: #94a3b8; margin-bottom: 5px; text-transform: uppercase; }
 
-        .btn {
-            width: 100%; padding: 20px; font-size: 18px; font-weight: 900;
-            text-transform: uppercase; border: none; border-radius: 10px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px;
-        }
-        .btn-primary { background: var(--primary); color: white; }
+        input, select { width: 100%; background: #0f172a; border: 2px solid #334155; color: white; padding: 12px; border-radius: 6px; font-weight: 600; font-size: 14px; box-sizing: border-box; }
+        input:focus { border-color: var(--primary); outline: none; }
+
+        /* BOUTONS AVEC SPINNER */
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 10px; text-transform: uppercase; transition: 0.2s; }
+        .btn:disabled { opacity: 0.6; cursor: wait; }
+        .btn-primary { background: var(--primary); color: white; margin-bottom: 10px; }
+        .btn-primary:hover { background: #4f46e5; }
         .btn-success { background: var(--success); color: #022c22; }
         .btn-secondary { background: #334155; color: white; }
 
-        /* SIDEBAR */
-        .sidebar { background: #020617; padding: 30px; border-right: 1px solid #1e293b; overflow-y: auto; }
-        .brand { font-size: 26px; font-weight: 900; margin-bottom: 50px; display: flex; gap: 15px; align-items: center; }
+        /* TABLEAU ÉDITEUR */
+        .editor-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .editor-table th { text-align: left; padding: 10px; color: #94a3b8; font-size: 12px; text-transform: uppercase; border-bottom: 2px solid #334155; }
+        .editor-table td { padding: 10px; border-bottom: 1px solid #334155; }
+        .editor-table input { margin: 0; padding: 8px; width: 70px; text-align: center; }
 
-        .nav-item {
-            padding: 18px; margin-bottom: 10px; border-radius: 10px; cursor: pointer;
-            font-size: 16px; font-weight: 700; color: #94a3b8; display: flex; gap: 15px;
-            transition: 0.2s;
-        }
-        .nav-item:hover { background: rgba(99, 102, 241, 0.1); }
-        .nav-item.active { background: var(--primary); color: white; }
+        /* PANEL DROITE */
+        .panel-right { background: #1e293b; border-left: 1px solid #334155; padding: 25px; overflow-y: auto; }
+        .status-box { background: #0f172a; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #334155; }
+        .status-val { font-size: 32px; font-weight: 900; color: white; }
+        .status-lbl { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; }
 
-        /* CONTENT */
-        .main-content { padding: 50px; overflow-y: auto; }
-        .card { background: #1e293b; padding: 40px; border-radius: 20px; border: 1px solid #334155; }
-        .phase { display: none; }
-        .phase.active { display: block; animation: fadeIn 0.3s; }
-
-        .alert { background: rgba(99, 102, 241, 0.1); padding: 20px; border-left: 5px solid var(--primary); font-weight: 600; margin: 20px 0; border-radius: 5px; }
-
+        /* SPINNER CSS */
+        .spinner { width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s linear infinite; display: none; }
+        .btn.loading .spinner { display: block; }
+        .btn.loading span { display: none; }
+        @keyframes spin { to { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <aside class="sidebar">
-        <div class="brand"><i class="fas fa-rocket"></i> PILOTE V3</div>
-        <nav>
-            <div class="nav-item active" onclick="goToPhase(1)" id="nav-1">
-                <span>1. ARCHITECTURE</span>
-            </div>
-            <div class="nav-item" onclick="goToPhase(2)" id="nav-2">
-                <span>2. DONNÉES</span>
-            </div>
-            <div class="nav-item" onclick="goToPhase(3)" id="nav-3">
-                <span>3. STRATÉGIE</span>
-            </div>
-            <div class="nav-item" onclick="goToPhase(4)" id="nav-4">
-                <span>4. MOTEUR</span>
-            </div>
-            <div class="nav-item" onclick="goToPhase(5)" id="nav-5">
-                <span>5. PILOTAGE</span>
-            </div>
-        </nav>
-    </aside>
+<aside class="sidebar">
+    <div class="brand"><i class="fas fa-rocket"></i> PILOTE V3</div>
+    <nav>
+        <div class="nav-item active" onclick="goTo(1)" id="nav-1"><i class="fas fa-hammer"></i> INIT</div>
+        <div class="nav-item" onclick="goTo(2)" id="nav-2"><i class="fas fa-database"></i> DATA</div>
+        <div class="nav-item" onclick="goTo(3)" id="nav-3"><i class="fas fa-chess-board"></i> STRUCTURE</div>
+        <div class="nav-item" onclick="goTo(4)" id="nav-4"><i class="fas fa-cogs"></i> MOTEUR</div>
+        <div class="nav-item" onclick="goTo(5)" id="nav-5"><i class="fas fa-check"></i> FINAL</div>
+    </nav>
+</aside>
 
-    <main class="main-content">
+<main class="main">
 
-        <div id="phase-1" class="phase active">
-            <h1>INITIALISATION DU SOCLE</h1>
-            <div class="card">
-                <h2>Paramètres Généraux</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                    <div>
-                        <label>🔒 Mot de Passe Admin</label>
-                        <input type="password" id="config-pwd" value="admin123">
-                    </div>
-                    <div>
-                        <label>🎓 Niveau Scolaire</label>
-                        <select id="config-level">
-                            <optgroup label="École Primaire">
-                                <option value="CM2">CM2</option>
-                            </optgroup>
-                            <optgroup label="Collège" selected>
-                                <option value="6°">6ème</option>
-                                <option value="5°" selected>5ème</option>
-                                <option value="4°">4ème</option>
-                                <option value="3°">3ème</option>
-                            </optgroup>
-                            <optgroup label="Lycée">
-                                <option value="2nde">2nde</option>
-                                <option value="1ère">1ère</option>
-                            </optgroup>
-                        </select>
-                    </div>
-                    <div>
-                        <label>📂 Nb Classes Sources</label>
-                        <input type="number" id="config-nb-src" value="6" min="1" max="30">
-                    </div>
-                    <div>
-                        <label>🎯 Nb Classes Cibles</label>
-                        <input type="number" id="config-nb-dest" value="6" min="1" max="20">
-                    </div>
+    <div id="phase-1" class="phase active">
+        <h1>INITIALISATION DU PROJET</h1>
+        <div class="card">
+            <h2>1. Architecture</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                <div><label>🔒 Mdp Admin</label><input type="password" id="pwd" value="admin123"></div>
+                <div>
+                    <label>🎓 Niveau</label>
+                    <select id="niv">
+                        <option value="6°">6ème</option>
+                        <option value="5°" selected>5ème</option>
+                        <option value="4°">4ème</option>
+                        <option value="3°">3ème</option>
+                        <option value="CM2">CM2</option>
+                        <option value="2nde">2nde</option>
+                    </select>
                 </div>
+                <div><label>📂 Sources</label><input type="number" id="src" value="6"></div>
+            </div>
 
-                <div class="alert">
-                    <i class="fas fa-info-circle"></i>
-                    Le système va créer les onglets automatiquement.
+            <hr style="border: 0; border-top: 1px solid #334155; margin: 20px 0;">
+
+            <h2>2. Dictionnaire des Codes</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+                <div><label>🌍 LV2</label><input type="text" id="lv2" value="ANG, ALL, ESP, ITA" placeholder="Ex: ANG, ESP, ALL"></div>
+                <div><label>🎯 Options</label><input type="text" id="opt" value="LATIN, CHAV" placeholder="Ex: LATIN, GREC"></div>
+                <div><label>📋 Dispositifs</label><input type="text" id="dispo" value="PAI, PPRE, ULIS" placeholder="Ex: PAI, PPRE"></div>
+            </div>
+
+            <button onclick="runInit()" id="btn-init" class="btn btn-primary" style="margin-top: 20px;">
+                <div class="spinner"></div>
+                <span>LANCER LA CONSTRUCTION</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="phase-2" class="phase">
+        <h1>REMPLISSAGE DES DONNÉES</h1>
+        <div class="card">
+            <h2>Saisie Manuelle</h2>
+            <p style="color: #94a3b8; margin-bottom: 20px;">Les onglets sont créés. Fermez la console, remplissez les données sources, et revenez pour consolider.</p>
+            <button onclick="google.script.host.close()" class="btn btn-secondary" style="margin-bottom: 20px;">
+                <i class="fas fa-door-open"></i> QUITTER POUR REMPLIR
+            </button>
+
+            <h2>Consolidation des Données</h2>
+            <button onclick="runConso()" id="btn-conso" class="btn btn-primary">
+                <div class="spinner"></div>
+                <span>CONSOLIDER & VÉRIFIER</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="phase-3" class="phase">
+        <h1>STRATÉGIE DE RÉPARTITION</h1>
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <h2>Définition des Classes Cibles</h2>
+                <button onclick="loadStructure()" id="btn-load-struct" class="btn btn-secondary" style="width: auto; padding: 10px 20px;">
+                    <i class="fas fa-sync"></i> Actualiser
+                </button>
+            </div>
+
+            <div style="overflow-x: auto; margin: 20px 0; border: 1px solid #334155; border-radius: 8px;">
+                <table class="editor-table" id="struct-table">
+                    <thead>
+                        <tr id="struct-header">
+                            <th>CLASSE</th>
+                            <th>CAPACITÉ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="struct-body">
+                        <tr><td colspan="5" style="text-align:center; padding: 30px;">Chargement...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                <div style="color: var(--warning); font-size: 13px; font-weight: 600;">
+                    <i class="fas fa-info-circle"></i> Total Places : <span id="total-cap">0</span>
                 </div>
-
-                <button onclick="runInit()" class="btn btn-primary">
-                    <i class="fas fa-hammer"></i> LANCER LA CONSTRUCTION
+                <button onclick="saveStructure()" id="btn-save-struct" class="btn btn-success" style="width: 200px;">
+                    <div class="spinner"></div>
+                    <span>VALIDER</span>
                 </button>
             </div>
         </div>
+    </div>
 
-        <div id="phase-2" class="phase">
-            <h1>IMPORTATION DONNÉES</h1>
-            <div class="card">
-                <h2>Action Requise</h2>
-                <p style="font-size: 18px; margin-bottom: 30px;">
-                    Les onglets sont créés. Vous devez maintenant les remplir avec vos listes d'élèves.
-                </p>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <button onclick="google.script.host.close()" class="btn btn-secondary">
-                        <i class="fas fa-door-open"></i> 1. QUITTER POUR REMPLIR
-                    </button>
-                    <button onclick="runDiagnostics()" class="btn btn-primary">
-                        <i class="fas fa-sync"></i> 2. CONSOLIDER & VÉRIFIER
-                    </button>
-                </div>
-            </div>
+    <div id="phase-4" class="phase">
+        <h1>OPTIMISATION</h1>
+        <div class="card">
+            <h2>Lancement du Moteur</h2>
+            <p style="color: #94a3b8; margin-bottom: 20px;">L'algorithme va répartir les élèves selon votre structure et générer les classes TEST optimisées.</p>
+            <button onclick="runEngine()" id="btn-engine" class="btn btn-primary" style="height: 80px; font-size: 20px;">
+                <div class="spinner"></div>
+                <span>DÉMARRER LE CALCUL</span>
+            </button>
         </div>
+    </div>
 
-        <div id="phase-3" class="phase">
-            <h1>STRATÉGIE</h1>
-            <div class="card">
-                <h2>Définition des Quotas</h2>
-                <p style="margin-bottom: 20px;">Configurez les niveaux attendus pour chaque classe cible.</p>
-                <button onclick="google.script.run.ouvrirConfigurationComplete()" class="btn btn-primary">
-                    <i class="fas fa-sliders-h"></i> OUVRIR LE CONFIGURATEUR
-                </button>
-                <button onclick="goToPhase(4)" class="btn btn-success">
-                    <i class="fas fa-check"></i> VALIDER
-                </button>
-            </div>
+    <div id="phase-5" class="phase">
+        <h1>FINALISATION</h1>
+        <div class="card">
+            <h2>Génération des Onglets FIN</h2>
+            <p style="color: #94a3b8; margin-bottom: 20px;">Créer les onglets définitifs à partir des résultats TEST.</p>
+            <button onclick="finalize()" id="btn-fin" class="btn btn-success">
+                <div class="spinner"></div>
+                <span>GÉNÉRER ONGLETS "FIN"</span>
+            </button>
         </div>
+    </div>
 
-        <div id="phase-4" class="phase">
-            <h1>MOTEUR ULTIMATE</h1>
-            <div class="card">
-                <h2>Lancement du Calcul</h2>
-                <p style="margin-bottom: 20px;">L'algorithme va optimiser la répartition avec asymétrie pondérée.</p>
-                <button onclick="runEngine()" class="btn btn-primary">
-                    <i class="fas fa-rocket"></i> LANCER L'OPTIMISATION
-                </button>
-            </div>
-        </div>
+</main>
 
-        <div id="phase-5" class="phase">
-            <h1>PILOTAGE FINAL</h1>
-            <div class="card">
-                <h2>Validation & Finalisation</h2>
-                <button onclick="openProfsInterface()" class="btn btn-secondary">
-                    <i class="fas fa-users"></i> INTERFACE PROFS (SWAP)
-                </button>
-                <button onclick="finalize()" class="btn btn-success">
-                    <i class="fas fa-lock"></i> FINALISER (CRÉER FIN)
-                </button>
-            </div>
-        </div>
+<aside class="panel-right">
+    <h2 style="font-size: 12px; color: #64748b; margin-bottom: 20px;">ÉTAT SYSTÈME</h2>
 
-    </main>
+    <div class="status-box">
+        <div class="status-val" id="stat-msg">PRÊT</div>
+        <div class="status-lbl">STATUS</div>
+    </div>
 
-    <script>
-        function goToPhase(n) {
-            document.querySelectorAll('.phase').forEach(e => e.classList.remove('active'));
-            document.getElementById('phase-'+n).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
-            document.getElementById('nav-'+n).classList.add('active');
+    <div class="status-box">
+        <div class="status-val" id="metric-eleves">0</div>
+        <div class="status-lbl">ÉLÈVES</div>
+    </div>
+</aside>
+
+<script>
+    // === NAVIGATION ===
+    function goTo(n) {
+        document.querySelectorAll('.phase').forEach(e => e.classList.remove('active'));
+        document.getElementById('phase-'+n).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
+        document.getElementById('nav-'+n).classList.add('active');
+
+        if(n === 3) loadStructure(); // Charger la structure auto
+    }
+
+    // === UI Helpers ===
+    function setLoading(btnId, isLoading) {
+        const btn = document.getElementById(btnId);
+        if(!btn) return;
+        if(isLoading) {
+            btn.classList.add('loading');
+            btn.disabled = true;
+            document.getElementById('stat-msg').innerText = "TRAITEMENT...";
+            document.getElementById('stat-msg').style.color = "#eab308";
+        } else {
+            btn.classList.remove('loading');
+            btn.disabled = false;
+            document.getElementById('stat-msg').innerText = "PRÊT";
+            document.getElementById('stat-msg').style.color = "#22c55e";
         }
+    }
 
-        function runInit() {
-            const btn = document.querySelector('#phase-1 .btn-primary');
-            btn.innerText = "⏳ TRAITEMENT EN COURS...";
+    // === ACTIONS ===
 
-            const form = {
-                adminPassword: document.getElementById('config-pwd').value,
-                niveau: document.getElementById('config-level').value,
-                nbSources: parseInt(document.getElementById('config-nb-src').value),
-                nbDest: parseInt(document.getElementById('config-nb-dest').value),
-                lv2: "ESP,ITA",
-                opt: "LATIN"
-            };
+    function runInit() {
+        setLoading('btn-init', true);
+        const form = {
+            adminPassword: document.getElementById('pwd').value,
+            niveau: document.getElementById('niv').value,
+            nbSources: parseInt(document.getElementById('src').value),
+            nbDest: 6,
+            lv2: document.getElementById('lv2').value,
+            opt: document.getElementById('opt').value,
+            dispo: document.getElementById('dispo').value
+        };
 
-            google.script.run.withSuccessHandler(res => {
-                btn.innerText = "🔨 LANCER LA CONSTRUCTION";
-                if(res.success) {
-                    alert("✅ " + res.message);
-                    goToPhase(2);
-                } else {
-                    alert("❌ ERREUR: " + res.error);
-                }
-            }).withFailureHandler(err => {
-                btn.innerText = "🔨 LANCER LA CONSTRUCTION";
-                alert("❌ ERREUR SERVEUR: " + err.message);
-            }).v3_runInitializationWithForm(form);
-        }
-
-        function runDiagnostics() {
-            google.script.run.withSuccessHandler(() => {
-                alert("✅ Données consolidées avec succès.");
-                goToPhase(3);
-            }).withFailureHandler(err => {
-                alert("❌ Erreur: " + err.message);
-            }).v3_runDiagnostics();
-        }
-
-        function runEngine() {
-            google.script.run.withSuccessHandler(() => {
-                alert("✅ Calcul lancé avec succès !");
-                goToPhase(5);
-            }).withFailureHandler(err => {
-                alert("❌ Erreur moteur: " + err.message);
-            }).v3_runGeneration();
-        }
-
-        function openProfsInterface() {
-            google.script.run.withSuccessHandler(() => {
-                alert("Interface professeurs ouverture...");
-            }).v3_setBridgeContext('TEST', '');
-        }
-
-        function finalize() {
-            if(confirm("Créer les onglets définitifs (FIN) ?")) {
-                google.script.run.withSuccessHandler(() => {
-                    alert("✅ Finalisation terminée !");
-                }).withFailureHandler(err => {
-                    alert("❌ Erreur: " + err.message);
-                }).v3_finalizeProcess();
+        google.script.run.withSuccessHandler(res => {
+            setLoading('btn-init', false);
+            if(res.success) {
+                alert("✅ " + res.message);
+                goTo(2);
             }
+            else alert("❌ Erreur: " + res.error);
+        }).withFailureHandler(err => {
+            setLoading('btn-init', false);
+            alert("❌ Erreur: " + err.message);
+        }).v3_runInitializationWithForm(form);
+    }
+
+    function runConso() {
+        setLoading('btn-conso', true);
+        google.script.run.withSuccessHandler(() => {
+            setLoading('btn-conso', false);
+            alert("✅ Consolidation réussie !");
+            document.getElementById('metric-eleves').innerText = "OK";
+            goTo(3);
+        }).withFailureHandler(err => {
+            setLoading('btn-conso', false);
+            alert("❌ Erreur: " + err.message);
+        }).v3_runDiagnostics();
+    }
+
+    // === LOGIQUE STRUCTURE INTÉGRÉE ===
+    let currentStructure = null;
+
+    function loadStructure() {
+        document.getElementById('struct-body').innerHTML = '<tr><td colspan="10" style="text-align:center; padding:20px">Chargement...</td></tr>';
+
+        google.script.run.withSuccessHandler(data => {
+            if(!data.success) {
+                alert("Erreur chargement structure: " + data.error);
+                return;
+            }
+            currentStructure = data;
+            renderStructureTable(data);
+        }).withFailureHandler(err => {
+            alert("Erreur: " + err.message);
+        }).v3_getStructureDataForEditor();
+    }
+
+    function renderStructureTable(data) {
+        const thead = document.getElementById('struct-header');
+        const tbody = document.getElementById('struct-body');
+
+        // 1. Construire les en-têtes dynamiques (LV2 + OPT)
+        let headersHTML = '<th>CLASSE</th><th>CAPACITÉ</th>';
+        const allOptions = [...data.lv2, ...data.options]; // Fusion des listes
+
+        allOptions.forEach(opt => {
+            headersHTML += `<th>${opt}</th>`;
+        });
+        thead.innerHTML = headersHTML;
+
+        // 2. Construire les lignes
+        let rowsHTML = '';
+        data.classes.forEach((cls, idx) => {
+            let row = `<tr>
+                <td><input type="text" value="${cls.name}" readonly style="background:#0f172a; border:none; font-weight:800; width:100%;"></td>
+                <td><input type="number" class="input-cap" value="${cls.capacity}" onchange="updateTotal()"></td>`;
+
+            allOptions.forEach(opt => {
+                const val = cls.quotas && cls.quotas[opt] ? cls.quotas[opt] : 0;
+                row += `<td><input type="number" class="input-opt" data-cls="${idx}" data-opt="${opt}" value="${val}" min="0"></td>`;
+            });
+
+            row += '</tr>';
+            rowsHTML += row;
+        });
+        tbody.innerHTML = rowsHTML;
+        updateTotal();
+    }
+
+    function updateTotal() {
+        let total = 0;
+        document.querySelectorAll('.input-cap').forEach(inp => total += parseInt(inp.value)||0);
+        document.getElementById('total-cap').innerText = total;
+    }
+
+    function saveStructure() {
+        setLoading('btn-save-struct', true);
+
+        // Mettre à jour les quotas depuis les inputs
+        const inputs = document.querySelectorAll('.input-opt');
+        inputs.forEach(inp => {
+            const clsIdx = parseInt(inp.dataset.cls);
+            const opt = inp.dataset.opt;
+            const val = parseInt(inp.value) || 0;
+            if(!currentStructure.classes[clsIdx].quotas) currentStructure.classes[clsIdx].quotas = {};
+            currentStructure.classes[clsIdx].quotas[opt] = val;
+        });
+
+        // Mettre à jour les capacités
+        document.querySelectorAll('.input-cap').forEach((inp, idx) => {
+            currentStructure.classes[idx].capacity = parseInt(inp.value) || 30;
+        });
+
+        google.script.run.withSuccessHandler(res => {
+            setLoading('btn-save-struct', false);
+            if(res.success) {
+                alert("✅ Structure enregistrée !");
+                goTo(4);
+            } else {
+                alert("❌ Erreur: " + res.error);
+            }
+        }).withFailureHandler(err => {
+            setLoading('btn-save-struct', false);
+            alert("❌ Erreur: " + err.message);
+        }).v3_saveStructureFromEditor(currentStructure);
+    }
+
+    function runEngine() {
+        setLoading('btn-engine', true);
+        google.script.run.withSuccessHandler(res => {
+            setLoading('btn-engine', false);
+            if(res.success) {
+                alert("✅ Calcul terminé !");
+                goTo(5);
+            } else {
+                alert("❌ Erreur: " + res.error);
+            }
+        }).withFailureHandler(err => {
+            setLoading('btn-engine', false);
+            alert("❌ Erreur: " + err.message);
+        }).v3_runGeneration();
+    }
+
+    function finalize() {
+        if(confirm("Créer les onglets FIN ? Cette action est irréversible.")) {
+            setLoading('btn-fin', true);
+            google.script.run.withSuccessHandler(() => {
+                setLoading('btn-fin', false);
+                alert("✅ Finalisation complétée !");
+            }).withFailureHandler(err => {
+                setLoading('btn-fin', false);
+                alert("❌ Erreur: " + err.message);
+            }).v3_finalizeProcess();
         }
-    </script>
+    }
+
+</script>
 </body>
 </html>
