@@ -1,59 +1,91 @@
-// Test des patterns de détection des onglets sources
+// TEST & DOCUMENTATION DES APPROCHES DE DÉTECTION D'ONGLETS SOURCES
+//
+// ANCIENNES APPROCHES (Basées sur des patterns regex):
+// ─────────────────────────────────────────────────────
+// Ces approches étaient trop restrictives et failaient avec des formats non-conventionnels
 
-// Pattern actuel dans le code
-const currentPattern = /^(ECOLE\d+|[A-Za-z0-9_-]+°\d+)$/;
+// Pattern strict (6°1 uniquement)
+const strictPattern = /^\d+°\d+$/;
 
-// Pattern simplifié (tout avec °)
-const simplifiedPattern = /^[A-Za-z0-9_-]+°\d+$/;
+// Pattern avec ECOLE support
+const ecoleSupportPattern = /^(ECOLE\d+|[A-Za-z0-9_-]+°\d+)$/;
 
-// Cas de test fournis par l'utilisateur
+// Pattern universel (°-obligatoire)
+const universalPattern = /^[A-Za-z0-9_-]+°\d+$/;
+
+//
+// NOUVELLE APPROCHE (Détection par exclusion) ✅ RECOMMANDÉE
+// ────────────────────────────────────────────────────────────
+// Accepte TOUS les onglets SAUF ceux qui sont système/résultats.
+// C'est plus flexible et future-proof.
+
+function isSourceSheet(name) {
+  const upper = name.toUpperCase();
+
+  // Exclure les onglets système (commencent par _)
+  if (upper.startsWith('_')) return false;
+
+  // Exclure les interfaces
+  if (upper === 'ACCUEIL' || upper === 'CONSOLIDATION') return false;
+
+  // Exclure les résultats/outputs
+  if (upper.endsWith('TEST') || upper.endsWith('FIN') || upper.endsWith('DEF') || upper.endsWith('CACHE')) return false;
+
+  return true; // Tout le reste est une source
+}
+
+// CAS DE TEST
 const testCases = [
-  '6°1',        // Niveau 6, classe 1
-  '5°3',        // Niveau 5, classe 3
-  '3°4',        // Niveau 4, classe 4
-  'GAMARRA°7',  // Nom personnalisé, classe 7
-  // Autres cas à tester
-  '4°2',        // Niveau 4, classe 2
-  'ECOLE°1',    // ECOLE avec °
-  'ECOLE1',     // ECOLE sans ° (ancien format ?)
-  'COLBERT°5',  // Autre nom personnalisé
-  '6°1TEST',    // Avec TEST (doit être rejeté)
-  '6°1DEF',     // Avec DEF (doit être rejeté)
-  'TEST',       // Juste TEST (doit être rejeté)
-  '_CONFIG',    // Config sheet (doit être rejeté)
+  '6°1',        // ✅ Format standard
+  '5°3',        // ✅ Format standard
+  '3°4',        // ✅ Format standard
+  'GAMARRA°7',  // ✅ Nom personnalisé
+  '4°2',        // ✅ Format standard
+  'ECOLE°1',    // ✅ ECOLE avec °
+  'ECOLE1',     // ✅ ECOLE sans ° (now accepted by exclusion!)
+  'COLBERT°5',  // ✅ Autre nom personnalisé
+  '5e1',        // ✅ Format alternatif (NEW!)
+  'CM2',        // ✅ Format primaire (NEW!)
+  'MONCLASS',   // ✅ N'importe quel nom (NEW!)
+  '6°1TEST',    // ❌ TEST → exclure
+  '6°1DEF',     // ❌ DEF → exclure
+  '6°1CACHE',   // ❌ CACHE → exclure
+  'TEST',       // ❌ TEST → exclure
+  '_CONFIG',    // ❌ Config sheet → exclure
+  '_STRUCTURE', // ❌ Structure sheet → exclure
+  'ACCUEIL',    // ❌ Interface → exclure
+  'CONSOLIDATION', // ❌ Interface → exclure
 ];
 
-console.log('╔═══════════════════════════════════════════════════════════╗');
-console.log('║ TEST DES PATTERNS DE DÉTECTION DES ONGLETS SOURCES       ║');
-console.log('╚═══════════════════════════════════════════════════════════╝\n');
+console.log('╔════════════════════════════════════════════════════════════╗');
+console.log('║ TEST DES APPROCHES DE DÉTECTION - PATTERNS vs EXCLUSION   ║');
+console.log('╚════════════════════════════════════════════════════════════╝\n');
 
-console.log('Pattern actuel : /^(ECOLE\\d+|[A-Za-z0-9_-]+°\\d+)$/');
-console.log('Pattern simplifié: /^[A-Za-z0-9_-]+°\\d+$/\n');
+console.log('APPROCHE ANCIENNE: Pattern regex (trop restrictif)');
+console.log('APPROCHE NOUVELLE: Détection par exclusion (flexible & robust)\n');
 
-console.log('─────────────────────────────────────────────────────────────');
-console.log('CAS DE TEST                 | ACTUEL | SIMPLIFIÉ');
-console.log('─────────────────────────────────────────────────────────────');
+console.log('─────────────────────────────┬─────────┬──────────────────────');
+console.log('NOM ONGLET                   │ PATTERN │ EXCLUSION (NEW)');
+console.log('─────────────────────────────┼─────────┼──────────────────────');
 
 testCases.forEach(testCase => {
-  const matchCurrent = currentPattern.test(testCase);
-  const matchSimplified = simplifiedPattern.test(testCase);
+  const matchStrict = strictPattern.test(testCase);
+  const matchUniversal = universalPattern.test(testCase);
+  const isSource = isSourceSheet(testCase);
 
-  const pad = 27 - testCase.length;
+  const pad = 28 - testCase.length;
   const padding = ' '.repeat(Math.max(0, pad));
 
-  const current = matchCurrent ? '  ✅   ' : '  ❌   ';
-  const simplified = matchSimplified ? '  ✅' : '  ❌';
+  const pattern = matchUniversal ? '  ✅   ' : '  ❌   ';
+  const exclusion = isSource ? '     ✅ SOURCE' : '     ❌ EXCLURE';
 
-  console.log(`${testCase}${padding} |${current}|${simplified}`);
+  console.log(`${testCase}${padding}│${pattern}│${exclusion}`);
 });
 
-console.log('─────────────────────────────────────────────────────────────\n');
+console.log('─────────────────────────────┴─────────┴──────────────────────\n');
 
-console.log('ANALYSE :');
-console.log('• Pattern actuel supporte ECOLE1 (sans °)');
-console.log('• Pattern simplifié requiert TOUJOURS le symbole °');
-console.log('• Les deux rejettent correctement TEST/DEF\n');
-
-console.log('RECOMMANDATION :');
-console.log('Si TOUS les onglets sources ont TOUJOURS le °,');
-console.log('alors le pattern simplifié est plus cohérent.');
+console.log('RÉSUMÉ:');
+console.log('✅ Pattern universel: Accepte tout avec ° sauf TEST/DEF/FIN/CACHE');
+console.log('✅ Exclusion (NEW): Accepte TOUS les noms, exclut seulement système');
+console.log('\nRECOMMANDATION: Utiliser EXCLUSION (plus flexible)');
+console.log('Fichiers impactés: Backend_Eleves.gs, GenereNOMprenomID.gs, COMPTER.gs, etc.');
