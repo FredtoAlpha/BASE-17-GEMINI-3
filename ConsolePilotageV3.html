@@ -211,12 +211,6 @@
             font-size: 24px;
             color: white;
             box-shadow: var(--shadow-glow);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
         }
 
         .brand-text h1 {
@@ -1286,83 +1280,7 @@
             to { opacity: 1; }
         }
 
-        /* =====================================================================
-         * SYSTÈME DE MINIMISATION - CORRECTION DU BUG
-         * Quand minimisé, le cadre DISPARAÎT complètement (pas de blocage des clics)
-         * ===================================================================*/
-        .console-toggle-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary-500), #764ba2);
-            border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 28px;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.6);
-            z-index: 99999;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .console-toggle-btn:hover {
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.8);
-        }
-
-        .console-toggle-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* État minimisé : le app-container DISPARAÎT COMPLÈTEMENT */
-        body.console-minimized .app-container {
-            display: none !important;
-            pointer-events: none !important;
-            visibility: hidden !important;
-        }
-
-        /* Rotation de l'icône quand minimisé */
-        body.console-minimized .console-toggle-btn i {
-            transform: rotate(180deg);
-        }
-
-        /* Barre minimale en bas */
-        .console-minimized-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 70px;
-            background: linear-gradient(135deg, rgba(26, 31, 54, 0.98), rgba(45, 55, 72, 0.98));
-            backdrop-filter: blur(24px);
-            border-top: 3px solid var(--primary-500);
-            z-index: 99998;
-            display: none;
-            align-items: center;
-            padding: 0 30px;
-            box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.4);
-            animation: slideUpFromBottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        body.console-minimized .console-minimized-bar {
-            display: flex;
-        }
-
-        @keyframes slideUpFromBottom {
-            from {
-                transform: translateY(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+        /* Console toggle and minimization removed for production */
 
         .minimized-bar-content {
             display: flex;
@@ -1380,7 +1298,6 @@
         .minimized-bar-logo i {
             font-size: 32px;
             color: var(--primary-400);
-            animation: float 3s ease-in-out infinite;
         }
 
         .minimized-bar-title {
@@ -1810,61 +1727,6 @@
                     <p style="margin-top: var(--space-md); font-size: 13px; color: var(--text-secondary); text-align: center;">
                         💾 La configuration est automatiquement sauvegardée dans votre navigateur et dans la feuille _CONFIG
                     </p>
-                </div>
-
-                <!-- CHOIX DU PARCOURS A/B -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-route"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title">Choix du Parcours</h2>
-                            <p class="card-description" style="margin-bottom: 0;">
-                                Choisissez de travailler soit en partant des données (Parcours A), soit en définissant d'abord la structure des classes (Parcours B).
-                            </p>
-                        </div>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: var(--space-md); align-items: center;">
-                        <div style="font-size: 13px; font-weight: 600; color: var(--text-secondary);">
-                            Parcours de travail :
-                        </div>
-                        <div class="parcours-toggle" id="parcours-toggle">
-                            <button type="button" class="parcours-toggle-btn" id="parcours-a-btn">
-                                <span>A</span>
-                                <span>Parcours A · Données d'abord</span>
-                            </button>
-                            <button type="button" class="parcours-toggle-btn" id="parcours-b-btn">
-                                <span>B</span>
-                                <span>Parcours B · Structure d'abord</span>
-                            </button>
-                        </div>
-                    </div>
-                    <div style="margin-top: var(--space-xl);">
-                        <div id="parcours-a-description" style="display: none; font-size: 13px; color: var(--text-secondary); line-height: 1.7;">
-                            <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Parcours A : Préparer les données d'abord (Approche "Bottom-Up")</h3>
-                            <p style="margin-bottom: 8px;">Ce parcours est le plus logique et <strong>recommandé</strong> si vous partez de listes d'élèves brutes (par exemple, des listes provenant de différentes classes de 6ème de l'année précédente).</p>
-                            <p style="margin-bottom: 6px;"><strong>1. Générer ID &amp; Noms</strong></p>
-                            <p style="margin-bottom: 4px;"><em>Quoi ?</em> Le système standardise les données en créant un identifiant unique (<code>ID_ELEVE</code>) et en fusionnant le nom et le prénom (<code>NOM_PRENOM</code>) pour chaque élève dans vos onglets sources (ex: 6°1, 6°2...).</p>
-                            <p style="margin-bottom: 8px;"><em>Pourquoi ?</em> C'est une étape de nettoyage indispensable pour que le système puisse suivre chaque élève de manière fiable, sans confusion.</p>
-                            <p style="margin-bottom: 6px;"><strong>2. Consolider</strong></p>
-                            <p style="margin-bottom: 4px;"><em>Quoi ?</em> Le système prend tous les élèves de tous les onglets sources et les rassemble dans un seul grand onglet appelé <code>CONSOLIDATION</code>.</p>
-                            <p style="margin-bottom: 8px;"><em>Pourquoi ?</em> Cela vous donne une vue d'ensemble de toute la population d'élèves. C'est cette liste consolidée qui sera utilisée pour la répartition.</p>
-                            <p style="margin-bottom: 6px;"><strong>3. Statistiques</strong></p>
-                            <p style="margin-bottom: 4px;"><em>Quoi ?</em> Le système analyse l'onglet <code>CONSOLIDATION</code> et produit un rapport : nombre total d'élèves, combien ont choisi l'espagnol, combien font du latin, etc.</p>
-                            <p style="margin-bottom: 8px;"><em>Pourquoi ?</em> Avec ces statistiques, vous pouvez configurer vos futures classes de manière éclairée (quotas par LV2, options, etc.).</p>
-                            <p style="margin-bottom: 0;">Dans ce parcours, vous commencez donc par <strong>préparer et comprendre vos données</strong> avant de passer à la structure des classes.</p>
-                        </div>
-
-                        <div id="parcours-b-description" style="display: none; font-size: 13px; color: var(--text-secondary); line-height: 1.7;">
-                            <h3 style="font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">Parcours B : Configurer la structure d'abord (Approche "Top-Down")</h3>
-                            <p style="margin-bottom: 8px;">Ce parcours est utile si vous savez déjà comment vos futures classes doivent être structurées, même avant d'avoir les listes d'élèves finales.</p>
-                            <p style="margin-bottom: 6px;"><strong>1. Configurer la Structure</strong></p>
-                            <p style="margin-bottom: 4px;"><em>Quoi ?</em> Vous définissez directement les classes cibles (ex: 5e1, 5e2, 5e3...). Pour chaque classe, vous indiquez l'effectif souhaité et les quotas de langues/options (par exemple, la 5e1 aura 15 places pour l'italien, la 5e2 n'en aura aucune).</p>
-                            <p style="margin-bottom: 8px;"><em>Pourquoi ?</em> Cela permet de définir le "cahier des charges" de la répartition. C'est le plan que le moteur devra respecter.</p>
-                            <p style="margin-bottom: 0;">En résumé, le Parcours B consiste à <strong>dessiner d'abord le plan de vos futures classes</strong>, puis à l'alimenter avec les données lorsque vous serez prêt.</p>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- ÉTAPES SUPPLÉMENTAIRES OBLIGATOIRES -->
@@ -3293,38 +3155,5 @@
         });
     </script>
 
-    <!-- =====================================================================
-     * BOUTON TOGGLE FLOTTANT
-     * ===================================================================-->
-    <button class="console-toggle-btn" id="consoleToggleBtn" title="Minimiser/Maximiser la console (Ctrl+M)">
-        <i class="fas fa-chevron-down"></i>
-    </button>
-
-    <!-- =====================================================================
-     * BARRE MINIMALE
-     * ===================================================================-->
-    <div class="console-minimized-bar">
-        <div class="minimized-bar-content">
-            <div class="minimized-bar-logo">
-                <i class="fas fa-rocket"></i>
-                <span class="minimized-bar-title">Console V3 Expert</span>
-            </div>
-            <div class="minimized-bar-status">
-                <div class="minimized-status-item">
-                    <i class="fas fa-layer-group"></i>
-                    <span id="minimized-current-phase">Phase 1</span>
-                </div>
-                <div class="minimized-status-item">
-                    <i class="fas fa-info-circle"></i>
-                    <span id="minimized-current-status">En attente</span>
-                </div>
-            </div>
-            <div class="minimized-bar-progress">
-                <div class="minimized-progress-circle" id="minimizedProgressCircle">
-                    <span class="minimized-progress-text" id="minimizedProgressText">0%</span>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
