@@ -34,30 +34,13 @@ function loadAllStudentsData(ctx) {
   const ss = ctx.ss || SpreadsheetApp.getActiveSpreadsheet();
   const allStudents = [];
 
-  // ✅ PATTERN UNIVERSEL & ADAPTATIF
-  // Les sources ont TOUJOURS le format: QUELQUECHOSE°CHIFFRE
-  // Ex: 6°1, 6°2, 6°3 (si répartition 5e)
-  //     BRESSOLS°1, GAMARRA°2 (si répartition CM2)
-  // Destinations: °A, °B, °C, etc. (terminées par LETTRE après °)
-  // Résultats: TEST, FIN, DEF, CACHE
+  // ✅ PATTERN STRICT & UNIVERSEL
+  // Règle d'or: Tout ce qui finit par °CHIFFRE est une SOURCE
+  // Pattern simple: /.+°\d+$/
   const sheets = ss.getSheets().filter(s => {
     const name = s.getName();
-
-    // 1. PATTERN SOURCE: Doit avoir le symbole ° suivi de chiffres
-    const sourcePattern = /^[A-Za-z0-9_-]+°\d+$/;
-    if (!sourcePattern.test(name)) return false;
-
-    // 2. Exclure onglets système
-    if (name.toUpperCase().startsWith('_')) return false;
-
-    // 3. Exclure interfaces
-    const upper = name.toUpperCase();
-    if (upper === 'ACCUEIL' || upper === 'CONSOLIDATION') return false;
-
-    // 4. Exclure résultats/suffixes
-    if (upper.endsWith('TEST') || upper.endsWith('FIN') || upper.endsWith('DEF') || upper.endsWith('CACHE')) return false;
-
-    return true; // Tout le reste est une source ✅
+    // Doit finir par °CHIFFRE (ex: ECOLE°1, 6°1, BRESSOLS°1)
+    return /.+°\d+$/.test(name);
   });
 
   sheets.forEach(sheet => {

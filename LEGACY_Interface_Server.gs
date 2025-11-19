@@ -38,7 +38,8 @@ function legacy_getUiContext() {
 
     // Logique de détection des sources (toujours avec °)
     const sourceSheets = allSheets.filter(function(s) {
-      return /^[A-Za-z0-9_-]+°\d+$/.test(s.getName());
+      // ✅ PATTERN STRICT: /.+°\d+$/
+      return /.+°\d+$/.test(s.getName());
     });
 
     sourceSheets.sort(function(a, b) {

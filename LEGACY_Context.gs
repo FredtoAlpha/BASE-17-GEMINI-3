@@ -37,14 +37,13 @@ function makeCtxFromSourceSheets_LEGACY() {
   // ========== ÉTAPE 1 : DÉTECTER ONGLETS SOURCES ==========
   const sourceSheets = [];
 
-  // Pattern pour onglets sources : 6°1, ALBEXT°7, BONHOURE°2, etc. (toujours avec °)
-  const sourcePattern = /^[A-Za-z0-9_-]+°\d+$/;
-  // ❌ Exclure les onglets TEST, CACHE, DEF, FIN, etc.
-  const excludePattern = /TEST|CACHE|DEF|FIN|SRC|SOURCE|_CONFIG|_STRUCTURE|_LOG/i;
+  // ✅ PATTERN STRICT: Tout ce qui finit par °CHIFFRE est une SOURCE
+  // Ex: 6°1, ECOLE°1, GAMARRA°4, BRESSOLS°2, etc.
+  const sourcePattern = /.+°\d+$/;
 
   for (let i = 0; i < allSheets.length; i++) {
     const name = allSheets[i].getName();
-    if (sourcePattern.test(name) && !excludePattern.test(name)) {
+    if (sourcePattern.test(name)) {
       sourceSheets.push(name);
     }
   }

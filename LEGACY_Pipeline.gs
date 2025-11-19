@@ -138,13 +138,13 @@ function legacy_runFullPipeline_PRIME() {
 // ===================================================================
 
 /**
- * Détecte les onglets sources (format: 6°1, 5°2, etc.)
+ * Détecte les onglets sources (format: 6°1, 5°2, BRESSOLS°1, etc.)
  */
 function detectSourceSheets() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   return ss.getSheets()
     .map(s => s.getName())
-    .filter(name => /^\d+°\d+$/.test(name))
+    .filter(name => /.+°\d+$/.test(name))
     .sort();
 }
 

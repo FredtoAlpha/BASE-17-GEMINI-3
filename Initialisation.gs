@@ -531,7 +531,16 @@ function determinerPrefixeSource(niveau) {
  */
 function creerOngletsSourcesVides(niveau, nbClasses) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const prefixeSource = determinerPrefixeSource(niveau);
+  let prefixeSource = determinerPrefixeSource(niveau);
+
+  // ✅ SÉCURITÉ ABSOLUE: On force le séparateur °
+  // Si le préfixe ne finit pas par °, on l'ajoute
+  // "ECOLE" → "ECOLE°"
+  // "6°" → "6°" (inchangé)
+  if (!prefixeSource.endsWith('°')) {
+    prefixeSource += '°';
+  }
+
   Logger.log(` - Création/MàJ CONSOLIDATION et ${nbClasses} onglets sources (${prefixeSource})...`);
 
   // En-tête standardisé

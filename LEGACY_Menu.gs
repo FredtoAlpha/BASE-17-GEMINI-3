@@ -61,8 +61,8 @@ function legacy_viewSourceClasses_PRIME() {
     const allSheets = ss.getSheets();
 
     const sourceSheets = allSheets.filter(function(s) {
-      // Support: 6°1, GAMARRA°4, etc. (toujours avec °)
-      return /^[A-Za-z0-9_-]+°\d+$/.test(s.getName());
+      // ✅ PATTERN STRICT: /.+°\d+$/
+      return /.+°\d+$/.test(s.getName());
     });
 
     sourceSheets.sort(function(a, b) {

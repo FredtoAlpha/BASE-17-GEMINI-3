@@ -19,31 +19,10 @@ function genererNomPrenomEtID() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ui = SpreadsheetApp.getUi();
 
-  // ✅ PATTERN UNIVERSEL & ADAPTATIF
-  // Accepte: QUELQUECHOSE°CHIFFRE (peu importe le préfixe)
-  // - 6°1, 6°2 (classes)
-  // - BRESSOLS°1, GAMARRA°2 (écoles)
-  // - N'importe quel nom + °CHIFFRE
-  const sourcePattern = /^[A-Za-z0-9_-]+°\d+$/;
-
-  const sheets = ss.getSheets().filter(s => {
-    const name = s.getName();
-
-    // 1. Doit matcher le pattern QUELQUECHOSE°CHIFFRE
-    if (!sourcePattern.test(name)) return false;
-
-    // 2. Exclure système
-    if (name.toUpperCase().startsWith('_')) return false;
-
-    // 3. Exclure interfaces
-    const upper = name.toUpperCase();
-    if (upper === 'ACCUEIL' || upper === 'CONSOLIDATION') return false;
-
-    // 4. Exclure résultats
-    if (upper.endsWith('TEST') || upper.endsWith('FIN') || upper.endsWith('DEF') || upper.endsWith('CACHE')) return false;
-
-    return true;
-  });
+  // ✅ PATTERN STRICT & UNIVERSEL
+  // Règle d'or: Tout ce qui finit par °CHIFFRE est une SOURCE
+  // Pattern simple: /.+°\d+$/
+  const sheets = ss.getSheets().filter(s => /.+°\d+$/.test(s.getName()));
 
   if (sheets.length === 0) {
     ui.alert(`⚠️ Aucun onglet source trouvé (format: QUELQUECHOSE°CHIFFRE)\nEx: 6°1, BRESSOLS°1, GAMARRA°2`);

@@ -110,12 +110,11 @@ function runLegacyDiagnostic(showUI) {
  */
 function checkSourceSheets_(ss) {
   const allSheets = ss.getSheets();
-  const sourcePattern = /^[A-Za-z0-9_-]+°\d+$/;
-  const excludePattern = /TEST|CACHE|DEF|FIN|SRC|SOURCE|_CONFIG|_STRUCTURE|_LOG/i;
+  // ✅ PATTERN STRICT: Tout ce qui finit par °CHIFFRE est une SOURCE
+  const sourcePattern = /.+°\d+$/;
 
   const sourceSheets = allSheets.filter(function(s) {
-    const name = s.getName();
-    return sourcePattern.test(name) && !excludePattern.test(name);
+    return sourcePattern.test(s.getName());
   });
 
   if (sourceSheets.length === 0) {
