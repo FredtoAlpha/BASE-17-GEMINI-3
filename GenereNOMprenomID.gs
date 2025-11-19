@@ -1,43 +1,45 @@
 /**
  * ===================================================================
- * 🆔 GÉNÉRATEUR D'IDENTIFIANTS (Format Historique & Compatible)
+ * 🆔 GÉNÉRATEUR D'IDENTIFIANTS UNIVERSEL
  * ===================================================================
- * Scanne les onglets sources et génère les IDs au format :
- * [NOM_ONGLET][1000 + INDEX] -> Ex: 6°51001 ou BRESSOLS°51001
- * Ce format texte est CRITIQUE pour la compatibilité du système.
+ * Scanne TOUS les onglets sources (peu importe le format : 6°1, 5e2, CM2)
+ * Génère les IDs au format historique : [NOM_ONGLET][1000 + INDEX]
+ * Exemples: 6°51001, 5e21001, CM21001, BRESSOLS°51001
  *
- * Pattern accepté : 6°1, 3°5, BRESSOLS°4, GAMARRA°7, etc.
- * (Toujours avec le ° - jamais sans)
+ * Principe: DÉTECTION PAR EXCLUSION (prendre tout sauf système/résultats)
  */
 
 function genererNomPrenomEtID() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ui = SpreadsheetApp.getUi();
 
-  // PATTERN UNIVERSEL - Onglets sources TOUJOURS avec le °
-  // Accepte: 6°1, 3°5, BRESSOLS°4, GAMARRA°7, etc.
-  const sourcePattern = /^[A-Za-z0-9_-]+°\d+$/;
-
+  // ✅ DÉTECTION UNIVERSELLE PAR EXCLUSION
+  // On prend TOUS les onglets SAUF ceux qui sont système/résultats
   const sheets = ss.getSheets().filter(s => {
-    const name = s.getName();
-    // Exclusions de sécurité
-    if (name.startsWith('_') || name === 'ACCUEIL' || name === 'CONSOLIDATION') return false;
-    if (name.endsWith('TEST') || name.endsWith('FIN') || name.endsWith('DEF')) return false;
+    const name = s.getName().toUpperCase();
 
-    // Filtre : doit matcher le pattern universel des onglets sources
-    return sourcePattern.test(name);
+    // Exclure les onglets système (commencent par _)
+    if (name.startsWith('_')) return false;
+
+    // Exclure les interfaces
+    if (name === 'ACCUEIL' || name === 'CONSOLIDATION') return false;
+
+    // Exclure les résultats/outputs
+    if (name.endsWith('TEST') || name.endsWith('FIN') || name.endsWith('DEF') || name.endsWith('CACHE')) return false;
+
+    return true; // Tout le reste est une source
   });
 
   if (sheets.length === 0) {
-    ui.alert(`⚠️ Aucun onglet source trouvé (ex: 6°1, 3°5, BRESSOLS°4).`);
+    ui.alert(`⚠️ Aucun onglet source trouvé. Vérifiez vos données.`);
     return;
   }
 
-  // 3. TRAITEMENT (Retour au format ID Historique)
+  // TRAITEMENT ROBUSTE
   let totalUpdated = 0;
 
   sheets.forEach(sheet => {
-    const name = sheet.getName(); // Ex: "6°5"
+    const name = sheet.getName(); // Ex: "6°5", "5e2", "CM2", "BRESSOLS°4"
     const lastRow = sheet.getLastRow();
     if (lastRow < 2) return;
 
@@ -51,8 +53,7 @@ function genererNomPrenomEtID() {
 
     if (colNom === -1 || colPrenom === -1) return;
 
-    // ✅ RETOUR AU FORMAT HISTORIQUE
-    // Le préfixe est littéralement le nom de l'onglet (avec le °)
+    // Le préfixe est le nom de l'onglet tel quel (universel)
     const prefix = name.trim();
 
     let countInSheet = 0;
@@ -67,19 +68,16 @@ function genererNomPrenomEtID() {
       // A. Concaténation NOM_PRENOM
       if (colNomPrenom > -1) {
         const fullName = `${nom} ${prenom}`.trim();
-        // On écrit seulement si vide ou différent (optimisation)
         if (String(row[colNomPrenom]) !== fullName) {
              sheet.getRange(i + 1, colNomPrenom + 1).setValue(fullName);
         }
       }
 
-      // B. Génération ID (Format 6°51001)
+      // B. Génération ID (Format universel: prefix + base1000)
       if (currentId === '') {
-        // Base 1000 pour éviter les confusions avec des chiffres simples
-        // Ex: 1er élève -> 1001
+        // Format historique robuste: NomClasse + 1000 + index
+        // Ex: 6°5 -> 6°51001, CM2 -> CM21001
         const suffix = (1000 + countInSheet + 1).toString();
-
-        // Résultat: "6°5" + "1001" = "6°51001"
         currentId = `${prefix}${suffix}`;
 
         if (colID > -1) {
@@ -89,10 +87,10 @@ function genererNomPrenomEtID() {
       countInSheet++;
       totalUpdated++;
     }
-    Logger.log(`✅ ${name} : IDs format '${prefix}1xxx' appliqués.`);
+    Logger.log(`✅ ${name} : ${countInSheet} élèves traités (Format ${prefix}1xxx).`);
   });
 
-  ui.alert(`✅ IDs générés (Format Historique) pour ${totalUpdated} élèves.`);
+  ui.alert(`✅ IDs générés pour ${totalUpdated} élèves dans ${sheets.length} onglets.`);
 }
 
 // Wrapper Console V3

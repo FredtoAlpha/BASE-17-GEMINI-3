@@ -170,9 +170,9 @@
         <div class="card">
             <h2>Lancement du Moteur</h2>
             <p style="color: #94a3b8; margin-bottom: 20px;">L'algorithme va répartir les élèves selon votre structure et générer les classes TEST optimisées.</p>
-            <button onclick="runEngine()" id="btn-engine" class="btn btn-primary" style="height: 80px; font-size: 20px;">
+            <button onclick="runEngine()" id="btn-engine" class="btn btn-primary">
                 <div class="spinner"></div>
-                <span>DÉMARRER LE CALCUL</span>
+                <span>LANCER CALCUL</span>
             </button>
         </div>
     </div>
@@ -223,12 +223,12 @@
         if(isLoading) {
             btn.classList.add('loading');
             btn.disabled = true;
-            document.getElementById('stat-msg').innerText = "TRAITEMENT...";
+            document.getElementById('stat-msg').innerText = "⏳";
             document.getElementById('stat-msg').style.color = "#eab308";
         } else {
             btn.classList.remove('loading');
             btn.disabled = false;
-            document.getElementById('stat-msg').innerText = "PRÊT";
+            document.getElementById('stat-msg').innerText = "✅";
             document.getElementById('stat-msg').style.color = "#22c55e";
         }
     }

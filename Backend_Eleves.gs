@@ -34,7 +34,22 @@ function loadAllStudentsData(ctx) {
   const ss = ctx.ss || SpreadsheetApp.getActiveSpreadsheet();
   const allStudents = [];
 
-  const sheets = ss.getSheets().filter(s => /^\d+°\d+$/.test(s.getName()));
+  // ✅ DÉTECTION UNIVERSELLE PAR EXCLUSION
+  // On prend TOUS les onglets SAUF ceux qui sont système/résultats
+  const sheets = ss.getSheets().filter(s => {
+    const name = s.getName().toUpperCase();
+
+    // Exclure les onglets système (commencent par _)
+    if (name.startsWith('_')) return false;
+
+    // Exclure les interfaces
+    if (name === 'ACCUEIL' || name === 'CONSOLIDATION') return false;
+
+    // Exclure les résultats/outputs
+    if (name.endsWith('TEST') || name.endsWith('FIN') || name.endsWith('DEF') || name.endsWith('CACHE')) return false;
+
+    return true; // Tout le reste est une source
+  });
 
   sheets.forEach(sheet => {
     const data = sheet.getDataRange().getValues();
