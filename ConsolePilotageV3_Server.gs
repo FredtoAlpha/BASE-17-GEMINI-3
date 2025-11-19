@@ -100,15 +100,18 @@ function v3_runInitializationWithForm(formData) {
       };
     }
 
-    // 3. Nettoyer les LV2 et Options
+    // 3. Nettoyer les LV2, Options, et Dispositifs
     const lv2Array = nettoyerListeInput(formData.lv2);
     const optArray = nettoyerListeInput(formData.opt);
+    // Nouveau : On traite aussi les dispositifs
+    const dispoArray = nettoyerListeInput(formData.dispo);
 
     Logger.log(`V3 Init - Niveau: ${formData.niveau}`);
     Logger.log(`V3 Init - Sources: ${formData.nbSources}`);
     Logger.log(`V3 Init - Destinations: ${formData.nbDest}`);
     Logger.log(`V3 Init - LV2: ${lv2Array.join(', ')}`);
     Logger.log(`V3 Init - Options: ${optArray.join(', ')}`);
+    Logger.log(`V3 Init - Dispositifs: ${dispoArray.join(', ')}`);
 
     // 4. Vérifier si déjà initialisé (silencieux, pas de popup)
     const structureSheet = ss.getSheetByName(config.SHEETS.STRUCTURE);
@@ -118,7 +121,7 @@ function v3_runInitializationWithForm(formData) {
 
     // 5. Appeler la fonction d'initialisation principale SANS POPUPS
     // On appelle directement initialiserSysteme() au lieu de ouvrirInitialisation()
-    initialiserSysteme(formData.niveau, formData.nbSources, formData.nbDest, lv2Array, optArray);
+    initialiserSysteme(formData.niveau, formData.nbSources, formData.nbDest, lv2Array, optArray, dispoArray);
 
     return {
       success: true,

@@ -47,12 +47,12 @@ function determinerNiveauSource(niveau) {
  * @param {string[]} lv2Options - Tableau des sigles LV2.
  * @param {string[]} optOptions - Tableau des sigles Options.
  */
-function initialiserSysteme(niveau, nbSources, nbDest, lv2Options, optOptions) {
+function initialiserSysteme(niveau, nbSources, nbDest, lv2Options, optOptions, dispoOptions) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ui = SpreadsheetApp.getUi();
   Logger.log(`--- Début Initialisation Système ---`);
   Logger.log(`Niveau: ${niveau}, Sources: ${nbSources}, Destinations: ${nbDest}`);
-  Logger.log(`LV2: ${lv2Options.join(',')}, OPT: ${optOptions.join(',')}`);
+  Logger.log(`LV2: ${lv2Options.join(',')}, OPT: ${optOptions.join(',')}, DISPO: ${(dispoOptions || []).join(',')}`);
   
   // Configuration du spinner progressif
   const etapes = [
@@ -92,7 +92,7 @@ function initialiserSysteme(niveau, nbSources, nbDest, lv2Options, optOptions) {
 
     // 1. Créer/Réinitialiser _CONFIG avec les nouvelles données
     Logger.log("Étape 1: Création/MàJ Onglet _CONFIG...");
-    creerOuMajOngletConfig(niveau, lv2Options, optOptions);
+    creerOuMajOngletConfig(niveau, lv2Options, optOptions, dispoOptions);
     afficherSpinner(2);
 
     // 2. Créer/Réinitialiser les onglets système (_JOURNAL, _BACKUP)
@@ -210,13 +210,14 @@ function supprimerAnciensOngletsNonSysteme() {
  * @param {string[]} lv2Options - Tableau des sigles LV2.
  * @param {string[]} optOptions - Tableau des sigles Options.
  */
-function creerOuMajOngletConfig(niveau, lv2Options, optOptions) {
+function creerOuMajOngletConfig(niveau, lv2Options, optOptions, dispoOptions) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const configSheetName = CONFIG.SHEETS.CONFIG;
   let configSheet = ss.getSheetByName(configSheetName);
 
   const lv2String = lv2Options.join(',');
   const optString = optOptions.join(',');
+  const dispoString = (dispoOptions || []).join(','); // Nouveau
 
   // Structure attendue des données dans _CONFIG
   const configMap = {
@@ -227,6 +228,7 @@ function creerOuMajOngletConfig(niveau, lv2Options, optOptions) {
     "AUTO_RENAME": { value: "NON", description: "Renommer automatiquement onglets DEF (OUI/NON)" },
     "LV2": { value: lv2String, description: "Liste des LV2 disponibles (séparées par virgule)" },
     "OPT": { value: optString, description: "Liste des Options spécifiques (séparées par virgule)" },
+    "DISPO": { value: dispoString, description: "Liste des Dispositifs pour Colonne L (séparées par virgule)" } // Ajouté
   };
 
   if (!configSheet) {
