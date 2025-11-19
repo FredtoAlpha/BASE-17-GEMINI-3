@@ -8,173 +8,99 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
-        /* === DESIGN SYSTEM "HEAVY IMPACT" === */
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4338ca;
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --text-white: #f8fafc;
-            --text-gray: #94a3b8;
-            --success: #22c55e;
-            --warning: #eab308;
-            --danger: #ef4444;
+            --primary: #6366f1; --bg-dark: #0f172a; --text-white: #f8fafc;
+            --success: #22c55e; --warning: #eab308;
         }
-
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-white);
-            margin: 0;
-            height: 100vh;
-            overflow: hidden;
-            display: grid;
-            grid-template-columns: 300px 1fr 350px; /* Layout 3 colonnes fixe */
+            font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-white);
+            margin: 0; height: 100vh; overflow: hidden;
+            display: grid; grid-template-columns: 320px 1fr;
         }
 
-        /* TYPOGRAPHIE MASSIVE */
-        h1 { font-size: 28px; font-weight: 900; margin: 0 0 10px 0; letter-spacing: -1px; }
-        h2 { font-size: 18px; font-weight: 800; color: var(--primary); margin: 0 0 20px 0; text-transform: uppercase; }
+        /* TYPOGRAPHIE XXL */
+        h1 { font-size: 32px; font-weight: 900; margin-bottom: 20px; letter-spacing: -1px; }
+        h2 { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 15px; text-transform: uppercase; }
 
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-gray);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
+        label { font-size: 14px; font-weight: 800; color: #94a3b8; margin-bottom: 8px; display: block; text-transform: uppercase; }
 
         input, select {
-            width: 100%;
-            background: #334155;
-            border: 2px solid #475569;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700; /* Saisie en gras */
-            margin-bottom: 20px;
-            box-sizing: border-box;
+            width: 100%; padding: 16px; font-size: 16px; font-weight: 700;
+            background: #1e293b; border: 2px solid #334155; color: white; border-radius: 8px;
+            margin-bottom: 20px; box-sizing: border-box;
         }
         input:focus, select:focus { border-color: var(--primary); outline: none; }
 
-        /* BOUTONS FORTS */
         .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 900;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: transform 0.1s;
+            width: 100%; padding: 20px; font-size: 18px; font-weight: 900;
+            text-transform: uppercase; border: none; border-radius: 10px; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px;
         }
-        .btn:active { transform: scale(0.98); }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); }
-        .btn-success { background: var(--success); color: #064e3b; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: #022c22; }
         .btn-secondary { background: #334155; color: white; }
 
-        /* SIDEBAR GAUCHE */
-        .sidebar { background: #020617; padding: 25px; border-right: 1px solid #1e293b; display: flex; flex-direction: column; }
-        .brand { font-size: 24px; font-weight: 900; margin-bottom: 40px; color: white; display: flex; align-items: center; gap: 10px; }
+        /* SIDEBAR */
+        .sidebar { background: #020617; padding: 30px; border-right: 1px solid #1e293b; overflow-y: auto; }
+        .brand { font-size: 26px; font-weight: 900; margin-bottom: 50px; display: flex; gap: 15px; align-items: center; }
 
         .nav-item {
-            padding: 15px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 700;
-            color: var(--text-gray);
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            padding: 18px; margin-bottom: 10px; border-radius: 10px; cursor: pointer;
+            font-size: 16px; font-weight: 700; color: #94a3b8; display: flex; gap: 15px;
             transition: 0.2s;
         }
+        .nav-item:hover { background: rgba(99, 102, 241, 0.1); }
         .nav-item.active { background: var(--primary); color: white; }
-        .nav-item:hover:not(.active) { background: rgba(255,255,255,0.05); }
-        .nav-number { font-size: 12px; opacity: 0.7; }
 
-        /* CONTENU CENTRAL */
-        .main-content { padding: 40px; overflow-y: auto; }
-        .card { background: var(--bg-card); padding: 30px; border-radius: 16px; border: 1px solid #334155; margin-bottom: 20px; }
+        /* CONTENT */
+        .main-content { padding: 50px; overflow-y: auto; }
+        .card { background: #1e293b; padding: 40px; border-radius: 20px; border: 1px solid #334155; }
         .phase { display: none; }
-        .phase.active { display: block; animation: slideUp 0.3s ease; }
+        .phase.active { display: block; animation: fadeIn 0.3s; }
 
-        /* PANNEAU DROITE (DIAGNOSTIC) */
-        .panel-right { background: #0f172a; padding: 25px; border-left: 1px solid #1e293b; }
-        .metric-card { background: #1e293b; padding: 20px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #334155; }
-        .metric-val { font-size: 36px; font-weight: 900; color: white; line-height: 1; }
-        .metric-lbl { font-size: 12px; font-weight: 700; color: var(--text-gray); text-transform: uppercase; margin-top: 5px; }
+        .alert { background: rgba(99, 102, 241, 0.1); padding: 20px; border-left: 5px solid var(--primary); font-weight: 600; margin: 20px 0; border-radius: 5px; }
 
-        /* JAUGES */
-        .gauge-track { height: 12px; background: #334155; border-radius: 6px; overflow: hidden; margin-top: 10px; }
-        .gauge-fill { height: 100%; background: var(--success); width: 0%; transition: width 1s; }
-
-        /* UTILS */
-        .alert { padding: 15px; background: rgba(99, 102, 241, 0.1); border-left: 4px solid var(--primary); border-radius: 4px; margin: 20px 0; font-weight: 600; }
-
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <aside class="sidebar">
-        <div class="brand"><i class="fas fa-layer-group"></i> PILOTE V3</div>
-
+        <div class="brand"><i class="fas fa-rocket"></i> PILOTE V3</div>
         <nav>
             <div class="nav-item active" onclick="goToPhase(1)" id="nav-1">
-                <span class="nav-number">01</span> ARCHITECTURE
+                <span>1. ARCHITECTURE</span>
             </div>
             <div class="nav-item" onclick="goToPhase(2)" id="nav-2">
-                <span class="nav-number">02</span> DONNÉES
+                <span>2. DONNÉES</span>
             </div>
             <div class="nav-item" onclick="goToPhase(3)" id="nav-3">
-                <span class="nav-number">03</span> STRATÉGIE
+                <span>3. STRATÉGIE</span>
             </div>
             <div class="nav-item" onclick="goToPhase(4)" id="nav-4">
-                <span class="nav-number">04</span> MOTEUR
+                <span>4. MOTEUR</span>
             </div>
             <div class="nav-item" onclick="goToPhase(5)" id="nav-5">
-                <span class="nav-number">05</span> PILOTAGE
+                <span>5. PILOTAGE</span>
             </div>
         </nav>
-
-        <div style="margin-top: auto;">
-            <div class="metric-lbl">STATUS SYSTÈME</div>
-            <div style="color: var(--success); font-weight: 700; display: flex; align-items: center; gap: 8px;">
-                <div style="width: 8px; height: 8px; background: var(--success); border-radius: 50%;"></div>
-                EN LIGNE
-            </div>
-        </div>
     </aside>
 
     <main class="main-content">
 
         <div id="phase-1" class="phase active">
-            <h1>INITIALISATION</h1>
+            <h1>INITIALISATION DU SOCLE</h1>
             <div class="card">
-                <h2>Configuration du Socle</h2>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <h2>Paramètres Généraux</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
                     <div>
                         <label>🔒 Mot de Passe Admin</label>
                         <input type="password" id="config-pwd" value="admin123">
                     </div>
-
                     <div>
                         <label>🎓 Niveau Scolaire</label>
                         <select id="config-level">
                             <optgroup label="École Primaire">
-                                <option value="CP">CP</option>
-                                <option value="CE1">CE1</option>
-                                <option value="CE2">CE2</option>
-                                <option value="CM1">CM1</option>
                                 <option value="CM2">CM2</option>
                             </optgroup>
                             <optgroup label="Collège" selected>
@@ -186,44 +112,40 @@
                             <optgroup label="Lycée">
                                 <option value="2nde">2nde</option>
                                 <option value="1ère">1ère</option>
-                                <option value="Term">Terminale</option>
-                            </optgroup>
-                            <optgroup label="Autre">
-                                <option value="Groupe">Groupe Spécial</option>
                             </optgroup>
                         </select>
                     </div>
-
                     <div>
                         <label>📂 Nb Classes Sources</label>
-                        <input type="number" id="config-nb-src" value="6">
+                        <input type="number" id="config-nb-src" value="6" min="1" max="30">
                     </div>
                     <div>
                         <label>🎯 Nb Classes Cibles</label>
-                        <input type="number" id="config-nb-dest" value="6">
+                        <input type="number" id="config-nb-dest" value="6" min="1" max="20">
                     </div>
                 </div>
 
                 <div class="alert">
                     <i class="fas fa-info-circle"></i>
-                    Cliquez ci-dessous pour créer les onglets vides dans le tableur.
+                    Le système va créer les onglets automatiquement.
                 </div>
 
                 <button onclick="runInit()" class="btn btn-primary">
-                    <i class="fas fa-play"></i> LANCER LA CONSTRUCTION
+                    <i class="fas fa-hammer"></i> LANCER LA CONSTRUCTION
                 </button>
             </div>
         </div>
 
         <div id="phase-2" class="phase">
-            <h1>DONNÉES ÉLÈVES</h1>
+            <h1>IMPORTATION DONNÉES</h1>
             <div class="card">
-                <h2>Importation</h2>
-                <p style="margin-bottom: 20px;">Les onglets sont prêts. Remplissez-les avec vos listes.</p>
-
+                <h2>Action Requise</h2>
+                <p style="font-size: 18px; margin-bottom: 30px;">
+                    Les onglets sont créés. Vous devez maintenant les remplir avec vos listes d'élèves.
+                </p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <button onclick="google.script.host.close()" class="btn btn-secondary">
-                        <i class="fas fa-external-link-alt"></i> 1. FERMER POUR REMPLIR
+                        <i class="fas fa-door-open"></i> 1. QUITTER POUR REMPLIR
                     </button>
                     <button onclick="runDiagnostics()" class="btn btn-primary">
                         <i class="fas fa-sync"></i> 2. CONSOLIDER & VÉRIFIER
@@ -235,24 +157,13 @@
         <div id="phase-3" class="phase">
             <h1>STRATÉGIE</h1>
             <div class="card">
-                <h2>Cibles & Quotas</h2>
-
-                <div style="margin-bottom: 30px;">
-                    <div style="display: flex; justify-content: space-between; font-weight: 700; margin-bottom: 5px;">
-                        <span>Remplissage Global</span>
-                        <span id="fill-rate">0%</span>
-                    </div>
-                    <div class="gauge-track">
-                        <div id="fill-gauge" class="gauge-fill"></div>
-                    </div>
-                </div>
-
-                <button onclick="openConfig()" class="btn btn-primary" style="margin-bottom: 15px;">
-                    <i class="fas fa-sliders-h"></i> CONFIGURER LA STRUCTURE
+                <h2>Définition des Quotas</h2>
+                <p style="margin-bottom: 20px;">Configurez les niveaux attendus pour chaque classe cible.</p>
+                <button onclick="google.script.run.ouvrirConfigurationComplete()" class="btn btn-primary">
+                    <i class="fas fa-sliders-h"></i> OUVRIR LE CONFIGURATEUR
                 </button>
-
                 <button onclick="goToPhase(4)" class="btn btn-success">
-                    <i class="fas fa-check"></i> VALIDER LA STRATÉGIE
+                    <i class="fas fa-check"></i> VALIDER
                 </button>
             </div>
         </div>
@@ -260,21 +171,9 @@
         <div id="phase-4" class="phase">
             <h1>MOTEUR ULTIMATE</h1>
             <div class="card">
-                <h2>Paramètres de Calcul</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div>
-                        <label>Intensité (Swaps)</label>
-                        <input type="number" id="engine-swaps" value="2000">
-                    </div>
-                    <div>
-                        <label>Mode</label>
-                        <select id="engine-mode">
-                            <option value="standard">Standard</option>
-                            <option value="academic">Académique</option>
-                        </select>
-                    </div>
-                </div>
-                <button onclick="runEngine()" class="btn btn-primary" style="margin-top: 20px; height: 80px; font-size: 20px;">
+                <h2>Lancement du Calcul</h2>
+                <p style="margin-bottom: 20px;">L'algorithme va optimiser la répartition avec asymétrie pondérée.</p>
+                <button onclick="runEngine()" class="btn btn-primary">
                     <i class="fas fa-rocket"></i> LANCER L'OPTIMISATION
                 </button>
             </div>
@@ -283,55 +182,31 @@
         <div id="phase-5" class="phase">
             <h1>PILOTAGE FINAL</h1>
             <div class="card">
-                <h2>Validation</h2>
-                <button onclick="openSwap()" class="btn btn-secondary" style="margin-bottom: 15px;">
-                    <i class="fas fa-users"></i> OUVRIR INTERFACE PROFS
+                <h2>Validation & Finalisation</h2>
+                <button onclick="openProfsInterface()" class="btn btn-secondary">
+                    <i class="fas fa-users"></i> INTERFACE PROFS (SWAP)
                 </button>
                 <button onclick="finalize()" class="btn btn-success">
-                    <i class="fas fa-lock"></i> CRÉER ONGLETS "FIN"
+                    <i class="fas fa-lock"></i> FINALISER (CRÉER FIN)
                 </button>
             </div>
         </div>
 
     </main>
 
-    <aside class="panel-right">
-        <h2 style="font-size: 14px; color: #94a3b8; margin-bottom: 20px;">MÉTRIQUES LIVE</h2>
-
-        <div class="metric-card">
-            <div class="metric-val" id="metric-students">0</div>
-            <div class="metric-lbl">TOTAL ÉLÈVES</div>
-        </div>
-
-        <div class="metric-card">
-            <div class="metric-val" id="metric-classes">0</div>
-            <div class="metric-lbl">TOTAL CLASSES</div>
-        </div>
-
-        <div class="metric-card">
-            <div class="metric-val" id="metric-sources">0</div>
-            <div class="metric-lbl">SOURCES</div>
-        </div>
-    </aside>
-
     <script>
-        // Navigation
         function goToPhase(n) {
-            document.querySelectorAll('.phase').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.phase').forEach(e => e.classList.remove('active'));
             document.getElementById('phase-'+n).classList.add('active');
-
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
             document.getElementById('nav-'+n).classList.add('active');
-
-            if(n === 3) refreshStats();
         }
 
-        // Actions Serveur
         function runInit() {
             const btn = document.querySelector('#phase-1 .btn-primary');
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> CRÉATION EN COURS...';
+            btn.innerText = "⏳ TRAITEMENT EN COURS...";
 
-            const formData = {
+            const form = {
                 adminPassword: document.getElementById('config-pwd').value,
                 niveau: document.getElementById('config-level').value,
                 nbSources: parseInt(document.getElementById('config-nb-src').value),
@@ -340,97 +215,52 @@
                 opt: "LATIN"
             };
 
-            google.script.run.withSuccessHandler((res) => {
-                btn.innerHTML = '<i class="fas fa-play"></i> LANCER LA CONSTRUCTION';
+            google.script.run.withSuccessHandler(res => {
+                btn.innerText = "🔨 LANCER LA CONSTRUCTION";
                 if(res.success) {
-                    alert(res.message);
+                    alert("✅ " + res.message);
                     goToPhase(2);
                 } else {
-                    alert("ERREUR : " + res.error);
+                    alert("❌ ERREUR: " + res.error);
                 }
-            }).v3_runInitializationWithForm(formData);
+            }).withFailureHandler(err => {
+                btn.innerText = "🔨 LANCER LA CONSTRUCTION";
+                alert("❌ ERREUR SERVEUR: " + err.message);
+            }).v3_runInitializationWithForm(form);
         }
 
         function runDiagnostics() {
             google.script.run.withSuccessHandler(() => {
-                alert('Données analysées avec succès.');
+                alert("✅ Données consolidées avec succès.");
                 goToPhase(3);
+            }).withFailureHandler(err => {
+                alert("❌ Erreur: " + err.message);
             }).v3_runDiagnostics();
         }
 
-        function openConfig() {
-            google.script.run.ouvrirConfigurationComplete();
-        }
-
         function runEngine() {
-            google.script.run.withSuccessHandler((res) => {
-                alert('Calcul terminé : ' + res.swaps + ' swaps effectués.');
+            google.script.run.withSuccessHandler(() => {
+                alert("✅ Calcul lancé avec succès !");
                 goToPhase(5);
+            }).withFailureHandler(err => {
+                alert("❌ Erreur moteur: " + err.message);
             }).v3_runGeneration();
         }
 
-        function openSwap() {
-             google.script.run.withSuccessHandler(() => {
-                window.open(google.script.host.origin + google.script.host.path, '_blank');
-             }).v3_setBridgeContext('TEST', '');
+        function openProfsInterface() {
+            google.script.run.withSuccessHandler(() => {
+                alert("Interface professeurs ouverture...");
+            }).v3_setBridgeContext('TEST', '');
         }
 
         function finalize() {
-            if(confirm("Créer les onglets définitifs ?")) {
-                google.script.run.v3_finalizeProcess();
+            if(confirm("Créer les onglets définitifs (FIN) ?")) {
+                google.script.run.withSuccessHandler(() => {
+                    alert("✅ Finalisation terminée !");
+                }).withFailureHandler(err => {
+                    alert("❌ Erreur: " + err.message);
+                }).v3_finalizeProcess();
             }
-        }
-
-        function refreshStats() {
-            google.script.run.withSuccessHandler(data => {
-                if(data && data.totalPlaces > 0) {
-                   const el = parseInt(document.getElementById('metric-students').innerText) || 0;
-                   const pct = Math.min(100, Math.round((el / data.totalPlaces) * 100));
-                   document.getElementById('fill-gauge').style.width = pct + '%';
-                   document.getElementById('fill-rate').innerText = pct + '%';
-                }
-            }).v3_getStructureInfo();
-        }
-
-        // === GESTION INTELLIGENTE DES MÉTRIQUES (Mode Manuel) ===
-        // PLUS DE HEARTBEAT AUTOMATIQUE (429 errors)
-        // Mise à jour manuelle = zéro erreur 429
-
-        function updateMetricsManually() {
-            // Indicateur visuel discret (fade 0.5)
-            document.getElementById('metric-students').style.opacity = '0.5';
-
-            google.script.run.withSuccessHandler(res => {
-                if(res && res.students !== undefined) {
-                    document.getElementById('metric-students').innerText = res.students;
-                }
-                if(res && res.classes !== undefined) {
-                    document.getElementById('metric-classes').innerText = res.classes;
-                }
-                if(res && res.sources !== undefined) {
-                    document.getElementById('metric-sources').innerText = res.sources;
-                }
-                document.getElementById('metric-students').style.opacity = '1';
-            }).withFailureHandler(err => {
-                // Erreur silencieuse, pas de crash
-                document.getElementById('metric-students').style.opacity = '1';
-                console.warn('Métrique non disponible:', err);
-            }).v3_getMetrics();
-        }
-
-        // Mise à jour initiale (une seule fois au chargement, avec délai)
-        setTimeout(updateMetricsManually, 1500);
-
-        // Wrapper autour de goToPhase pour mise à jour intelligente
-        const originalGoToPhase = goToPhase;
-        goToPhase = function(n) {
-            originalGoToPhase(n); // Appel de la fonction originale
-            if(n === 3) {
-                // Phase 3 = besoin des stats
-                refreshStats();
-            }
-            // Mise à jour légère après changement de phase (500ms)
-            setTimeout(updateMetricsManually, 500);
         }
     </script>
 </body>
