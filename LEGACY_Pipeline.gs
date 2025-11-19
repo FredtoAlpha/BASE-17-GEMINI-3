@@ -209,13 +209,7 @@ function finalizeAllSheets(ctx) {
   };
 }
 
-/**
- * Utilitaire logging
- */
-function logLine(level, msg) {
-  const timestamp = new Date().toLocaleTimeString('fr-FR');
-  Logger.log(`[${timestamp}] [${level}] ${msg}`);
-}
+// logLine() defined in Phase4_Ultimate.gs (single global definition)
 
 // ===================================================================
 // ENTRÉES ALTERNATIVES (Menu + Console)
@@ -229,20 +223,7 @@ function ouvrirPipeline_FromConsole_V3(options) {
   return legacy_runFullPipeline_PRIME();
 }
 
-/**
- * Entrée depuis Menu (Backward compatibility)
- */
-function legacy_viewSourceClasses() {
-  const sheets = detectSourceSheets();
-  if (sheets.length === 0) {
-    SpreadsheetApp.getUi().alert('⚠️ Aucune classe source détectée.');
-    return;
-  }
-  SpreadsheetApp.getActiveSpreadsheet().setActiveSheet(
-    SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheets[0])
-  );
-  SpreadsheetApp.getUi().alert(`Classes détectées: ${sheets.join(', ')}`);
-}
+// legacy_viewSourceClasses() moved to Code.gs (single entry point)
 
 // ===================================================================
 // TEST FUNCTION

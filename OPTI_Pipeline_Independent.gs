@@ -197,14 +197,7 @@ function finalizePhase_OPTI(ctx, options) {
 // UTILITAIRES & LOGGING
 // ===================================================================
 
-/**
- * Log avec timestamp
- */
-function logLine(level, msg) {
-  const timestamp = new Date().toLocaleTimeString('fr-FR');
-  const prefix = `[${timestamp}] [${level}]`;
-  Logger.log(`${prefix} ${msg}`);
-}
+// logLine() defined in Phase4_Ultimate.gs (single global definition)
 
 /**
  * Lance le pipeline (wrapper pour menu)
