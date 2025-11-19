@@ -77,12 +77,17 @@ function v3_runInitializationWithForm(formData) {
       };
     }
 
-    // 2. Valider les données
-    const niveauxValides = ["6°", "5°", "4°", "3°"];
+    // 2. Valider les données (LISTE ÉTENDUE - Universelle)
+    // On accepte tous les niveaux scolaires : primaire, collège, lycée
+    const niveauxValides = [
+      "CP", "CE1", "CE2", "CM1", "CM2",
+      "6°", "5°", "4°", "3°",
+      "2nde", "1ère", "Term"
+    ];
     if (!niveauxValides.includes(formData.niveau)) {
       return {
         success: false,
-        error: "Niveau invalide. Valeurs acceptées: 6°, 5°, 4°, 3°"
+        error: "Niveau invalide. Valeurs acceptées: CP, CE1, CE2, CM1, CM2, 6°, 5°, 4°, 3°, 2nde, 1ère, Term"
       };
     }
 

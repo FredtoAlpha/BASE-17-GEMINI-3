@@ -7,17 +7,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        /* VARIABLES & RESET */
+        /* =====================================================================
+         * DESIGN SYSTEM "BOLD & CLEAR"
+         * ===================================================================*/
         :root {
             --primary-500: #667eea; --primary-600: #5468d8;
             --bg-primary: #ffffff; --bg-secondary: #f8fafc; --text-primary: #1e293b;
             --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
             --sidebar-width: 280px;
+            --font-family: 'Inter', -apple-system, sans-serif;
         }
         [data-theme="dark"] {
             --bg-primary: #0f172a; --bg-secondary: #1e293b; --text-primary: #f8fafc;
         }
-        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--bg-primary); color: var(--text-primary); height: 100vh; overflow: hidden; }
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            font-size: 16px;
+            font-weight: 500;
+        }
 
         /* LAYOUT */
         .app-container { display: grid; grid-template-columns: var(--sidebar-width) 1fr; height: 100%; }
@@ -25,7 +38,7 @@
         /* SIDEBAR */
         .sidebar { background: linear-gradient(180deg, #1e1b4b 0%, #312e81 100%); color: white; padding: 20px; display: flex; flex-direction: column; }
         .brand { font-size: 18px; font-weight: 800; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; }
-        .nav-item { padding: 12px 15px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; opacity: 0.7; transition: 0.2s; }
+        .nav-item { padding: 12px 15px; margin-bottom: 5px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; opacity: 0.7; transition: 0.2s; font-weight: 700; }
         .nav-item:hover { opacity: 1; background: rgba(255,255,255,0.1); }
         .nav-item.active { opacity: 1; background: var(--primary-500); font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .nav-item.disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
@@ -37,15 +50,55 @@
 
         /* COMPONENTS */
         .card { background: var(--bg-primary); border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        h1 { font-size: 28px; margin-bottom: 10px; }
-        h2 { font-size: 20px; margin-bottom: 20px; color: var(--primary-500); }
-        label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; margin-top: 15px; }
-        input, select { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; background: var(--bg-primary); color: var(--text-primary); }
+        h1 { font-size: 32px; font-weight: 900; margin-bottom: 10px; letter-spacing: -1px; }
+        h2 { font-size: 22px; font-weight: 800; margin-bottom: 20px; color: var(--primary-500); }
 
-        .btn { padding: 12px 24px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 800;
+            color: #334155;
+            margin-bottom: 8px;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #0f172a;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+            outline: none;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 800;
+            font-size: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
         .btn-primary { background: var(--primary-500); color: white; }
         .btn-primary:hover { background: var(--primary-600); transform: translateY(-1px); }
         .btn-secondary { background: #e2e8f0; color: #475569; }
+        .btn-success { background: var(--success); color: white; }
 
         /* UTILS */
         .alert { padding: 15px; border-radius: 8px; background: #eff6ff; border-left: 4px solid var(--primary-500); margin: 20px 0; font-size: 14px; }
@@ -97,12 +150,26 @@
                         <input type="password" id="config-pwd" placeholder="Requis pour initialiser">
                     </div>
                     <div>
-                        <label>Niveau</label>
+                        <label>Niveau Scolaire</label>
                         <select id="config-level">
-                            <option value="6°">6ème</option>
-                            <option value="5°">5ème</option>
-                            <option value="4°">4ème</option>
-                            <option value="3°">3ème</option>
+                            <optgroup label="École Primaire">
+                                <option value="CP">CP</option>
+                                <option value="CE1">CE1</option>
+                                <option value="CE2">CE2</option>
+                                <option value="CM1">CM1</option>
+                                <option value="CM2">CM2</option>
+                            </optgroup>
+                            <optgroup label="Collège">
+                                <option value="6°" selected>6ème</option>
+                                <option value="5°">5ème</option>
+                                <option value="4°">4ème</option>
+                                <option value="3°">3ème</option>
+                            </optgroup>
+                            <optgroup label="Lycée">
+                                <option value="2nde">2nde</option>
+                                <option value="1ère">1ère</option>
+                                <option value="Term">Terminale</option>
+                            </optgroup>
                         </select>
                     </div>
                     <div>
@@ -276,6 +343,53 @@
              google.script.run.v3_finalizeProcess();
         }
     }
+
+    // ===================================================================
+    // 💓 LE POULS (HEARTBEAT) - Version Sûre
+    // ===================================================================
+    function startHeartbeat() {
+        // Un seul intervalle propre - Toutes les 5 secondes
+        setInterval(() => {
+            // Vérifier que google.script.run est disponible
+            if(typeof google !== 'undefined' && google.script && google.script.run) {
+                google.script.run.withSuccessHandler(updateMetrics).v3_getMetrics();
+            }
+        }, 5000);
+
+        // Un seul appel initial avec délai (laisser le temps au chargement)
+        setTimeout(() => {
+            if(typeof google !== 'undefined' && google.script && google.script.run) {
+                google.script.run.withSuccessHandler(updateMetrics).v3_getMetrics();
+            }
+        }, 1000);
+
+        // Horloge (optionnel)
+        setInterval(updateClock, 1000);
+    }
+
+    function updateMetrics(metrics) {
+        // Met à jour les chiffres si vous en avez besoin
+        if (metrics) {
+            console.log('Métriques reçues:', metrics);
+        }
+    }
+
+    function updateClock() {
+        const el = document.getElementById('current-time');
+        if(el) {
+            const now = new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+            el.textContent = now;
+        }
+    }
+
+    // ===================================================================
+    // 🚀 INITIALISATION - Au chargement de la page
+    // ===================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        // Lancer le heartbeat
+        startHeartbeat();
+        console.log('✅ Console V3 Expert chargée - Heartbeat actif');
+    });
 </script>
 </body>
 </html>
