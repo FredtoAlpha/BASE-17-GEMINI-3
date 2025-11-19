@@ -471,3 +471,95 @@ function v3_getStructureInfo() {
     };
   }
 }
+
+/**
+ * ===================================================================
+ * PHASE 3 : ÉDITEUR DE STRUCTURE INTÉGRÉ
+ * ===================================================================
+ */
+
+/**
+ * Récupère les données pour l'éditeur de structure intégré (Phase 3)
+ */
+function v3_getStructureDataForEditor() {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const config = getConfig(); // Lit _CONFIG pour avoir les options/LV2 définies en Phase 1
+
+    // 1. Récupérer les options actives
+    const lv2List = (config.LV2 || "").split(',').map(s => s.trim()).filter(Boolean);
+    const optList = (config.OPT || "").split(',').map(s => s.trim()).filter(Boolean);
+
+    // 2. Générer le squelette basé sur la config Init
+    const niveau = config.NIVEAU || "Niveau";
+    const nbDest = parseInt(config.NB_DEST) || 6;
+
+    const classesGenerated = [];
+    for(let i=1; i<=nbDest; i++) {
+       classesGenerated.push({
+         name: `${niveau}${i}`,
+         capacity: 30,
+         quotas: {} // Vide par défaut
+       });
+    }
+
+    return {
+      success: true,
+      lv2: lv2List,
+      options: optList,
+      classes: classesGenerated
+    };
+
+  } catch (e) {
+    Logger.log("Erreur v3_getStructureDataForEditor: " + e.toString());
+    return { success: false, error: e.toString() };
+  }
+}
+
+/**
+ * Sauvegarde la structure depuis l'éditeur intégré
+ */
+function v3_saveStructureFromEditor(data) {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName('_STRUCTURE');
+
+    // Si pas de feuille, on la recrée (sécurité)
+    if (!sheet) {
+      sheet = ss.insertSheet('_STRUCTURE');
+    }
+
+    // On réécrit le sheet proprement
+    sheet.clear();
+
+    const headers = ["Type", "Nom Classe", "Capacité Max", "Options (Quotas)"];
+    sheet.appendRow(headers);
+    sheet.getRange(1,1,1,4).setFontWeight("bold").setBackground("#d3d3d3");
+
+    // Construire les lignes
+    const rows = [];
+    data.classes.forEach(cls => {
+        // Construire la chaîne d'options : "ITA=5,LATIN=2"
+        let optsParts = [];
+        if (cls.quotas) {
+            for (const [key, val] of Object.entries(cls.quotas)) {
+                if (val > 0) optsParts.push(`${key}=${val}`);
+            }
+        }
+
+        // Ligne pour la classe (Type TEST pour le moteur)
+        rows.push(["TEST", cls.name, cls.capacity, optsParts.join(',')]);
+    });
+
+    if(rows.length > 0) {
+        sheet.getRange(2, 1, rows.length, 4).setValues(rows);
+    }
+
+    Logger.log("Structure enregistrée avec succès");
+    return { success: true, message: "Structure enregistrée !" };
+
+  } catch(e) {
+    Logger.log("Erreur v3_saveStructureFromEditor: " + e.toString());
+    return { success: false, error: e.toString() };
+  }
+}
