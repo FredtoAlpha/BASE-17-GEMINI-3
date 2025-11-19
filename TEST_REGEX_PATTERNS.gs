@@ -1,59 +1,96 @@
-// Test des patterns de détection des onglets sources
+// TEST & DOCUMENTATION - LA VRAIE SOLUTION
+//
+// ❌ ERREUR QUE J'AI COMMISE:
+// J'ai pensé que c'était basé sur le dernier CARACTÈRE (chiffre vs lettre).
+// Mais c'est FAUX! C'est ADAPTATIF au CONTEXTE (quel niveau on répartit).
+//
+// ✅ SOLUTION CORRECTE & UNIVERSELLE:
+// Les onglets SOURCES ont TOUJOURS le format: QUELQUECHOSE°CHIFFRE
+// - Si on répartit le niveau 5e → sources sont 6°1, 6°2, 6°3, etc.
+// - Si on répartit CM2 → sources sont BRESSOLS°1, GAMARRA°2, etc.
+// - Le pattern IDENTIQUE fonctionne TOUJOURS: /^[A-Za-z0-9_-]+°\d+$/
+//
+// Les DESTINATIONS et RÉSULTATS ont des suffixes explicites:
+// - °A, °B, °C, etc. (destinations)
+// - TEST, FIN, DEF, CACHE (résultats)
 
-// Pattern actuel dans le code
-const currentPattern = /^(ECOLE\d+|[A-Za-z0-9_-]+°\d+)$/;
+const sourcePattern = /^[A-Za-z0-9_-]+°\d+$/;     // QUELQUECHOSE°CHIFFRE (source adaptatif)
+const destinationPattern = /^[A-Za-z0-9_-]+°[A-Za-z]$/; // QUELQUECHOSE°LETTRE (destination)
 
-// Pattern simplifié (tout avec °)
-const simplifiedPattern = /^[A-Za-z0-9_-]+°\d+$/;
-
-// Cas de test fournis par l'utilisateur
+// CAS DE TEST
 const testCases = [
-  '6°1',        // Niveau 6, classe 1
-  '5°3',        // Niveau 5, classe 3
-  '3°4',        // Niveau 4, classe 4
-  'GAMARRA°7',  // Nom personnalisé, classe 7
-  // Autres cas à tester
-  '4°2',        // Niveau 4, classe 2
-  'ECOLE°1',    // ECOLE avec °
-  'ECOLE1',     // ECOLE sans ° (ancien format ?)
-  'COLBERT°5',  // Autre nom personnalisé
-  '6°1TEST',    // Avec TEST (doit être rejeté)
-  '6°1DEF',     // Avec DEF (doit être rejeté)
-  'TEST',       // Juste TEST (doit être rejeté)
-  '_CONFIG',    // Config sheet (doit être rejeté)
+  // SOURCES: Format QUELQUECHOSE°CHIFFRE (adaptatif)
+  { name: '6°1', type: 'SOURCE 5e', shouldAccept: true },
+  { name: '6°2', type: 'SOURCE 5e', shouldAccept: true },
+  { name: '6°3', type: 'SOURCE 5e', shouldAccept: true },
+  { name: 'BRESSOLS°1', type: 'SOURCE CM2', shouldAccept: true },
+  { name: 'GAMARRA°7', type: 'SOURCE CM2', shouldAccept: true },
+  { name: 'COLBERT°4', type: 'SOURCE CM2', shouldAccept: true },
+
+  // DESTINATIONS: Format QUELQUECHOSE°LETTRE (suffixes explicites)
+  { name: '5°A', type: 'DESTINATION', shouldAccept: false },
+  { name: '5°B', type: 'DESTINATION', shouldAccept: false },
+  { name: '5°C', type: 'DESTINATION', shouldAccept: false },
+  { name: 'CM2A', type: 'DESTINATION', shouldAccept: false },
+  { name: '6°Z', type: 'DESTINATION', shouldAccept: false },
+
+  // RÉSULTATS: Suffixes explicites TEST/FIN/DEF/CACHE
+  { name: '6°1TEST', type: 'RÉSULTAT TEST', shouldAccept: false },
+  { name: '6°1FIN', type: 'RÉSULTAT FIN', shouldAccept: false },
+  { name: '6°1DEF', type: 'RÉSULTAT DEF', shouldAccept: false },
+  { name: '6°1CACHE', type: 'RÉSULTAT CACHE', shouldAccept: false },
+
+  // SYSTÈME: Préfixe _
+  { name: '_CONFIG', type: 'SYSTÈME', shouldAccept: false },
+  { name: '_STRUCTURE', type: 'SYSTÈME', shouldAccept: false },
+
+  // INTERFACES
+  { name: 'ACCUEIL', type: 'INTERFACE', shouldAccept: false },
+  { name: 'CONSOLIDATION', type: 'INTERFACE', shouldAccept: false },
 ];
 
-console.log('╔═══════════════════════════════════════════════════════════╗');
-console.log('║ TEST DES PATTERNS DE DÉTECTION DES ONGLETS SOURCES       ║');
-console.log('╚═══════════════════════════════════════════════════════════╝\n');
+console.log('╔═══════════════════════════════════════════════════════════════╗');
+console.log('║ PATTERN UNIVERSEL & ADAPTATIF - Sources vs Destinations       ║');
+console.log('╚═══════════════════════════════════════════════════════════════╝\n');
 
-console.log('Pattern actuel : /^(ECOLE\\d+|[A-Za-z0-9_-]+°\\d+)$/');
-console.log('Pattern simplifié: /^[A-Za-z0-9_-]+°\\d+$/\n');
+console.log('PATTERN SOURCE: /^[A-Za-z0-9_-]+°\\d+$/');
+console.log('Format: QUELQUECHOSE°CHIFFRE');
+console.log('Accepte: 6°1, 6°2 (niveau 5e) OU BRESSOLS°1, GAMARRA°2 (niveau CM2)');
+console.log('Fonctionne TOUJOURS peu importe le contexte/niveau!\n');
 
-console.log('─────────────────────────────────────────────────────────────');
-console.log('CAS DE TEST                 | ACTUEL | SIMPLIFIÉ');
-console.log('─────────────────────────────────────────────────────────────');
+console.log('─────────────────────────────┬──────────────┬────────────────────');
+console.log('NOM ONGLET                   │ TYPE         │ RÉSULTAT');
+console.log('─────────────────────────────┼──────────────┼────────────────────');
 
-testCases.forEach(testCase => {
-  const matchCurrent = currentPattern.test(testCase);
-  const matchSimplified = simplifiedPattern.test(testCase);
+let correct = 0;
+let total = 0;
 
-  const pad = 27 - testCase.length;
+testCases.forEach(test => {
+  const matches = sourcePattern.test(test.name);
+  const result = matches ? 'ACCEPTÉ ✅' : 'REJETÉ ❌';
+  const expected = test.shouldAccept ? 'ACCEPTÉ ✅' : 'REJETÉ ❌';
+  const status = matches === test.shouldAccept ? '✅ OK' : '❌ ERREUR';
+
+  const pad = 28 - test.name.length;
   const padding = ' '.repeat(Math.max(0, pad));
+  const typePad = 12 - test.type.length;
+  const typePadding = ' '.repeat(Math.max(0, typePad));
 
-  const current = matchCurrent ? '  ✅   ' : '  ❌   ';
-  const simplified = matchSimplified ? '  ✅' : '  ❌';
+  console.log(`${test.name}${padding}│ ${test.type}${typePadding} │ ${result} ${status}`);
 
-  console.log(`${testCase}${padding} |${current}|${simplified}`);
+  total++;
+  if (matches === test.shouldAccept) correct++;
 });
 
-console.log('─────────────────────────────────────────────────────────────\n');
+console.log('─────────────────────────────┴──────────────┴────────────────────\n');
 
-console.log('ANALYSE :');
-console.log('• Pattern actuel supporte ECOLE1 (sans °)');
-console.log('• Pattern simplifié requiert TOUJOURS le symbole °');
-console.log('• Les deux rejettent correctement TEST/DEF\n');
+console.log(`RÉSULTATS: ${correct}/${total} cas corrects\n`);
 
-console.log('RECOMMANDATION :');
-console.log('Si TOUS les onglets sources ont TOUJOURS le °,');
-console.log('alors le pattern simplifié est plus cohérent.');
+console.log('BÉNÉFICES DU PATTERN:');
+console.log('✅ Accepte: 6°1, 6°2, 6°3 (niveau 5e) - adaptatif!');
+console.log('✅ Accepte: BRESSOLS°1, GAMARRA°7 (niveau CM2) - adaptatif!');
+console.log('❌ Rejette: 5°A, 5°B, 5°C (destinations avec °LETTRE)');
+console.log('❌ Rejette: 6°1TEST, 6°1FIN, etc. (résultats)');
+console.log('❌ Rejette: _CONFIG, _STRUCTURE (système)');
+console.log('\n🎯 UN SEUL PATTERN fonctionne pour TOUS les niveaux!');
+console.log('🎯 C\'est RÉELLEMENT ADAPTATIF et UNIVERSEL!');
