@@ -34,14 +34,18 @@ function loadAllStudentsData(ctx) {
   const ss = ctx.ss || SpreadsheetApp.getActiveSpreadsheet();
   const allStudents = [];
 
-  // ✅ PATTERN INTELLIGENT: Accepte sources (finissent par chiffre), rejette destinations (finissent par lettre)
-  // Sources: 6°1, 5e2, CM2, BRESSOLS°4 ✅
-  // Destinations: 6°A, 5°B, 5°C ❌ (finissent par lettre)
+  // ✅ PATTERN UNIVERSEL & ADAPTATIF
+  // Les sources ont TOUJOURS le format: QUELQUECHOSE°CHIFFRE
+  // Ex: 6°1, 6°2, 6°3 (si répartition 5e)
+  //     BRESSOLS°1, GAMARRA°2 (si répartition CM2)
+  // Destinations: °A, °B, °C, etc. (terminées par LETTRE après °)
+  // Résultats: TEST, FIN, DEF, CACHE
   const sheets = ss.getSheets().filter(s => {
     const name = s.getName();
 
-    // 1. Doit finir par un chiffre (source = données élèves)
-    if (!/^[A-Za-z0-9_-]+\d$/.test(name)) return false;
+    // 1. PATTERN SOURCE: Doit avoir le symbole ° suivi de chiffres
+    const sourcePattern = /^[A-Za-z0-9_-]+°\d+$/;
+    if (!sourcePattern.test(name)) return false;
 
     // 2. Exclure onglets système
     if (name.toUpperCase().startsWith('_')) return false;

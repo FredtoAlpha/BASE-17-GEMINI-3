@@ -13,14 +13,17 @@ function genererNomPrenomEtID() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ui = SpreadsheetApp.getUi();
 
-  // ✅ PATTERN INTELLIGENT: Doit finir par un chiffre (source, pas destination)
-  // Sources: 6°1, 5e2, CM2, BRESSOLS°4 ✅
-  // Destinations: 6°A, 5°B, 5°C ❌ (lettre à la fin)
+  // ✅ PATTERN UNIVERSEL & ADAPTATIF
+  // Les sources ont TOUJOURS le format: QUELQUECHOSE°CHIFFRE
+  // Fonctionne avec n'importe quel niveau (adaptatif):
+  // - 6°1, 6°2, 6°3 (sources si répartition 5e)
+  // - BRESSOLS°1, GAMARRA°2 (sources si répartition CM2)
   const sheets = ss.getSheets().filter(s => {
     const name = s.getName();
 
-    // 1. Doit finir par un chiffre
-    if (!/^[A-Za-z0-9_-]+\d$/.test(name)) return false;
+    // 1. PATTERN SOURCE: QUELQUECHOSE°CHIFFRE
+    const sourcePattern = /^[A-Za-z0-9_-]+°\d+$/;
+    if (!sourcePattern.test(name)) return false;
 
     // 2. Exclure onglets système
     if (name.toUpperCase().startsWith('_')) return false;
