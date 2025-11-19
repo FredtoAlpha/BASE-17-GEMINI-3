@@ -392,14 +392,46 @@
             }).v3_getStructureInfo();
         }
 
-        // Heartbeat (Ralenti à 10s pour éviter erreur 429)
-        setInterval(() => {
+        // === GESTION INTELLIGENTE DES MÉTRIQUES (Mode Manuel) ===
+        // PLUS DE HEARTBEAT AUTOMATIQUE (429 errors)
+        // Mise à jour manuelle = zéro erreur 429
+
+        function updateMetricsManually() {
+            // Indicateur visuel discret (fade 0.5)
+            document.getElementById('metric-students').style.opacity = '0.5';
+
             google.script.run.withSuccessHandler(res => {
-                document.getElementById('metric-students').innerText = res.students;
-                document.getElementById('metric-classes').innerText = res.classes;
-                document.getElementById('metric-sources').innerText = res.sources;
+                if(res && res.students !== undefined) {
+                    document.getElementById('metric-students').innerText = res.students;
+                }
+                if(res && res.classes !== undefined) {
+                    document.getElementById('metric-classes').innerText = res.classes;
+                }
+                if(res && res.sources !== undefined) {
+                    document.getElementById('metric-sources').innerText = res.sources;
+                }
+                document.getElementById('metric-students').style.opacity = '1';
+            }).withFailureHandler(err => {
+                // Erreur silencieuse, pas de crash
+                document.getElementById('metric-students').style.opacity = '1';
+                console.warn('Métrique non disponible:', err);
             }).v3_getMetrics();
-        }, 10000); // 10 secondes
+        }
+
+        // Mise à jour initiale (une seule fois au chargement, avec délai)
+        setTimeout(updateMetricsManually, 1500);
+
+        // Wrapper autour de goToPhase pour mise à jour intelligente
+        const originalGoToPhase = goToPhase;
+        goToPhase = function(n) {
+            originalGoToPhase(n); // Appel de la fonction originale
+            if(n === 3) {
+                // Phase 3 = besoin des stats
+                refreshStats();
+            }
+            // Mise à jour légère après changement de phase (500ms)
+            setTimeout(updateMetricsManually, 500);
+        }
     </script>
 </body>
 </html>
