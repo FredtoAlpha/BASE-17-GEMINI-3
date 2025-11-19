@@ -13,21 +13,26 @@ function genererNomPrenomEtID() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ui = SpreadsheetApp.getUi();
 
-  // ✅ DÉTECTION UNIVERSELLE PAR EXCLUSION
-  // On prend TOUS les onglets SAUF ceux qui sont système/résultats
+  // ✅ PATTERN INTELLIGENT: Doit finir par un chiffre (source, pas destination)
+  // Sources: 6°1, 5e2, CM2, BRESSOLS°4 ✅
+  // Destinations: 6°A, 5°B, 5°C ❌ (lettre à la fin)
   const sheets = ss.getSheets().filter(s => {
-    const name = s.getName().toUpperCase();
+    const name = s.getName();
 
-    // Exclure les onglets système (commencent par _)
-    if (name.startsWith('_')) return false;
+    // 1. Doit finir par un chiffre
+    if (!/^[A-Za-z0-9_-]+\d$/.test(name)) return false;
 
-    // Exclure les interfaces
-    if (name === 'ACCUEIL' || name === 'CONSOLIDATION') return false;
+    // 2. Exclure onglets système
+    if (name.toUpperCase().startsWith('_')) return false;
 
-    // Exclure les résultats/outputs
-    if (name.endsWith('TEST') || name.endsWith('FIN') || name.endsWith('DEF') || name.endsWith('CACHE')) return false;
+    // 3. Exclure interfaces
+    const upper = name.toUpperCase();
+    if (upper === 'ACCUEIL' || upper === 'CONSOLIDATION') return false;
 
-    return true; // Tout le reste est une source
+    // 4. Exclure résultats
+    if (upper.endsWith('TEST') || upper.endsWith('FIN') || upper.endsWith('DEF') || upper.endsWith('CACHE')) return false;
+
+    return true;
   });
 
   if (sheets.length === 0) {

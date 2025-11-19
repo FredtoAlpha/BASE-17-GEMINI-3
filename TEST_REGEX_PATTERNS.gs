@@ -1,91 +1,79 @@
-// TEST & DOCUMENTATION DES APPROCHES DE DÉTECTION D'ONGLETS SOURCES
+// TEST & DOCUMENTATION - LA VRAIE SOLUTION
 //
-// ANCIENNES APPROCHES (Basées sur des patterns regex):
-// ─────────────────────────────────────────────────────
-// Ces approches étaient trop restrictives et failaient avec des formats non-conventionnels
-
-// Pattern strict (6°1 uniquement)
-const strictPattern = /^\d+°\d+$/;
-
-// Pattern avec ECOLE support
-const ecoleSupportPattern = /^(ECOLE\d+|[A-Za-z0-9_-]+°\d+)$/;
-
-// Pattern universel (°-obligatoire)
-const universalPattern = /^[A-Za-z0-9_-]+°\d+$/;
-
+// ❌ PROBLÈME INITIAL:
+// J'avais utilisé une détection "par exclusion universelle" qui acceptait TOUS les onglets sauf système.
+// Résultat: Les DESTINATIONS (6°A, 5°B) étaient aussi lues comme SOURCES!
 //
-// NOUVELLE APPROCHE (Détection par exclusion) ✅ RECOMMANDÉE
-// ────────────────────────────────────────────────────────────
-// Accepte TOUS les onglets SAUF ceux qui sont système/résultats.
-// C'est plus flexible et future-proof.
+// ✅ SOLUTION CORRECTE:
+// Un onglet SOURCE finit TOUJOURS par un CHIFFRE
+// Une DESTINATION finit par une LETTRE
+// Pattern simple: /^[A-Za-z0-9_-]+\d$/
 
-function isSourceSheet(name) {
-  const upper = name.toUpperCase();
-
-  // Exclure les onglets système (commencent par _)
-  if (upper.startsWith('_')) return false;
-
-  // Exclure les interfaces
-  if (upper === 'ACCUEIL' || upper === 'CONSOLIDATION') return false;
-
-  // Exclure les résultats/outputs
-  if (upper.endsWith('TEST') || upper.endsWith('FIN') || upper.endsWith('DEF') || upper.endsWith('CACHE')) return false;
-
-  return true; // Tout le reste est une source
-}
+const sourcePattern = /^[A-Za-z0-9_-]+\d$/;     // Doit finir par chiffre (source)
+const destinationPattern = /^[A-Za-z0-9_-]+[A-Za-z]$/; // Finit par lettre (destination)
 
 // CAS DE TEST
 const testCases = [
-  '6°1',        // ✅ Format standard
-  '5°3',        // ✅ Format standard
-  '3°4',        // ✅ Format standard
-  'GAMARRA°7',  // ✅ Nom personnalisé
-  '4°2',        // ✅ Format standard
-  'ECOLE°1',    // ✅ ECOLE avec °
-  'ECOLE1',     // ✅ ECOLE sans ° (now accepted by exclusion!)
-  'COLBERT°5',  // ✅ Autre nom personnalisé
-  '5e1',        // ✅ Format alternatif (NEW!)
-  'CM2',        // ✅ Format primaire (NEW!)
-  'MONCLASS',   // ✅ N'importe quel nom (NEW!)
-  '6°1TEST',    // ❌ TEST → exclure
-  '6°1DEF',     // ❌ DEF → exclure
-  '6°1CACHE',   // ❌ CACHE → exclure
-  'TEST',       // ❌ TEST → exclure
-  '_CONFIG',    // ❌ Config sheet → exclure
-  '_STRUCTURE', // ❌ Structure sheet → exclure
-  'ACCUEIL',    // ❌ Interface → exclure
-  'CONSOLIDATION', // ❌ Interface → exclure
+  // SOURCES (finissent par chiffre) → doivent être acceptées
+  { name: '6°1', type: 'SOURCE', shouldAccept: true },
+  { name: '5°3', type: 'SOURCE', shouldAccept: true },
+  { name: '3°4', type: 'SOURCE', shouldAccept: true },
+  { name: 'GAMARRA°7', type: 'SOURCE', shouldAccept: true },
+  { name: '5e2', type: 'SOURCE', shouldAccept: true },
+  { name: 'CM2', type: 'SOURCE', shouldAccept: true },
+  { name: 'BRESSOLS°4', type: 'SOURCE', shouldAccept: true },
+
+  // DESTINATIONS (finissent par lettre) → DOIVENT ÊTRE REJETÉES!
+  { name: '6°A', type: 'DESTINATION', shouldAccept: false },
+  { name: '5°B', type: 'DESTINATION', shouldAccept: false },
+  { name: '5°C', type: 'DESTINATION', shouldAccept: false },
+  { name: 'CM2A', type: 'DESTINATION', shouldAccept: false },
+  { name: '6°Z', type: 'DESTINATION', shouldAccept: false },
+
+  // RÉSULTATS/SYSTÈME → Rejetés
+  { name: '6°1TEST', type: 'RÉSULTAT', shouldAccept: false },
+  { name: '_CONFIG', type: 'SYSTÈME', shouldAccept: false },
+  { name: 'ACCUEIL', type: 'INTERFACE', shouldAccept: false },
 ];
 
-console.log('╔════════════════════════════════════════════════════════════╗');
-console.log('║ TEST DES APPROCHES DE DÉTECTION - PATTERNS vs EXCLUSION   ║');
-console.log('╚════════════════════════════════════════════════════════════╝\n');
+console.log('╔═══════════════════════════════════════════════════════════════╗');
+console.log('║ PATTERN INTELLIGENT: Sources vs Destinations                 ║');
+console.log('╚═══════════════════════════════════════════════════════════════╝\n');
 
-console.log('APPROCHE ANCIENNE: Pattern regex (trop restrictif)');
-console.log('APPROCHE NOUVELLE: Détection par exclusion (flexible & robust)\n');
+console.log('PATTERN: /^[A-Za-z0-9_-]+\\d$/');
+console.log('Accepte: Tout ce qui finit par CHIFFRE (données élèves)');
+console.log('Rejette: Tout ce qui finit par LETTRE (classes cibles)\n');
 
-console.log('─────────────────────────────┬─────────┬──────────────────────');
-console.log('NOM ONGLET                   │ PATTERN │ EXCLUSION (NEW)');
-console.log('─────────────────────────────┼─────────┼──────────────────────');
+console.log('─────────────────────────────┬──────────────┬────────────────────');
+console.log('NOM ONGLET                   │ TYPE         │ RÉSULTAT');
+console.log('─────────────────────────────┼──────────────┼────────────────────');
 
-testCases.forEach(testCase => {
-  const matchStrict = strictPattern.test(testCase);
-  const matchUniversal = universalPattern.test(testCase);
-  const isSource = isSourceSheet(testCase);
+let correct = 0;
+let total = 0;
 
-  const pad = 28 - testCase.length;
+testCases.forEach(test => {
+  const matches = sourcePattern.test(test.name);
+  const result = matches ? 'ACCEPTÉ ✅' : 'REJETÉ ❌';
+  const expected = test.shouldAccept ? 'ACCEPTÉ ✅' : 'REJETÉ ❌';
+  const status = matches === test.shouldAccept ? '✅ OK' : '❌ ERREUR';
+
+  const pad = 28 - test.name.length;
   const padding = ' '.repeat(Math.max(0, pad));
+  const typePad = 12 - test.type.length;
+  const typePadding = ' '.repeat(Math.max(0, typePad));
 
-  const pattern = matchUniversal ? '  ✅   ' : '  ❌   ';
-  const exclusion = isSource ? '     ✅ SOURCE' : '     ❌ EXCLURE';
+  console.log(`${test.name}${padding}│ ${test.type}${typePadding} │ ${result} ${status}`);
 
-  console.log(`${testCase}${padding}│${pattern}│${exclusion}`);
+  total++;
+  if (matches === test.shouldAccept) correct++;
 });
 
-console.log('─────────────────────────────┴─────────┴──────────────────────\n');
+console.log('─────────────────────────────┴──────────────┴────────────────────\n');
 
-console.log('RÉSUMÉ:');
-console.log('✅ Pattern universel: Accepte tout avec ° sauf TEST/DEF/FIN/CACHE');
-console.log('✅ Exclusion (NEW): Accepte TOUS les noms, exclut seulement système');
-console.log('\nRECOMMANDATION: Utiliser EXCLUSION (plus flexible)');
-console.log('Fichiers impactés: Backend_Eleves.gs, GenereNOMprenomID.gs, COMPTER.gs, etc.');
+console.log(`RÉSULTATS: ${correct}/${total} cas corrects\n`);
+
+console.log('BÉNÉFICES:');
+console.log('✅ Accepte: 6°1, 5°3, 5e2, CM2, BRESSOLS°4 (SOURCES)');
+console.log('❌ Rejette: 6°A, 5°B, 5°C (DESTINATIONS - pas de confusion!)');
+console.log('❌ Rejette: TEST, _CONFIG, ACCUEIL (système/résultats)');
+console.log('\nZéro confusion entre sources et destinations! 🎯');

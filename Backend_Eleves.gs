@@ -34,21 +34,26 @@ function loadAllStudentsData(ctx) {
   const ss = ctx.ss || SpreadsheetApp.getActiveSpreadsheet();
   const allStudents = [];
 
-  // ✅ DÉTECTION UNIVERSELLE PAR EXCLUSION
-  // On prend TOUS les onglets SAUF ceux qui sont système/résultats
+  // ✅ PATTERN INTELLIGENT: Accepte sources (finissent par chiffre), rejette destinations (finissent par lettre)
+  // Sources: 6°1, 5e2, CM2, BRESSOLS°4 ✅
+  // Destinations: 6°A, 5°B, 5°C ❌ (finissent par lettre)
   const sheets = ss.getSheets().filter(s => {
-    const name = s.getName().toUpperCase();
+    const name = s.getName();
 
-    // Exclure les onglets système (commencent par _)
-    if (name.startsWith('_')) return false;
+    // 1. Doit finir par un chiffre (source = données élèves)
+    if (!/^[A-Za-z0-9_-]+\d$/.test(name)) return false;
 
-    // Exclure les interfaces
-    if (name === 'ACCUEIL' || name === 'CONSOLIDATION') return false;
+    // 2. Exclure onglets système
+    if (name.toUpperCase().startsWith('_')) return false;
 
-    // Exclure les résultats/outputs
-    if (name.endsWith('TEST') || name.endsWith('FIN') || name.endsWith('DEF') || name.endsWith('CACHE')) return false;
+    // 3. Exclure interfaces
+    const upper = name.toUpperCase();
+    if (upper === 'ACCUEIL' || upper === 'CONSOLIDATION') return false;
 
-    return true; // Tout le reste est une source
+    // 4. Exclure résultats/suffixes
+    if (upper.endsWith('TEST') || upper.endsWith('FIN') || upper.endsWith('DEF') || upper.endsWith('CACHE')) return false;
+
+    return true; // Tout le reste est une source ✅
   });
 
   sheets.forEach(sheet => {

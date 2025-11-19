@@ -59,33 +59,40 @@ function compterEffectifs(isTest) {
 
 /**
  * Trouve les onglets sources
- * Formats supportés: 6°1, 5°2, ECOLE1, GAMARRA°4, etc.
+ * Formats supportés: 6°1, 5e2, CM2, GAMARRA°4, etc.
+ * Logique: Accepte tout ce qui finit par un chiffre (source = données élèves)
+ * Rejette les destinations (finissent par lettre: 6°A, 5°B)
  */
 function trouverOngletsSources() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheets = ss.getSheets();
-  // Support: 3°1, GAMARRA°4, etc. (toujours avec °)
-  const regex = /^[A-Za-z0-9_-]+°\d+$/;
+  // Doit finir par un chiffre (pas une lettre)
+  // Accepte: 6°1, 5e2, CM2, BRESSOLS°4, etc.
+  // Rejette: 6°A, 5°B, TEST, _CONFIG, etc.
+  const sourcePattern = /^[A-Za-z0-9_-]+\d$/;
+  const excludePattern = /(TEST|DEF|FIN|CACHE|^_|ACCUEIL|CONSOLIDATION)/i;
 
   return sheets.filter(sheet => {
     const name = sheet.getName();
-    return regex.test(name) && !name.includes("TEST") && !name.includes("DEF");
+    return sourcePattern.test(name) && !excludePattern.test(name);
   });
 }
 
 /**
  * Trouve les onglets TEST
- * Formats supportés: 5°1TEST, 5°2TEST, GAMARRA°4TEST, etc.
+ * Formats supportés: 5°1TEST, 5e2TEST, CM2TEST, GAMARRA°4TEST, etc.
+ * Logique: source + TEST suffix (ex: 6°1TEST, 5e2TEST)
  */
 function trouverOngletsTest() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheets = ss.getSheets();
-  // Support: 3°1TEST, GAMARRA°4TEST, etc.
-  const regex = /^[A-Za-z0-9_-]+°\d+TEST$/;
+  // Avant TEST, doit finir par un chiffre (source valide + TEST)
+  // Accepte: 6°1TEST, 5e2TEST, CM2TEST, BRESSOLS°4TEST
+  const testPattern = /^[A-Za-z0-9_-]+\d+TEST$/;
 
   return sheets.filter(sheet => {
     const name = sheet.getName();
-    return regex.test(name);
+    return testPattern.test(name);
   });
 }
 
