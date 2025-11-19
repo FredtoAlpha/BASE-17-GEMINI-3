@@ -1228,159 +1228,9 @@
         .gap-md { gap: var(--space-md); }
         .gap-lg { gap: var(--space-lg); }
 
-        /* Sélecteur de parcours A/B */
-        .parcours-toggle {
-            display: inline-flex;
-            border-radius: var(--radius-full);
-            padding: 4px;
-            background: var(--bg-tertiary);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .parcours-toggle-btn {
-            border: none;
-            background: transparent;
-            padding: 8px 16px;
-            border-radius: var(--radius-full);
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all var(--transition-base);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .parcours-toggle-btn span:first-child {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid var(--border-medium);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-        }
-
-        .parcours-toggle-btn.active {
-            background: var(--bg-primary);
-            color: var(--primary-600);
-            box-shadow: var(--shadow-md);
-        }
-
-        .parcours-toggle-btn.active span:first-child {
-            border-color: var(--primary-500);
-            background: var(--primary-500);
-            color: white;
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
-        }
-
-        /* Console toggle and minimization removed for production */
-
-        .minimized-bar-content {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            width: 100%;
-        }
-
-        .minimized-bar-logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .minimized-bar-logo i {
-            font-size: 32px;
-            color: var(--primary-400);
-        }
-
-        .minimized-bar-title {
-            color: white;
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        .minimized-bar-status {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex: 1;
-            padding: 0 30px;
-        }
-
-        .minimized-status-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 18px;
-            background: rgba(255, 255, 255, 0.12);
-            border-radius: 25px;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .minimized-status-item i {
-            font-size: 18px;
-            color: var(--primary-400);
-        }
-
-        .minimized-bar-progress {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .minimized-progress-circle {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background: conic-gradient(
-                var(--primary-500) 0deg,
-                var(--primary-500) var(--progress-angle, 0deg),
-                rgba(255, 255, 255, 0.15) var(--progress-angle, 0deg)
-            );
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.5);
-        }
-
-        .minimized-progress-circle::before {
-            content: '';
-            width: 47px;
-            height: 47px;
-            border-radius: 50%;
-            background: var(--bg-sidebar);
-            position: absolute;
-        }
-
-        .minimized-progress-text {
-            position: relative;
-            z-index: 1;
-            color: white;
-            font-size: 13px;
-            font-weight: 800;
-        }
-
-        @keyframes slideOutRight {
-            from {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateX(120%);
-            }
         }
 
         /* =====================================================================
@@ -1409,10 +1259,6 @@
 
         .capacity-fill.error {
             background: var(--danger);
-        }
-
-        .capacity-fill.info {
-            background: var(--info);
         }
 
         /* Strategy Dashboard Stats Grid */
@@ -1473,10 +1319,6 @@
                         <h1>Console de Pilotage</h1>
                         <div class="version">Version 3.0 Expert</div>
                     </div>
-                    <!-- BOUTON DE VRAIE FERMETURE -->
-                    <button onclick="closeConsole()" style="background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.3); color: #fca5a5; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; margin-left: auto;" title="Fermer la Console">
-                        <i class="fas fa-times"></i>
-                    </button>
                 </div>
 
                 <!-- Theme Toggle -->
@@ -1492,7 +1334,7 @@
             </div>
 
             <nav class="sidebar-nav">
-                <div class="nav-section-title">Pipeline de Production</div>
+                <div class="nav-section-title">WORKFLOW ADMIN</div>
 
                 <div class="nav-item">
                     <a href="#" class="nav-link active" data-step="1" role="button" aria-label="Phase 1: Initialisation">
@@ -1500,7 +1342,7 @@
                             <span class="nav-number">1</span>
                             <i class="nav-icon fas fa-rocket"></i>
                         </div>
-                        <span class="nav-text">Initialisation</span>
+                        <span class="nav-text">1. Architecture</span>
                         <span id="badge-1" class="nav-badge badge-active">En cours</span>
                     </a>
                 </div>
@@ -1511,41 +1353,41 @@
                             <span class="nav-number">2</span>
                             <i class="nav-icon fas fa-users"></i>
                         </div>
-                        <span class="nav-text">Données Élèves</span>
-                        <span id="badge-2" class="nav-badge badge-pending">En attente</span>
+                        <span class="nav-text">2. Données Élèves</span>
+                        <span id="badge-2" class="nav-badge badge-pending">Attente</span>
                     </a>
                 </div>
 
                 <div class="nav-item">
-                    <a href="#" class="nav-link" data-step="3" role="button" aria-label="Phase 3: Stratégie & Structure">
+                    <a href="#" class="nav-link" data-step="3" role="button" aria-label="Phase 3: Stratégie">
                         <div class="nav-icon-wrapper">
                             <span class="nav-number">3</span>
                             <i class="nav-icon fas fa-chess-board"></i>
                         </div>
-                        <span class="nav-text">Stratégie & Structure</span>
-                        <span id="badge-3" class="nav-badge badge-pending">À définir</span>
+                        <span class="nav-text">3. Stratégie</span>
+                        <span id="badge-3" class="nav-badge badge-pending">Attente</span>
                     </a>
                 </div>
 
                 <div class="nav-item">
-                    <a href="#" class="nav-link" data-step="4" role="button" aria-label="Phase 4: Moteur de Répartition">
+                    <a href="#" class="nav-link" data-step="4" role="button" aria-label="Phase 4: Moteur">
                         <div class="nav-icon-wrapper">
                             <span class="nav-number">4</span>
-                            <i class="nav-icon fas fa-cogs"></i>
+                            <i class="nav-icon fas fa-microchip"></i>
                         </div>
-                        <span class="nav-text">Moteur de Répartition</span>
-                        <span id="badge-4" class="nav-badge badge-pending">En attente</span>
+                        <span class="nav-text">4. Moteur Ultimate</span>
+                        <span id="badge-4" class="nav-badge badge-pending">Attente</span>
                     </a>
                 </div>
 
                 <div class="nav-item">
-                    <a href="#" class="nav-link" data-step="5" role="button" aria-label="Phase 5: Pilotage Final">
+                    <a href="#" class="nav-link" data-step="5" role="button" aria-label="Phase 5: Pilotage">
                         <div class="nav-icon-wrapper">
                             <span class="nav-number">5</span>
-                            <i class="nav-icon fas fa-gauge-high"></i>
+                            <i class="nav-icon fas fa-flag-checkered"></i>
                         </div>
-                        <span class="nav-text">Pilotage Final</span>
-                        <span id="badge-5" class="nav-badge badge-pending">Final</span>
+                        <span class="nav-text">5. Pilotage Final</span>
+                        <span id="badge-5" class="nav-badge badge-pending">Attente</span>
                     </a>
                 </div>
             </nav>
@@ -1557,7 +1399,7 @@
                         <div class="progress-bar" id="global-progress" style="width: 0%"></div>
                     </div>
                     <div class="progress-text">
-                        <span id="progress-completed">0</span>
+                        <span id="progress-completed">0/5</span>
                         <span id="progress-percentage">0%</span>
                     </div>
                 </div>
@@ -1568,404 +1410,52 @@
          * MAIN CONTENT
          * ===================================================================-->
         <main class="main-content">
-
-            <!-- Phase 1: Initialisation -->
+            <!-- Les phases seront chargées ici -->
             <div id="phase-1" class="phase active">
                 <div class="content-header">
-                    <h1 class="page-title">Phase 1: Initialisation & Configuration</h1>
-                    <p class="page-subtitle">✨ ZÉRO POPUP ! Configurez tous les paramètres directement ici, puis lancez l'initialisation</p>
+                    <h1 class="page-title">Phase 1: Initialisation</h1>
+                    <p class="page-subtitle">Configurez l'architecture</p>
                 </div>
-
-                <!-- FORMULAIRE DE CONFIGURATION INTÉGRÉ -->
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-cogs"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title">⚙️ Paramètres Généraux</h2>
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-xl); margin-bottom: var(--space-2xl);">
-                        <!-- Niveau Scolaire -->
-                        <div>
-                            <label style="display: block; font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary); font-size: 14px;">
-                                <i class="fas fa-graduation-cap" style="margin-right: 8px; color: var(--primary-500);"></i>
-                                Niveau Scolaire
-                            </label>
-                            <select id="config-niveau" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 15px; font-weight: 500; background: white; transition: all var(--transition-base); cursor: pointer;">
-                                <option value="6°">6ème</option>
-                                <option value="5°" selected>5ème</option>
-                                <option value="4°">4ème</option>
-                                <option value="3°">3ème</option>
-                            </select>
-                        </div>
-
-                        <!-- Nombre de Sources -->
-                        <div>
-                            <label style="display: block; font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary); font-size: 14px;">
-                                <i class="fas fa-arrow-right" style="margin-right: 8px; color: var(--secondary-500);"></i>
-                                Classes Sources <span id="source-label" style="font-weight: 400; font-size: 13px; color: var(--text-secondary);">(6°)</span>
-                            </label>
-                            <input type="number" id="config-nb-sources" min="1" max="20" value="6" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 15px; font-weight: 500; transition: all var(--transition-base);">
-                        </div>
-
-                        <!-- Nombre de Destinations -->
-                        <div>
-                            <label style="display: block; font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary); font-size: 14px;">
-                                <i class="fas fa-bullseye" style="margin-right: 8px; color: var(--info);"></i>
-                                Classes Destinations
-                            </label>
-                            <input type="number" id="config-nb-dest" min="1" max="15" value="6" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 15px; font-weight: 500; transition: all var(--transition-base);">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- OPTIONS & LANGUES -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-language"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title">📚 Options & Langues</h2>
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: 1fr; gap: var(--space-xl); margin-bottom: var(--space-xl);">
-                        <!-- LV2 -->
-                        <div>
-                            <label style="display: block; font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary); font-size: 14px;">
-                                <i class="fas fa-globe" style="margin-right: 8px; color: var(--primary-500);"></i>
-                                Langues Vivantes 2 (LV2)
-                            </label>
-                            <input type="text" id="config-lv2" placeholder="ESP, ITA, ALL (séparés par virgules)" value="ESP, ITA" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 15px; font-weight: 500; transition: all var(--transition-base);">
-                            <small style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; display: block;">Entrez les sigles séparés par des virgules</small>
-                        </div>
-
-                        <!-- Options Spécifiques -->
-                        <div>
-                            <label style="display: block; font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary); font-size: 14px;">
-                                <i class="fas fa-star" style="margin-right: 8px; color: var(--warning);"></i>
-                                Options Spécifiques (LATIN, GREC, etc.)
-                            </label>
-                            <input type="text" id="config-opt" placeholder="LATIN, GREC, CHAV (séparés par virgules)" value="LATIN, GREC, CHAV" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 15px; font-weight: 500; transition: all var(--transition-base);">
-                            <small style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; display: block;">Entrez les sigles séparés par des virgules</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PARAMÈTRES AVANCÉS -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-sliders-h"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title">🎛️ Paramètres Avancés</h2>
-                        </div>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--space-lg); margin-bottom: var(--space-xl);">
-                        <div>
-                            <label style="display: block; font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary); font-size: 14px;">Max Swaps</label>
-                            <input type="number" id="config-max-swaps" min="10" max="200" value="50" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 15px; font-weight: 500;">
-                        </div>
-
-                        <div>
-                            <label style="display: block; font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary); font-size: 14px;">Tolérance Parité</label>
-                            <input type="number" id="config-parity-tolerance" min="0" max="5" value="2" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 15px; font-weight: 500;">
-                        </div>
-
-                        <div>
-                            <label style="display: block; font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary); font-size: 14px;">Suffixe TEST</label>
-                            <input type="text" id="config-test-suffix" value="TEST" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 15px; font-weight: 500;">
-                        </div>
-
-                        <div>
-                            <label style="display: block; font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary); font-size: 14px;">Suffixe DEF</label>
-                            <input type="text" id="config-def-suffix" value="DEF" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 15px; font-weight: 500;">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SÉCURITÉ : MOT DE PASSE ADMIN -->
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-shield-halved"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title">🔐 Authentification Administrateur</h2>
-                        </div>
-                    </div>
-                    <div style="max-width: 400px;">
-                        <label style="display: block; font-weight: 700; margin-bottom: var(--space-sm); color: var(--text-primary); font-size: 14px;">
-                            <i class="fas fa-key" style="margin-right: 8px; color: var(--danger);"></i>
-                            Mot de passe Administrateur
-                        </label>
-                        <input type="password" id="config-admin-password" placeholder="Requis pour lancer l'initialisation" style="width: 100%; padding: 12px 16px; border: 2px solid var(--border-light); border-radius: var(--radius-lg); font-size: 15px; font-weight: 500; transition: all var(--transition-base);">
-                        <small style="color: var(--text-secondary); font-size: 12px; margin-top: 4px; display: block;">
-                            🔒 Nécessaire pour valider toute modification de configuration
-                        </small>
-                    </div>
-                </div>
-
-                <!-- BOUTONS D'ACTION -->
-                <div class="card">
-                    <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
-                        <button id="btn-save-config" class="btn btn-success" style="flex: 1; min-width: 200px;">
-                            <i class="btn-icon fas fa-save"></i>
-                            <span>Sauvegarder la Configuration</span>
-                        </button>
-                        <button id="btn-run-initialisation" class="btn btn-primary" style="flex: 1; min-width: 200px;">
-                            <i class="btn-icon fas fa-play"></i>
-                            <span>Lancer l'Initialisation</span>
-                        </button>
-                    </div>
-                    <p style="margin-top: var(--space-md); font-size: 13px; color: var(--text-secondary); text-align: center;">
-                        💾 La configuration est automatiquement sauvegardée dans votre navigateur et dans la feuille _CONFIG
-                    </p>
-                </div>
-
-                <!-- ÉTAPES SUPPLÉMENTAIRES OBLIGATOIRES -->
-                <div id="parcours-steps-card" class="card" style="border: 2px solid var(--warning); background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(251, 191, 36, 0.05));">
-                  <div class="card-header">
-                        <div class="card-icon" style="background: var(--warning);">
-                            <i class="fas fa-exclamation-triangle"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title" style="color: var(--warning);">⚠️ ÉTAPES CLÉS AVANT CONSOLIDATION</h2>
-                            <p id="parcours-steps-caption" style="font-size: 13px; color: var(--text-secondary); margin-top: 4px;">Ces étapes sont recommandées dans le cadre du Parcours A (données d'abord).</p>
-                        </div>
-                    </div>
-
-                    <div style="display: grid; gap: var(--space-lg);">
-                        <!-- Étape 1 : Génération NOM_PRENOM et ID_ELEVE -->
-                        <div style="padding: var(--space-lg); background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
-                            <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-md);">
-                                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary-500), #764ba2); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;" id="parcours-step1-badge">1</div>
-                                <div style="flex: 1;">
-                                    <h3 style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Générer NOM_PRENOM & ID_ELEVE</h3>
-                                    <div id="parcours-step1-label" style="font-size: 12px; font-weight: 600; color: var(--primary-600); margin-bottom: 2px;">Étape 1 – Parcours A (Données)</div>
-                                    <p style="font-size: 13px; color: var(--text-secondary);">Crée les colonnes D (NOM_PRENOM) et A (ID_ELEVE) dans les onglets sources</p>
-                                </div>
-                            </div>
-                            <button id="btn-generate-ids" class="btn btn-warning" style="width: 100%;">
-                                <i class="btn-icon fas fa-id-card"></i>
-                                <span>Générer NOM_PRENOM & ID_ELEVE</span>
-                            </button>
-                            <div id="ids-status" style="margin-top: var(--space-sm); font-size: 13px; color: var(--text-secondary);"></div>
-                        </div>
-
-                        <!-- Étape 2 : Configuration Structure Classes -->
-                        <div style="padding: var(--space-lg); background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
-                            <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-md);">
-                                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--secondary-500), var(--secondary-700)); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;" id="parcours-step2-badge">2</div>
-                                <div style="flex: 1;">
-                                    <h3 style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Configurer la Structure des Classes</h3>
-                                    <div id="parcours-step2-label" style="font-size: 12px; font-weight: 600; color: var(--secondary-700); margin-bottom: 2px;">Étape 2 – Après Parcours A (Structure)</div>
-                                    <p style="font-size: 13px; color: var(--text-secondary);">Définit le nombre d'élèves par classe et le placement des OPT/LV2</p>
-                                </div>
-                            </div>
-                            <button id="btn-configure-structure" class="btn btn-info" style="width: 100%;">
-                                <i class="btn-icon fas fa-cogs"></i>
-                                <span>Configurer Structure (OPT/LV2)</span>
-                            </button>
-                            <div id="structure-status" style="margin-top: var(--space-sm); font-size: 13px; color: var(--text-secondary);"></div>
-                        </div>
-
-                        <!-- Étape 3 : CONSOLIDATION des données -->
-                        <div style="padding: var(--space-lg); background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
-                            <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-md);">
-                                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--warning), #f97316); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;">3</div>
-                                <div style="flex: 1;">
-                                    <h3 style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Consolider les Sources vers CONSOLIDATION</h3>
-                                    <p style="font-size: 13px; color: var(--text-secondary);">Regroupe tous les élèves des onglets sources dans l'onglet <code>CONSOLIDATION</code>, prêt pour l'analyse.</p>
-                                </div>
-                            </div>
-                            <button id="btn-run-consolidation" class="btn btn-warning" style="width: 100%;">
-                                <i class="btn-icon fas fa-layer-group"></i>
-                                <span>Consolider les Données</span>
-                            </button>
-                            <div id="consolidation-status" style="margin-top: var(--space-sm); font-size: 13px; color: var(--text-secondary);"></div>
-                        </div>
-
-                        <!-- Étape 4 : STATISTIQUES à partir des sources/CONSOLIDATION -->
-                        <div style="padding: var(--space-lg); background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-light);">
-                            <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-md);">
-                                <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--info), #2563eb); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;">4</div>
-                                <div style="flex: 1;">
-                                    <h3 style="font-size: 16px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px;">Calculer les Statistiques</h3>
-                                    <p style="font-size: 13px; color: var(--text-secondary);">Analyse les effectifs, LV2 et options et produit un onglet <code>STATISTIQUES</code> pour préparer la structure.</p>
-                                </div>
-                            </div>
-                            <button id="btn-run-stats" class="btn btn-info" style="width: 100%;">
-                                <i class="btn-icon fas fa-chart-pie"></i>
-                                <span>Calculer les Statistiques</span>
-                            </button>
-                            <div id="stats-status" style="margin-top: var(--space-sm); font-size: 13px; color: var(--text-secondary);"></div>
-                        </div>
-                    </div>
+                    <button id="btn-run-initialisation" class="btn btn-primary">Lancer</button>
                 </div>
             </div>
 
-            <!-- Phase 2: Diagnostic -->
             <div id="phase-2" class="phase">
                 <div class="content-header">
-                    <h1 class="page-title">Phase 2: Diagnostic</h1>
-                    <p class="page-subtitle">Analyse complète du système et vérification de l'intégrité des données</p>
+                    <h1 class="page-title">Phase 2: Données</h1>
                 </div>
-
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-stethoscope"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title">Diagnostic Complet</h2>
-                        </div>
-                    </div>
-                    <p class="card-description">
-                        Le système va analyser toutes les données, vérifier la cohérence des informations et détecter d'éventuels problèmes
-                        avant de procéder à la génération des classes.
-                    </p>
-                    <ul id="diagnostic-results" class="diagnostic-list">
-                        <!-- Les résultats du diagnostic seront injectés ici -->
-                    </ul>
-                    <button id="btn-run-diagnostics" class="btn btn-primary">
-                        <i class="btn-icon fas fa-play"></i>
-                        <span>Lancer le Diagnostic</span>
-                    </button>
+                    <button id="btn-run-diagnostics" class="btn btn-primary">Analyser</button>
                 </div>
             </div>
 
-            <!-- Phase 3: Stratégie & Structure -->
             <div id="phase-3" class="phase">
                 <div class="content-header">
-                    <h1 class="page-title">Phase 3: Stratégie de Répartition</h1>
-                    <p class="page-subtitle">Définissez la structure cible : combien d'élèves et quelles options dans chaque classe ?</p>
+                    <h1 class="page-title">Phase 3: Stratégie</h1>
                 </div>
-
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon"><i class="fas fa-chart-pie"></i></div>
-                        <div>
-                            <h2 class="card-title">État de la Structure (_STRUCTURE)</h2>
-                            <p class="card-description" id="structure-summary-text">Chargement des données...</p>
-                        </div>
-                    </div>
-
-                    <div class="strategy-stats-grid">
-                        <div class="stat-card">
-                            <div class="stat-value" id="stat-places">0</div>
-                            <div class="stat-label">Places Totales</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="stat-classes">0</div>
-                            <div class="stat-label">Classes Cibles</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="stat-remplissage">0%</div>
-                            <div class="stat-label">Taux Remplissage</div>
-                            <div class="capacity-gauge">
-                                <div id="gauge-fill" class="capacity-fill" style="width: 0%"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle alert-icon"></i>
-                        <div>C'est ici que vous dites : <strong>"En 4°4, je veux 28 élèves dont 6 ITA et 4 LATIN".</strong></div>
-                    </div>
-
-                    <button id="btn-open-structure-config" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                        <i class="btn-icon fas fa-pen-to-square"></i>
-                        <span>Ouvrir le Configurateur de Structure</span>
-                    </button>
-                </div>
-
-                <div class="card" style="border-left: 4px solid var(--warning);">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Validation de la Stratégie</h3>
-                            <p style="font-size: 13px; color: var(--text-secondary);">Une fois la configuration terminée, validez pour débloquer le moteur.</p>
-                        </div>
-                        <button id="btn-validate-strategy" class="btn btn-success">
-                            <i class="fas fa-check"></i> Valider & Verrouiller
-                        </button>
-                    </div>
+                    <button id="btn-validate-strategy" class="btn btn-primary">Valider</button>
                 </div>
             </div>
 
-            <!-- Phase 4: Moteur de Répartition -->
             <div id="phase-4" class="phase">
                 <div class="content-header">
-                    <h1 class="page-title">Phase 4: Moteur de Répartition</h1>
-                    <p class="page-subtitle">Optimisation intelligente avec Pondération Asymétrique des Extrêmes (ULTIMATE)</p>
+                    <h1 class="page-title">Phase 4: Moteur</h1>
                 </div>
-
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-cogs"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title">OPTIMUM PRIME ULTIMATE</h2>
-                            <p class="card-description">Moteur hybride Jules Codex + Critères Pédagogiques</p>
-                        </div>
-                    </div>
-                    <p class="card-description">
-                        <strong>Asymmetric Weighting of Extremes :</strong> Pénalité quadratique pour les têtes manquantes,
-                        pénalité cubique pour l'excès de Niv1. Combine distribution académique et profils d'élèves pour l'équilibre optimal.
-                    </p>
-                    <button id="btn-run-ultimate-engine" class="btn btn-primary">
-                        <i class="btn-icon fas fa-rocket"></i>
-                        <span>Lancer le Moteur ULTIMATE</span>
-                    </button>
+                    <button id="btn-run-ultimate-engine" class="btn btn-primary">Lancer ULTIMATE</button>
                 </div>
             </div>
 
-            <!-- Phase 5: Pilotage Final -->
             <div id="phase-5" class="phase">
                 <div class="content-header">
-                    <h1 class="page-title">Phase 5: Pilotage Final & Validation</h1>
-                    <p class="page-subtitle">Contrôle final, ajustements et création des onglets définitifs</p>
+                    <h1 class="page-title">Phase 5: Pilotage Final</h1>
                 </div>
-
                 <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-gauge-high"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title">Contrôle & Finalisation</h2>
-                        </div>
-                    </div>
-                    <p class="card-description">
-                        Effectuez les derniers ajustements avant la finalisation. Visualisez les résultats,
-                        faites des swaps manuels si nécessaire, puis validez pour créer les onglets définitifs FIN.
-                    </p>
-
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
-                        <button id="btn-open-swap-interface" class="btn btn-secondary">
-                            <i class="btn-icon fas fa-arrows-rotate"></i>
-                            <span>Ajustements Manuels</span>
-                        </button>
-                        <button id="btn-finalize-process" class="btn btn-success">
-                            <i class="btn-icon fas fa-check-double"></i>
-                            <span>Finaliser & Créer FIN</span>
-                        </button>
-                    </div>
-
-                    <div class="alert alert-warning">
-                        <i class="fas fa-exclamation-triangle alert-icon"></i>
-                        <div><strong>⚠️ Attention :</strong> La finalisation créera les onglets définitifs. Vérifiez tout avant.</div>
-                    </div>
+                    <button id="btn-finalize-process" class="btn btn-primary">Finaliser</button>
                 </div>
             </div>
-
         </main>
 
         <!-- =====================================================================
@@ -1982,7 +1472,6 @@
                 </div>
             </div>
 
-            <!-- Metrics Grid -->
             <div class="metrics-grid">
                 <div class="metric-card">
                     <div class="metric-value" id="metric-students">0</div>
@@ -2017,7 +1506,6 @@
                 </div>
             </div>
 
-            <!-- Live Status -->
             <div class="live-status">
                 <div class="status-header">
                     <div class="status-indicator"></div>
@@ -2026,50 +1514,13 @@
                 </div>
             </div>
 
-            <!-- Alerts Section -->
             <div class="alerts-section" id="alerts-section">
                 <div class="alert alert-info">
                     <i class="fas fa-info-circle alert-icon"></i>
-                    <div>Démarrez par l'initialisation du système pour commencer le processus de répartition.</div>
+                    <div>Démarrez l'initialisation pour commencer.</div>
                 </div>
             </div>
         </aside>
-    </div>
-
-    <!-- =====================================================================
-     * MODAL - Review Modal
-     * ===================================================================-->
-    <div id="reviewModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">Révision Finale Avant Finalisation</h2>
-                <button id="btn-close-modal" class="modal-close" aria-label="Fermer">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p style="margin-bottom: var(--space-lg); color: var(--text-secondary);">
-                    Veuillez vérifier les diagnostics suivants avant de continuer. Cette action est <strong>irréversible</strong>.
-                </p>
-                <ul id="checklist-container" class="checklist">
-                    <!-- Les éléments de la checklist seront injectés ici par JavaScript -->
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <label class="confirm-checkbox-label">
-                    <input type="checkbox" id="confirm-checklist">
-                    <span>Je confirme avoir lu et compris les avertissements</span>
-                </label>
-                <button id="btn-cancel-finalize" class="btn btn-secondary">
-                    <i class="fas fa-times"></i>
-                    <span>Annuler</span>
-                </button>
-                <button id="btn-confirm-finalize" class="btn btn-primary" disabled>
-                    <i class="fas fa-check"></i>
-                    <span>Confirmer et Finaliser</span>
-                </button>
-            </div>
-        </div>
     </div>
 
     <!-- =====================================================================
@@ -2087,49 +1538,186 @@
     </div>
 
     <!-- =====================================================================
-     * JAVASCRIPT
+     * JAVASCRIPT - FINITION EXPERT
      * ===================================================================-->
     <script>
         // ===================================================================
-        // STATE MANAGEMENT
+        // 🧠 CERVEAU DE L'INTERFACE (STATE MANAGEMENT)
         // ===================================================================
         const appState = {
             currentPhase: 1,
             theme: 'light',
-            parcours: 'A',
-            // Étapes obligatoires avant la CONSOLIDATION / DIAGNOSTIC
-            steps: {
-                idsGenerated: false,
-                structureConfigured: false
-            },
-            phases: {
-                1: { status: 'active', completed: false },
-                2: { status: 'pending', completed: false },
-                3: { status: 'pending', completed: false },
-                4: { status: 'pending', completed: false },
-                5: { status: 'pending', completed: false },
-                6: { status: 'pending', completed: false }
-            },
-            metrics: {
-                students: 0,
-                classes: 0,
-                sources: 0,
-                destinations: 0
-            }
+            steps: { idsGenerated: false, structureConfigured: false },
+            phases: { 1: {status:'active'}, 2: {status:'pending'}, 3: {status:'pending'}, 4: {status:'pending'}, 5: {status:'pending'} }
         };
 
         // ===================================================================
-        // THEME MANAGEMENT
+        // 💓 LE POULS (HEARTBEAT) - Active le panneau de droite
         // ===================================================================
+        function startHeartbeat() {
+            // Rafraîchir les métriques toutes les 5 secondes
+            setInterval(() => {
+                google.script.run.withSuccessHandler(updateMetrics).v3_getMetrics();
+            }, 5000);
+            // Appel immédiat au lancement
+            google.script.run.withSuccessHandler(updateMetrics).v3_getMetrics();
+            // Horloge
+            setInterval(updateClock, 1000);
+            updateClock();
+        }
+
+        function updateMetrics(metrics) {
+            // Met à jour les chiffres du panneau de droite avec animation
+            if (metrics) {
+                if(metrics.students !== undefined) animateNumber('metric-students', metrics.students);
+                if(metrics.classes !== undefined) animateNumber('metric-classes', metrics.classes);
+                if(metrics.sources !== undefined) animateNumber('metric-sources', metrics.sources);
+                if(metrics.destinations !== undefined) animateNumber('metric-destinations', metrics.destinations);
+            }
+        }
+
+        function animateNumber(id, val) {
+            const el = document.getElementById(id);
+            if(el) el.textContent = val;
+        }
+
+        // ===================================================================
+        // 🎮 CONTRÔLEURS (NAVIGATION & ACTIONS)
+        // ===================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            startHeartbeat();
+
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (!link.classList.contains('disabled')) goToPhase(parseInt(link.dataset.step));
+                });
+            });
+
+            // --- PHASE 4 : MOTEUR (CORRECTION ID) ---
+            // ID Corrigé : btn-run-ultimate-engine
+            safeAddEventListener('btn-run-ultimate-engine', 'click', () => {
+                updatePhaseStatus(4, 'active');
+                showLoading('Moteur ULTIMATE en cours d\'exécution...');
+
+                // Récupération des paramètres fins
+                const engineParams = {
+                    swaps: parseInt(document.getElementById('engine-swaps')?.value) || 2000,
+                    mode: document.getElementById('engine-mode')?.value || 'standard'
+                };
+
+                google.script.run
+                    .withSuccessHandler(res => {
+                        hideLoading();
+                        if(res.success) {
+                            updatePhaseStatus(4, 'completed');
+                            showToast('success', `Optimisation terminée : ${res.swaps} swaps !`);
+                            goToPhase(5);
+                        } else {
+                            updatePhaseStatus(4, 'error');
+                            showToast('error', res.error || 'Erreur moteur');
+                        }
+                    })
+                    .withFailureHandler(e => {
+                        hideLoading();
+                        updatePhaseStatus(4, 'error');
+                        showToast('error', 'Crash moteur : ' + e.message);
+                    })
+                    .v3_runGeneration(engineParams);
+            });
+
+            // --- AUTRES BOUTONS ---
+            safeAddEventListener('btn-run-initialisation', 'click', () => {
+                showLoading('Initialisation...');
+                google.script.run.withSuccessHandler(res => {
+                    hideLoading();
+                    if(res.success) {
+                        updatePhaseStatus(1, 'completed');
+                        showToast('success', 'Initialisation réussie');
+                        goToPhase(2);
+                    } else {
+                        showToast('error', res.error);
+                    }
+                }).v3_runInitializationWithForm({});
+            });
+
+            safeAddEventListener('btn-run-diagnostics', 'click', () => {
+                showLoading('Diagnostic...');
+                google.script.run.withSuccessHandler(res => {
+                    hideLoading();
+                    updatePhaseStatus(2, 'completed');
+                    showToast('success', 'Diagnostic terminé');
+                    goToPhase(3);
+                }).v3_runDiagnostics();
+            });
+
+            safeAddEventListener('btn-validate-strategy', 'click', () => {
+                updatePhaseStatus(3, 'completed');
+                showToast('success', 'Stratégie validée');
+                goToPhase(4);
+            });
+
+            safeAddEventListener('btn-finalize-process', 'click', () => {
+                if(confirm('Confirmer la finalisation ?')) {
+                    showLoading('Finalisation...');
+                    google.script.run.withSuccessHandler(res => {
+                        hideLoading();
+                        if(res.success) {
+                            updatePhaseStatus(5, 'completed');
+                            showToast('success', 'Finalisation réussie!');
+                        } else {
+                            showToast('error', res.error);
+                        }
+                    }).v3_finalizeProcess();
+                }
+            });
+        });
+
+        // --- UTILITAIRES ---
+        function goToPhase(n) {
+            document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+            document.getElementById(`phase-${n}`).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelector(`.nav-link[data-step="${n}"]`).classList.add('active');
+            appState.currentPhase = n;
+        }
+
+        function updatePhaseStatus(n, status) {
+            const badge = document.getElementById(`badge-${n}`);
+            badge.className = `nav-badge badge-${status}`;
+            badge.textContent = status === 'active' ? 'En cours' : status === 'completed' ? 'Terminé' : status === 'error' ? 'Erreur' : 'Attente';
+
+            const done = [1,2,3,4,5].filter(i => document.getElementById(`badge-${i}`).classList.contains('badge-completed')).length;
+            document.getElementById('global-progress').style.width = `${(done/5)*100}%`;
+            document.getElementById('progress-percentage').textContent = `${Math.round((done/5)*100)}%`;
+            document.getElementById('progress-completed').textContent = `${done}/5`;
+        }
+
+        function showToast(type, msg) {
+            const t = document.createElement('div');
+            t.className = `toast toast-${type}`;
+            t.innerHTML = `<i class="fas fa-info-circle"></i><span>${msg}</span>`;
+            document.getElementById('toast-container').appendChild(t);
+            setTimeout(() => t.remove(), 4000);
+        }
+
+        function safeAddEventListener(id, evt, fn) {
+            const el = document.getElementById(id);
+            if(el) el.addEventListener(evt, fn);
+        }
+
+        function showLoading(msg) { document.getElementById('loading-text').textContent=msg; document.getElementById('loading-overlay').classList.add('active'); }
+        function hideLoading() { document.getElementById('loading-overlay').classList.remove('active'); }
+
         function initTheme() {
             const savedTheme = localStorage.getItem('theme') || 'light';
             appState.theme = savedTheme;
             document.documentElement.setAttribute('data-theme', savedTheme);
-
             const toggle = document.getElementById('theme-toggle');
-            if (savedTheme === 'dark') {
-                toggle.classList.add('active');
-            }
+            if (savedTheme === 'dark') toggle.classList.add('active');
         }
 
         function toggleTheme() {
@@ -2137,1022 +1725,17 @@
             appState.theme = newTheme;
             document.documentElement.setAttribute('data-theme', newTheme);
             localStorage.setItem('theme', newTheme);
-
-            const toggle = document.getElementById('theme-toggle');
-            toggle.classList.toggle('active');
-
-            showToast('success', `Mode ${newTheme === 'dark' ? 'sombre' : 'clair'} activé`);
+            document.getElementById('theme-toggle').classList.toggle('active');
         }
 
-        // ===================================================================
-        // PARCOURS A/B
-        // ===================================================================
-        function initParcours() {
-            // Valeur par défaut
-            const savedParcours = localStorage.getItem('console_v3_parcours');
-            const hasSavedParcours = savedParcours === 'A' || savedParcours === 'B';
-
-            if (hasSavedParcours) {
-                appState.parcours = savedParcours;
-            }
-
-            const btnA = document.getElementById('parcours-a-btn');
-            const btnB = document.getElementById('parcours-b-btn');
-            const caption = document.getElementById('parcours-steps-caption');
-            const step1Label = document.getElementById('parcours-step1-label');
-            const step2Label = document.getElementById('parcours-step2-label');
-            const stepsCard = document.getElementById('parcours-steps-card');
-            const parcoursADesc = document.getElementById('parcours-a-description');
-            const parcoursBDesc = document.getElementById('parcours-b-description');
-
-            if (!btnA || !btnB) {
-                // Si la carte de parcours n'est pas présente, on ne fait rien
-                return;
-            }
-
-            function applyUI() {
-                const isA = appState.parcours === 'A';
-
-                btnA.classList.toggle('active', isA);
-                btnB.classList.toggle('active', !isA);
-
-                if (caption) {
-                    caption.textContent = isA
-                        ? 'Ces étapes sont recommandées dans le cadre du Parcours A (données d\'abord).'
-                        : 'Ces étapes sont recommandées dans le cadre du Parcours B (structure d\'abord).';
-                }
-
-                if (step1Label && step2Label) {
-                    if (isA) {
-                        step1Label.textContent = 'Étape 1 – Parcours A (Données)';
-                        step2Label.textContent = 'Étape 2 – Après Parcours A (Structure)';
-                    } else {
-                        step1Label.textContent = 'Étape 1 – Parcours B (Structure)';
-                        step2Label.textContent = 'Étape 2 – Parcours A (Données, optionnel)';
-                    }
-                }
-
-                if (stepsCard) {
-                    // Afficher la carte uniquement quand un parcours est réellement choisi
-                    stepsCard.style.display = appState.parcours === 'A' || appState.parcours === 'B' ? '' : 'none';
-                }
-
-                // Description détaillée du process A/B
-                if (parcoursADesc && parcoursBDesc) {
-                    if (isA) {
-                        parcoursADesc.style.display = 'block';
-                        parcoursBDesc.style.display = 'none';
-                    } else {
-                        parcoursADesc.style.display = 'none';
-                        parcoursBDesc.style.display = 'block';
-                    }
-                }
-            }
-
-            // Au premier chargement :
-            // - si un parcours était déjà enregistré, on affiche directement la carte
-            // - sinon, on masque la carte en attendant un choix explicite
-            if (!hasSavedParcours && stepsCard) {
-                stepsCard.style.display = 'none';
-            }
-
-            if (hasSavedParcours) {
-                applyUI();
-            } else if (parcoursADesc && parcoursBDesc) {
-                // Aucun choix encore : on cache les deux descriptions
-                parcoursADesc.style.display = 'none';
-                parcoursBDesc.style.display = 'none';
-            }
-
-            // Écouteurs
-            btnA.addEventListener('click', () => {
-                appState.parcours = 'A';
-                localStorage.setItem('console_v3_parcours', 'A');
-                applyUI();
-                showToast('info', 'Parcours A sélectionné : données d\'abord (sources, consolidation, stats).');
-            });
-
-            btnB.addEventListener('click', () => {
-                appState.parcours = 'B';
-                localStorage.setItem('console_v3_parcours', 'B');
-                applyUI();
-                showToast('info', 'Parcours B sélectionné : structure d\'abord (_STRUCTURE).');
-            });
-        }
-
-        // ===================================================================
-        // FERMETURE COMPLÈTE DE LA CONSOLE
-        // ===================================================================
-        function closeConsole() {
-            if (confirm('⚠️ Voulez-vous vraiment FERMER la Console de Pilotage V3 ?\n\nVous pourrez la rouvrir depuis le menu BASE-16 RENEW.')) {
-                try {
-                    google.script.host.close();
-                } catch (e) {
-                    // Si on est en mode dev local, on simule la fermeture
-                    window.close();
-                }
-            }
-        }
-
-        // ===================================================================
-        // NAVIGATION
-        // ===================================================================
-        function goToPhase(phaseNum) {
-            appState.currentPhase = phaseNum;
-
-            // Hide all phases
-            document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
-
-            // Show target phase
-            document.getElementById(`phase-${phaseNum}`).classList.add('active');
-
-            // Update navigation
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('active');
-                if (parseInt(link.dataset.step) === phaseNum) {
-                    link.classList.add('active');
-                }
-            });
-
-            // Scroll to top
-            document.querySelector('.main-content').scrollTop = 0;
-        }
-
-        // ===================================================================
-        // STATUS MANAGEMENT
-        // ===================================================================
-        function updatePhaseStatus(phaseNum, status) {
-            appState.phases[phaseNum].status = status;
-
-            const badge = document.getElementById(`badge-${phaseNum}`);
-            const navLink = document.querySelector(`.nav-link[data-step="${phaseNum}"]`);
-
-            // Remove all status classes
-            badge.classList.remove('badge-pending', 'badge-active', 'badge-completed', 'badge-error');
-            navLink.classList.remove('completed');
-
-            // Add new status
-            switch(status) {
-                case 'active':
-                    badge.classList.add('badge-active');
-                    badge.textContent = 'En cours';
-                    break;
-                case 'completed':
-                    badge.classList.add('badge-completed');
-                    badge.textContent = 'Terminé';
-                    navLink.classList.add('completed');
-                    appState.phases[phaseNum].completed = true;
-                    updateGlobalProgress();
-                    break;
-                case 'error':
-                    badge.classList.add('badge-error');
-                    badge.textContent = 'Erreur';
-                    break;
-                default:
-                    badge.classList.add('badge-pending');
-                    badge.textContent = 'En attente';
-            }
-
-            updateNavLockState();
-        }
-
-        function updateNavLockState() {
-            let enabledUpTo = 0;
-
-            Object.keys(appState.phases).forEach(phase => {
-                if (appState.phases[phase].completed) {
-                    enabledUpTo = Math.max(enabledUpTo, parseInt(phase));
-                }
-            });
-
-            document.querySelectorAll('.nav-link').forEach(link => {
-                const step = parseInt(link.dataset.step);
-
-                // Par défaut : verrouiller au-delà de la prochaine phase non complétée
-                let shouldDisable = step > enabledUpTo + 1;
-
-                // Verrou supplémentaire : la Phase 2 (Diagnostic / CONSOLIDATION / STAT) nécessite
-                // que les étapes ID/NOM_PRENOM et Structure aient été effectuées.
-                if (step >= 2 && (!appState.steps.idsGenerated || !appState.steps.structureConfigured)) {
-                    shouldDisable = true;
-                }
-
-                if (shouldDisable) {
-                    link.classList.add('disabled');
-                } else {
-                    link.classList.remove('disabled');
-                }
-            });
-        }
-
-        function updateGlobalProgress() {
-            const completedCount = Object.values(appState.phases).filter(p => p.completed).length;
-            const totalPhases = 6;
-            const percentage = Math.round((completedCount / totalPhases) * 100);
-
-            document.getElementById('global-progress').style.width = `${percentage}%`;
-            document.getElementById('progress-completed').textContent = `${completedCount}/${totalPhases} phases`;
-            document.getElementById('progress-percentage').textContent = `${percentage}%`;
-        }
-
-        // ===================================================================
-        // METRICS
-        // ===================================================================
-        function updateMetrics(metrics) {
-            if (metrics.students !== undefined) {
-                appState.metrics.students = metrics.students;
-                animateNumber('metric-students', metrics.students);
-            }
-            if (metrics.classes !== undefined) {
-                appState.metrics.classes = metrics.classes;
-                animateNumber('metric-classes', metrics.classes);
-            }
-            if (metrics.sources !== undefined) {
-                appState.metrics.sources = metrics.sources;
-                animateNumber('metric-sources', metrics.sources);
-            }
-            if (metrics.destinations !== undefined) {
-                appState.metrics.destinations = metrics.destinations;
-                animateNumber('metric-destinations', metrics.destinations);
-            }
-        }
-
-        function animateNumber(elementId, targetValue) {
-            const element = document.getElementById(elementId);
-            const currentValue = parseInt(element.textContent) || 0;
-            const duration = 600;
-            const steps = 30;
-            const increment = (targetValue - currentValue) / steps;
-            let current = currentValue;
-            let step = 0;
-
-            const timer = setInterval(() => {
-                step++;
-                current += increment;
-                element.textContent = Math.round(current);
-
-                if (step >= steps) {
-                    element.textContent = targetValue;
-                    clearInterval(timer);
-                }
-            }, duration / steps);
-        }
-
-        // ===================================================================
-        // TOAST NOTIFICATIONS
-        // ===================================================================
-        function showToast(type, message, duration = 4000) {
-            const container = document.getElementById('toast-container');
-            if (!container) {
-                console.error('Toast container not found');
-                return;
-            }
-
-            // Convertir les objets en chaînes lisibles
-            let displayMessage = message;
-            if (typeof message === 'object') {
-                if (message.error) {
-                    displayMessage = message.error;
-                } else if (message.message) {
-                    displayMessage = message.message;
-                } else {
-                    displayMessage = JSON.stringify(message);
-                }
-            }
-
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-
-            const iconMap = {
-                success: 'fa-check-circle',
-                error: 'fa-times-circle',
-                warning: 'fa-exclamation-triangle',
-                info: 'fa-info-circle'
-            };
-
-            toast.innerHTML = `
-                <i class="fas ${iconMap[type]}"></i>
-                <span>${displayMessage}</span>
-            `;
-
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.style.animation = 'slideOutRight 0.3s ease';
-                setTimeout(() => toast.remove(), 300);
-            }, duration);
-        }
-
-        // ===================================================================
-        // ALERTS
-        // ===================================================================
-        function showAlert(type, message) {
-            const alertsSection = document.getElementById('alerts-section');
-            const iconMap = {
-                success: 'fa-check-circle',
-                warning: 'fa-exclamation-triangle',
-                error: 'fa-times-circle',
-                info: 'fa-info-circle'
-            };
-
-            const alert = document.createElement('div');
-            alert.className = `alert alert-${type}`;
-            alert.innerHTML = `
-                <i class="fas ${iconMap[type]} alert-icon"></i>
-                <div>${message}</div>
-            `;
-
-            // Remove old alerts of same type
-            alertsSection.querySelectorAll(`.alert-${type}`).forEach(a => a.remove());
-
-            alertsSection.appendChild(alert);
-
-            // Auto-remove success alerts
-            if (type === 'success') {
-                setTimeout(() => alert.remove(), 5000);
-            }
-        }
-
-        function clearAlerts() {
-            document.getElementById('alerts-section').innerHTML = '';
-        }
-
-        // ===================================================================
-        // LOADING
-        // ===================================================================
-        function showLoading(text = 'Chargement...') {
-            document.getElementById('loading-text').textContent = text;
-            document.getElementById('loading-overlay').classList.add('active');
-        }
-
-        function hideLoading() {
-            document.getElementById('loading-overlay').classList.remove('active');
-        }
-
-        // ===================================================================
-        // MODAL
-        // ===================================================================
-        function showModal() {
-            document.getElementById('reviewModal').classList.add('active');
-        }
-
-        function hideModal() {
-            document.getElementById('reviewModal').classList.remove('active');
-        }
-
-        // ===================================================================
-        // DIAGNOSTIC
-        // ===================================================================
-        function displayDiagnostics(results) {
-            const container = document.getElementById('diagnostic-results');
-            container.innerHTML = '';
-
-            results.forEach(item => {
-                const li = document.createElement('li');
-                li.className = `diagnostic-item status-${item.status}`;
-
-                const iconMap = {
-                    ok: '✅',
-                    warning: '⚠️',
-                    error: '❌'
-                };
-
-                li.innerHTML = `
-                    <span class="diagnostic-icon">${iconMap[item.status]}</span>
-                    <span class="diagnostic-message">${item.message}</span>
-                `;
-
-                container.appendChild(li);
-            });
-        }
-
-        // ===================================================================
-        // CLOCK
-        // ===================================================================
         function updateClock() {
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('current-time').textContent = timeString;
+            const now = new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+            const el = document.getElementById('current-time');
+            if(el) el.textContent = now;
         }
 
-        // ===================================================================
-        // HELPER: SAFE EVENT LISTENER ATTACHMENT
-        // ===================================================================
-        function safeAddEventListener(elementId, event, handler) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                element.addEventListener(event, handler);
-                return true;
-            } else {
-                console.warn(`⚠️ Element "${elementId}" not found, skipping event listener`);
-                return false;
-            }
-        }
-
-        // ===================================================================
-        // EVENT LISTENERS
-        // ===================================================================
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize theme
-            initTheme();
-
-            // Initialize parcours selector
-            initParcours();
-
-            // Theme toggle
-            safeAddEventListener('theme-toggle', 'click', toggleTheme);
-
-            // Navigation
-            document.querySelectorAll('.nav-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    if (!link.classList.contains('disabled')) {
-                        const phaseNum = parseInt(link.dataset.step);
-                        goToPhase(phaseNum);
-                    }
-                });
-            });
-
-            // Modal controls
-            const confirmCheckbox = document.getElementById('confirm-checklist');
-            const confirmBtn = document.getElementById('btn-confirm-finalize');
-
-            if (confirmCheckbox && confirmBtn) {
-                confirmCheckbox.addEventListener('change', () => {
-                    confirmBtn.disabled = !confirmCheckbox.checked;
-                });
-            }
-
-            safeAddEventListener('btn-close-modal', 'click', hideModal);
-            safeAddEventListener('btn-cancel-finalize', 'click', hideModal);
-
-            // ===================================================================
-            // PHASE 1 : FORMULAIRE DE CONFIGURATION INTÉGRÉ
-            // ===================================================================
-            const configNiveau = document.getElementById('config-niveau');
-            const configNbSources = document.getElementById('config-nb-sources');
-            const configNbDest = document.getElementById('config-nb-dest');
-            const configLv2 = document.getElementById('config-lv2');
-            const configOpt = document.getElementById('config-opt');
-            const configMaxSwaps = document.getElementById('config-max-swaps');
-            const configParityTolerance = document.getElementById('config-parity-tolerance');
-            const configTestSuffix = document.getElementById('config-test-suffix');
-            const configDefSuffix = document.getElementById('config-def-suffix');
-            const sourceLabel = document.getElementById('source-label');
-
-            // Fonction pour déterminer le niveau source selon le niveau destination
-            function getNiveauSource(niveau) {
-                switch(niveau) {
-                    case '6°': return '(écoles primaires)';
-                    case '5°': return '(6°)';
-                    case '4°': return '(5°)';
-                    case '3°': return '(4°)';
-                    default: return '';
-                }
-            }
-
-            // Mise à jour dynamique du label "Classes Sources"
-            if (configNiveau && sourceLabel) {
-                configNiveau.addEventListener('change', () => {
-                    sourceLabel.textContent = getNiveauSource(configNiveau.value);
-                    autoSaveConfig(); // Sauvegarde auto
-                });
-            }
-
-            // ===================================================================
-            // SAUVEGARDE AUTOMATIQUE EN TEMPS RÉEL
-            // ===================================================================
-            let autoSaveTimeout;
-
-            function autoSaveConfig() {
-                // Debounce : attendre 500ms après la dernière modification
-                clearTimeout(autoSaveTimeout);
-                autoSaveTimeout = setTimeout(() => {
-                    const config = {
-                        niveau: configNiveau.value,
-                        nbSources: parseInt(configNbSources.value),
-                        nbDest: parseInt(configNbDest.value),
-                        lv2: configLv2.value,
-                        opt: configOpt.value,
-                        maxSwaps: parseInt(configMaxSwaps.value),
-                        parityTolerance: parseInt(configParityTolerance.value),
-                        testSuffix: configTestSuffix.value,
-                        defSuffix: configDefSuffix.value
-                    };
-
-                    // Sauvegarder localement (silencieux, pas de toast)
-                    localStorage.setItem('console_v3_config', JSON.stringify(config));
-                    console.log('✅ Configuration auto-sauvegardée');
-                }, 500);
-            }
-
-            // Ajouter les event listeners pour la sauvegarde auto sur tous les champs
-            [configNiveau, configNbSources, configNbDest, configLv2, configOpt,
-             configMaxSwaps, configParityTolerance, configTestSuffix, configDefSuffix].forEach(field => {
-                if (field) {
-                    field.addEventListener('input', autoSaveConfig);
-                    field.addEventListener('change', autoSaveConfig);
-                }
-            });
-
-            // Charger la configuration sauvegardée
-            function loadSavedConfig() {
-                const saved = localStorage.getItem('console_v3_config');
-                if (saved) {
-                    try {
-                        const config = JSON.parse(saved);
-                        if (config.niveau) configNiveau.value = config.niveau;
-                        if (config.nbSources) configNbSources.value = config.nbSources;
-                        if (config.nbDest) configNbDest.value = config.nbDest;
-                        if (config.lv2) configLv2.value = config.lv2;
-                        if (config.opt) configOpt.value = config.opt;
-                        if (config.maxSwaps) configMaxSwaps.value = config.maxSwaps;
-                        if (config.parityTolerance) configParityTolerance.value = config.parityTolerance;
-                        if (config.testSuffix) configTestSuffix.value = config.testSuffix;
-                        if (config.defSuffix) configDefSuffix.value = config.defSuffix;
-
-                        // Mettre à jour le label
-                        sourceLabel.textContent = getNiveauSource(configNiveau.value);
-
-                        showToast('info', 'Configuration chargée depuis votre navigateur');
-                    } catch(e) {
-                        console.error('Erreur lors du chargement de la config:', e);
-                    }
-                }
-            }
-
-            // Sauvegarder la configuration
-            safeAddEventListener('btn-save-config', 'click', () => {
-                const config = {
-                    niveau: configNiveau.value,
-                    nbSources: parseInt(configNbSources.value),
-                    nbDest: parseInt(configNbDest.value),
-                    lv2: configLv2.value,
-                    opt: configOpt.value,
-                    maxSwaps: parseInt(configMaxSwaps.value),
-                    parityTolerance: parseInt(configParityTolerance.value),
-                    testSuffix: configTestSuffix.value,
-                    defSuffix: configDefSuffix.value
-                };
-
-                // Validation basique
-                if (config.nbSources < 1 || config.nbSources > 20) {
-                    showToast('error', 'Le nombre de sources doit être entre 1 et 20');
-                    return;
-                }
-                if (config.nbDest < 1 || config.nbDest > 15) {
-                    showToast('error', 'Le nombre de destinations doit être entre 1 et 15');
-                    return;
-                }
-
-                // Sauvegarder localement
-                localStorage.setItem('console_v3_config', JSON.stringify(config));
-                showToast('success', '💾 Configuration sauvegardée dans votre navigateur');
-
-                // TODO: Envoyer au backend pour mise à jour de _CONFIG
-                // google.script.run.saveConfiguration(config);
-            });
-
-            // Phase 1: Initialisation (avec données du formulaire)
-            safeAddEventListener('btn-run-initialisation', 'click', () => {
-                // Récupérer le mot de passe admin
-                const adminPassword = document.getElementById('config-admin-password').value;
-
-                // Validation du mot de passe
-                if (!adminPassword || adminPassword.trim() === '') {
-                    showToast('error', '🔒 Veuillez entrer le mot de passe administrateur');
-                    document.getElementById('config-admin-password').focus();
-                    return;
-                }
-
-                // Récupérer les données du formulaire
-                const formData = {
-                    adminPassword: adminPassword,
-                    niveau: configNiveau.value,
-                    nbSources: parseInt(configNbSources.value),
-                    nbDest: parseInt(configNbDest.value),
-                    lv2: configLv2.value,
-                    opt: configOpt.value
-                };
-
-                // Validation basique
-                if (formData.nbSources < 1 || formData.nbSources > 20) {
-                    showToast('error', 'Le nombre de sources doit être entre 1 et 20');
-                    return;
-                }
-                if (formData.nbDest < 1 || formData.nbDest > 15) {
-                    showToast('error', 'Le nombre de destinations doit être entre 1 et 15');
-                    return;
-                }
-
-                updatePhaseStatus(1, 'active');
-                showLoading('Initialisation en cours...');
-
-                // Sauvegarder automatiquement avant l'initialisation (SANS le mot de passe)
-                localStorage.setItem('console_v3_config', JSON.stringify({
-                    niveau: formData.niveau,
-                    nbSources: formData.nbSources,
-                    nbDest: formData.nbDest,
-                    lv2: configLv2.value,
-                    opt: configOpt.value,
-                    maxSwaps: parseInt(configMaxSwaps.value),
-                    parityTolerance: parseInt(configParityTolerance.value),
-                    testSuffix: configTestSuffix.value,
-                    defSuffix: configDefSuffix.value
-                }));
-
-                // Appeler la NOUVELLE fonction backend sans popups
-                google.script.run
-                    .withSuccessHandler(response => {
-                        hideLoading();
-                        if (response.success) {
-                            updatePhaseStatus(1, 'completed');
-                            showToast('success', '✅ Initialisation terminée avec succès !');
-                            showAlert('success', response.message || 'Le système a été initialisé avec succès. Vous pouvez passer au diagnostic.');
-                        } else {
-                            updatePhaseStatus(1, 'error');
-                            showToast('error', 'Erreur lors de l\'initialisation');
-                            showAlert('error', response.error || 'Une erreur est survenue');
-                        }
-                    })
-                    .withFailureHandler(error => {
-                        hideLoading();
-                        updatePhaseStatus(1, 'error');
-                        showToast('error', 'Erreur lors de l\'initialisation');
-                        showAlert('error', error.message);
-                    })
-                    .v3_runInitializationWithForm(formData);
-            });
-
-            // NOUVEAUX BOUTONS - Étape 1 : Générer NOM_PRENOM & ID_ELEVE
-            safeAddEventListener('btn-generate-ids', 'click', () => {
-                showLoading('Génération NOM_PRENOM & ID_ELEVE...');
-                const statusDiv = document.getElementById('ids-status');
-
-                google.script.run
-                    .withSuccessHandler(response => {
-                        hideLoading();
-                        if (response.success) {
-                            statusDiv.innerHTML = '<span style="color: var(--success);"><i class="fas fa-check-circle"></i> ' + response.message + '</span>';
-                            showToast('success', '✅ NOM_PRENOM & ID_ELEVE générés !');
-                            // Marquer l'étape comme réalisée
-                            appState.steps.idsGenerated = true;
-                            updateNavLockState();
-                        } else {
-                            statusDiv.innerHTML = '<span style="color: var(--danger);"><i class="fas fa-exclamation-circle"></i> Erreur: ' + response.error + '</span>';
-                            showToast('error', 'Erreur lors de la génération');
-                        }
-                    })
-                    .withFailureHandler(error => {
-                        hideLoading();
-                        statusDiv.innerHTML = '<span style="color: var(--danger);"><i class="fas fa-exclamation-circle"></i> Erreur: ' + error.message + '</span>';
-                        showToast('error', 'Erreur lors de la génération');
-                    })
-                    .v3_genererNomPrenomEtID();
-            });
-
-            // NOUVEAUX BOUTONS - Étape 2 : Configurer Structure
-            safeAddEventListener('btn-configure-structure', 'click', () => {
-                const statusDiv = document.getElementById('structure-status');
-                statusDiv.innerHTML = '<span style="color: var(--info);"><i class="fas fa-spinner fa-spin"></i> Ouverture de l\'interface...</span>';
-
-                try {
-                    google.script.run
-                        .withSuccessHandler(() => {
-                            statusDiv.innerHTML = '<span style="color: var(--success);"><i class="fas fa-check-circle"></i> Interface ouverte - Complétez la configuration</span>';
-                            // On considère qu'une fois l'interface ouverte et utilisée,
-                            // la structure sera configurée avant de revenir au diagnostic.
-                            appState.steps.structureConfigured = true;
-                            updateNavLockState();
-                        })
-                        .withFailureHandler(error => {
-                            statusDiv.innerHTML = '<span style="color: var(--danger);"><i class="fas fa-exclamation-circle"></i> Erreur: ' + error.message + '</span>';
-                            showToast('error', 'Impossible d\'ouvrir l\'interface');
-                        })
-                        .ouvrirConfigurationComplete();
-                } catch (e) {
-                    statusDiv.innerHTML = '<span style="color: var(--danger);"><i class="fas fa-exclamation-circle"></i> Erreur: ' + e.message + '</span>';
-                }
-            });
-
-            // Sauvegarde automatique lors de la modification d'un champ
-            const configFields = [
-                configNiveau, configNbSources, configNbDest, configLv2, configOpt,
-                configMaxSwaps, configParityTolerance, configTestSuffix, configDefSuffix
-            ];
-
-            configFields.forEach(field => {
-                if (field) {
-                    field.addEventListener('input', () => {
-                    const config = {
-                        niveau: configNiveau.value,
-                        nbSources: parseInt(configNbSources.value),
-                        nbDest: parseInt(configNbDest.value),
-                        lv2: configLv2.value,
-                        opt: configOpt.value,
-                        maxSwaps: parseInt(configMaxSwaps.value),
-                        parityTolerance: parseInt(configParityTolerance.value),
-                        testSuffix: configTestSuffix.value,
-                        defSuffix: configDefSuffix.value
-                    };
-                    localStorage.setItem('console_v3_config', JSON.stringify(config));
-                    showToast('info', '💾 brouillon sauvegardé...');
-                    });
-                }
-            });
-
-            // Charger la configuration au démarrage
-            loadSavedConfig();
-
-            // Initialiser le label source dès le début
-            sourceLabel.textContent = getNiveauSource(configNiveau.value);
-
-            // Phase 2: Diagnostic (verrouillé si les étapes obligatoires ne sont pas faites)
-            safeAddEventListener('btn-run-diagnostics', 'click', () => {
-                if (!appState.steps.idsGenerated || !appState.steps.structureConfigured) {
-                    showToast('error', 'Vous devez d\'abord générer NOM_PRENOM & ID_ELEVE ET configurer la structure avant de lancer le diagnostic.');
-                    showAlert('error', 'Étapes obligatoires manquantes : assurez-vous d\'avoir exécuté les deux blocs "Étapes clés avant CONSOLIDATION".');
-                    return;
-                }
-
-                updatePhaseStatus(2, 'active');
-                showLoading('Diagnostic en cours...');
-
-                google.script.run
-                    .withSuccessHandler(results => {
-                        hideLoading();
-                        displayDiagnostics(results);
-                        const hasErrors = results.some(r => r.status === 'error');
-                        updatePhaseStatus(2, hasErrors ? 'error' : 'completed');
-
-                        if (hasErrors) {
-                            showToast('error', 'Des erreurs ont été détectées');
-                            showAlert('error', 'Veuillez corriger les erreurs avant de continuer.');
-                        } else {
-                            showToast('success', 'Diagnostic terminé avec succès');
-                            showAlert('success', 'Aucune erreur détectée. Vous pouvez passer à la génération.');
-                        }
-                    })
-                    .withFailureHandler(error => {
-                        hideLoading();
-                        updatePhaseStatus(2, 'error');
-                        showToast('error', 'Erreur lors du diagnostic');
-                        showAlert('error', error.message);
-                    })
-                    .v3_runDiagnostics();
-            });
-
-            // Phase 3: Génération
-            safeAddEventListener('btn-run-generation', 'click', () => {
-                updatePhaseStatus(3, 'active');
-                showLoading('Génération des classes en cours...');
-
-                google.script.run
-                    .withSuccessHandler(response => {
-                        hideLoading();
-                        if (response.success) {
-                            updatePhaseStatus(3, 'completed');
-                            showToast('success', 'Classes générées avec succès !');
-                            showAlert('success', response.message || 'Les classes ont été générées dans les onglets ...TEST.');
-                        } else {
-                            updatePhaseStatus(3, 'error');
-                            showToast('error', 'Erreur lors de la génération');
-                            showAlert('error', response.error || 'Une erreur est survenue');
-                        }
-                    })
-                    .withFailureHandler(error => {
-                        hideLoading();
-                        updatePhaseStatus(3, 'error');
-                        showToast('error', 'Erreur lors de la génération');
-                        showAlert('error', error.message);
-                    })
-                    .v3_runGeneration();
-            });
-
-            // Phase 4: Optimisation
-            safeAddEventListener('btn-run-optimization', 'click', () => {
-                updatePhaseStatus(4, 'active');
-
-                google.script.run
-                    .withSuccessHandler(response => {
-                        if (response.success) {
-                            updatePhaseStatus(4, 'completed');
-                            showToast('success', 'Panneau d\'optimisation ouvert');
-                            showAlert('success', response.message || 'Utilisez le panneau pour optimiser la répartition.');
-                        } else {
-                            updatePhaseStatus(4, 'error');
-                            showToast('error', 'Erreur lors de l\'optimisation');
-                            showAlert('error', response.error || 'Une erreur est survenue');
-                        }
-                    })
-                    .withFailureHandler(error => {
-                        updatePhaseStatus(4, 'error');
-                        showToast('error', 'Erreur lors de l\'optimisation');
-                        showAlert('error', error.message);
-                    })
-                    .v3_runOptimization();
-            });
-
-            // Phase 5: Swaps Manuels
-            safeAddEventListener('btn-open-swap-interface', 'click', () => {
-                updatePhaseStatus(5, 'active');
-
-                google.script.run
-                    .withSuccessHandler(response => {
-                        if (response.success) {
-                            window.open(google.script.host.origin + google.script.host.path, '_blank');
-                            updatePhaseStatus(5, 'completed');
-                            showToast('success', 'Interface de swap ouverte');
-                        } else {
-                            updatePhaseStatus(5, 'error');
-                            showToast('error', 'Erreur lors de l\'ouverture');
-                            showAlert('error', response.error || 'Impossible d\'ouvrir l\'interface');
-                        }
-                    })
-                    .withFailureHandler(error => {
-                        updatePhaseStatus(5, 'error');
-                        showToast('error', 'Erreur lors de l\'ouverture');
-                        showAlert('error', error.message);
-                    })
-                    .v3_setBridgeContext('TEST', '');
-            });
-
-            // Phase 6: Finalisation
-            safeAddEventListener('btn-finalize-process', 'click', () => {
-                updatePhaseStatus(6, 'active');
-                showLoading('Vérification avant finalisation...');
-
-                google.script.run
-                    .withSuccessHandler(results => {
-                        hideLoading();
-
-                        // Populate modal checklist
-                        const checklistContainer = document.getElementById('checklist-container');
-                        checklistContainer.innerHTML = '';
-
-                        results.forEach(item => {
-                            const li = document.createElement('li');
-                            li.className = 'checklist-item';
-
-                            let icon = '';
-                            if (item.status === 'ok') {
-                                icon = '✅';
-                                li.style.background = 'rgba(16, 185, 129, 0.1)';
-                            } else if (item.status === 'warning') {
-                                icon = '⚠️';
-                                li.style.background = 'rgba(245, 158, 11, 0.1)';
-                            } else {
-                                icon = '❌';
-                                li.style.background = 'rgba(239, 68, 68, 0.1)';
-                            }
-
-                            li.innerHTML = `<span style="margin-right: 12px;">${icon}</span><span>${item.message}</span>`;
-                            checklistContainer.appendChild(li);
-                        });
-
-                        // Reset checkbox
-                        confirmCheckbox.checked = false;
-                        confirmBtn.disabled = true;
-
-                        showModal();
-                    })
-                    .withFailureHandler(error => {
-                        hideLoading();
-                        updatePhaseStatus(6, 'error');
-                        showToast('error', 'Erreur lors de la vérification');
-                        showAlert('error', error.message);
-                    })
-                    .v3_runDiagnostics();
-            });
-
-            // Confirm finalize
-            confirmBtn.addEventListener('click', () => {
-                hideModal();
-                showLoading('Finalisation en cours...');
-                updatePhaseStatus(6, 'active');
-
-                google.script.run
-                    .withSuccessHandler(response => {
-                        hideLoading();
-                        if (response.success) {
-                            updatePhaseStatus(6, 'completed');
-                            showToast('success', 'Processus finalisé avec succès !');
-                            showAlert('success', response.message);
-                        } else {
-                            updatePhaseStatus(6, 'error');
-                            showToast('error', 'Erreur lors de la finalisation');
-                            showAlert('error', response.error || 'Une erreur est survenue');
-                        }
-                    })
-                    .withFailureHandler(error => {
-                        hideLoading();
-                        updatePhaseStatus(6, 'error');
-                        showToast('error', 'Erreur lors de la finalisation');
-                        showAlert('error', error.message);
-                    })
-                    .v3_finalizeProcess();
-            });
-
-            // Start clock
-            updateClock();
-            setInterval(updateClock, 1000);
-
-            // Initial state
-            updateNavLockState();
-            updateGlobalProgress();
-
-            console.log('✅ Console de Pilotage V3 Expert Edition chargée !');
-
-            // ===================================================================
-            // SYSTÈME DE MINIMISATION - GESTION
-            // ===================================================================
-            const consoleToggleBtn = document.getElementById('consoleToggleBtn');
-            const minimizedCurrentPhase = document.getElementById('minimized-current-phase');
-            const minimizedCurrentStatus = document.getElementById('minimized-current-status');
-            const minimizedProgressCircle = document.getElementById('minimizedProgressCircle');
-            const minimizedProgressText = document.getElementById('minimizedProgressText');
-
-            let isConsoleMinimized = localStorage.getItem('consoleMinimized') === 'true';
-
-            // Appliquer l'état initial au chargement
-            if (isConsoleMinimized) {
-                document.body.classList.add('console-minimized');
-                updateMinimizedBar();
-            }
-
-            // Fonction pour mettre à jour la barre minimale
-            function updateMinimizedBar() {
-                const currentPhaseNum = appState.currentPhase;
-                const currentPhase = appState.phases[currentPhaseNum];
-
-                // Mettre à jour la phase actuelle
-                minimizedCurrentPhase.textContent = `Phase ${currentPhaseNum}`;
-
-                // Mettre à jour le statut
-                const statusText = {
-                    'active': 'En cours',
-                    'pending': 'En attente',
-                    'completed': 'Terminé',
-                    'error': 'Erreur'
-                };
-                minimizedCurrentStatus.textContent = statusText[currentPhase.status] || 'En attente';
-
-                // Calculer et mettre à jour la progression
-                const completedPhases = Object.values(appState.phases).filter(p => p.completed).length;
-                const totalPhases = 6;
-                const percentage = Math.round((completedPhases / totalPhases) * 100);
-                const angle = (percentage / 100) * 360;
-
-                minimizedProgressCircle.style.setProperty('--progress-angle', `${angle}deg`);
-                minimizedProgressText.textContent = `${percentage}%`;
-            }
-
-            // Fonction toggle
-            function toggleConsole() {
-                isConsoleMinimized = !isConsoleMinimized;
-                document.body.classList.toggle('console-minimized');
-                localStorage.setItem('consoleMinimized', isConsoleMinimized);
-
-                if (isConsoleMinimized) {
-                    updateMinimizedBar();
-                    showToast('info', 'Console minimisée. Les onglets Google Sheets sont maintenant accessibles.');
-                } else {
-                    showToast('success', 'Console restaurée.');
-                }
-            }
-
-            // Événement du bouton toggle
-            consoleToggleBtn.addEventListener('click', toggleConsole);
-
-            // Raccourci clavier : Ctrl + M (ou Cmd + M sur Mac)
-            document.addEventListener('keydown', (e) => {
-                if ((e.ctrlKey || e.metaKey) && e.key === 'm') {
-                    e.preventDefault();
-                    toggleConsole();
-                }
-            });
-
-            // Override updatePhaseStatus pour mettre à jour la barre minimale
-            const originalUpdatePhaseStatus = updatePhaseStatus;
-            updatePhaseStatus = function(phaseNum, status) {
-                originalUpdatePhaseStatus(phaseNum, status);
-                if (isConsoleMinimized) {
-                    updateMinimizedBar();
-                }
-            };
-
-            // Override goToPhase pour mettre à jour la barre minimale
-            const originalGoToPhase = goToPhase;
-            goToPhase = function(phaseNum) {
-                originalGoToPhase(phaseNum);
-                if (isConsoleMinimized) {
-                    updateMinimizedBar();
-                }
-            };
-
-            // Initialiser la barre minimale
-            updateMinimizedBar();
-        });
+        // Theme Toggle
+        document.getElementById('theme-toggle')?.addEventListener('click', toggleTheme);
     </script>
 
 </body>
