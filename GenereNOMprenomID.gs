@@ -3,20 +3,20 @@
  * 🆔 GÉNÉRATEUR D'IDENTIFIANTS (Format Historique & Compatible)
  * ===================================================================
  * Scanne les onglets sources et génère les IDs au format :
- * [NOM_ONGLET][1000 + INDEX] -> Ex: 6°51001 ou ECOLE11001
+ * [NOM_ONGLET][1000 + INDEX] -> Ex: 6°51001 ou BRESSOLS°51001
  * Ce format texte est CRITIQUE pour la compatibilité du système.
  *
- * Pattern accepté : ECOLE1, 6°1, GAMARRA°4, etc.
- * (Même pattern que COMPTER.gs, LEGACY_Context.gs, etc.)
+ * Pattern accepté : 6°1, 3°5, BRESSOLS°4, GAMARRA°7, etc.
+ * (Toujours avec le ° - jamais sans)
  */
 
 function genererNomPrenomEtID() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ui = SpreadsheetApp.getUi();
 
-  // PATTERN UNIVERSEL (Identique à COMPTER.gs & LEGACY_Context.gs)
-  // Accepte: ECOLE1, ECOLE2, 6°1, 5°2, GAMARRA°4, ALBEXT°7, etc.
-  const sourcePattern = /^(ECOLE\d+|[A-Za-z0-9_-]+°\d+)$/;
+  // PATTERN UNIVERSEL - Onglets sources TOUJOURS avec le °
+  // Accepte: 6°1, 3°5, BRESSOLS°4, GAMARRA°7, etc.
+  const sourcePattern = /^[A-Za-z0-9_-]+°\d+$/;
 
   const sheets = ss.getSheets().filter(s => {
     const name = s.getName();
@@ -29,7 +29,7 @@ function genererNomPrenomEtID() {
   });
 
   if (sheets.length === 0) {
-    ui.alert(`⚠️ Aucun onglet source trouvé (ex: ECOLE1, 6°1, GAMARRA°4).`);
+    ui.alert(`⚠️ Aucun onglet source trouvé (ex: 6°1, 3°5, BRESSOLS°4).`);
     return;
   }
 
