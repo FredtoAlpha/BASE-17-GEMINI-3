@@ -1,87 +1,97 @@
 /**
- * 🚀 BASE-17 ULTIMATE - ENTRY POINT (Menu + Web App + Wrappers)
- * Version: 3.5 | Date: 19/11/2025
- * ALL BUSINESS LOGIC IN BACKEND MODULES - DO NOT ADD HERE
+ * ===================================================================
+ * 🚀 BASE-17 ULTIMATE - POINT D'ENTRÉE PRINCIPAL
+ * ===================================================================
+ * Version : 3.5 (Finale & Nettoyée)
  */
 
 function onOpen() {
-  try {
-    const ui = SpreadsheetApp.getUi();
-    ui.createMenu('🎯 CONSOLE')
-      .addItem('🚀 Console V3', 'ouvrirConsolePilotageV3')
-      .addSeparator()
-      .addItem('⚙️ Configuration', 'ouvrirConfigurationStructure')
-      .addItem('🔓 Déverrouiller _STRUCTURE', 'deverrouillerStructure')
-      .addToUi();
+  SpreadsheetApp.getUi()
+    .createMenu('🚀 PILOTAGE CLASSE')
+    .addItem('📊 Ouvrir la Console V3', 'ouvrirConsolePilotageV3')
+    .addSeparator()
+    .addSubMenu(SpreadsheetApp.getUi().createMenu('🛠️ Outils Spécifiques')
+        .addItem('➕ Intégrer un Nouvel Élève', 'ouvrirModuleNouvelEleve')
+        .addItem('👥 Créer des Groupes', 'ouvrirModuleGroupes'))
+    .addSeparator()
+    .addItem('⚙️ Configuration Avancée', 'ouvrirConfigurationStructure')
+    .addItem('🔓 Déverrouiller _STRUCTURE', 'deverrouillerStructure')
+    .addToUi();
 
-    ui.createMenu('⚙️ LEGACY')
-      .addItem('📋 Classes Sources', 'legacy_viewSourceClasses')
-      .addItem('📊 Pipeline Complet', 'legacy_runFullPipeline')
-      .addItem('⚙️ _STRUCTURE', 'legacy_openStructure')
-      .addToUi();
-  } catch (e) {
-    Logger.log('❌ onOpen error: ' + e.toString());
-  }
+  Logger.log('✅ Menu V3 Ultimate chargé');
 }
 
+// --- ACCÈS WEB (Interface Profs) ---
 function doGet(e) {
   return HtmlService.createTemplateFromFile('InterfaceV2')
     .evaluate()
-    .setTitle('Interface Répartition')
+    .setTitle('Interface Répartition - Professeurs')
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
 
+// --- LANCEURS MODALES ---
 function ouvrirConsolePilotageV3() {
-  const html = HtmlService.createHtmlOutputFromFile('ConsolePilotageV3').setWidth(1600).setHeight(900);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Console de Pilotage V3');
+  const html = HtmlService.createHtmlOutputFromFile('ConsolePilotageV3')
+    .setWidth(1600).setHeight(900);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Console de Pilotage V3 - Expert Edition');
 }
 
 function ouvrirConfigurationStructure() {
-  const html = HtmlService.createHtmlOutputFromFile('ConfigurationComplete').setWidth(1200).setHeight(800);
-  SpreadsheetApp.getUi().showModalDialog(html, 'Configuration Structure');
+  const html = HtmlService.createHtmlOutputFromFile('ConfigurationComplete')
+    .setWidth(1200).setHeight(800);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Configuration de la Structure');
+}
+
+function ouvrirConfigurationComplete() {
+  const html = HtmlService.createHtmlOutputFromFile('ConfigurationComplete')
+    .setWidth(1200).setHeight(800);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Configuration Complète');
+}
+
+function ouvrirModuleGroupes() {
+  const html = HtmlService.createHtmlOutputFromFile('GroupsInterfaceV4')
+    .setWidth(1400).setHeight(800);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Module Groupes');
+}
+
+function ouvrirModuleNouvelEleve() {
+  const html = HtmlService.createHtmlOutputFromFile('InterfaceV2_NewStudentModule')
+    .setWidth(1000).setHeight(600);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Intégration Nouvel Élève');
+}
+
+// --- UTILITAIRES ADMIN & COMPATIBILITÉ ---
+function deverrouillerStructure() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('_STRUCTURE');
+  if (sheet) {
+    sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET).forEach(p => p.remove());
+    SpreadsheetApp.getUi().alert('✅ Onglet _STRUCTURE déverrouillé.');
+  } else {
+    SpreadsheetApp.getUi().alert('⚠️ Onglet _STRUCTURE introuvable.');
+  }
 }
 
 function legacy_runFullPipeline() {
   if (typeof legacy_runFullPipeline_PRIME === 'function') {
     return legacy_runFullPipeline_PRIME();
-  } else {
-    SpreadsheetApp.getUi().alert('❌ LEGACY_Pipeline.gs not found');
   }
+  SpreadsheetApp.getUi().alert("❌ Erreur : Moteur LEGACY introuvable.");
 }
 
 function legacy_viewSourceClasses() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheets = ss.getSheets().filter(s => /^\d+°\d+$/.test(s.getName()));
-  if (sheets.length === 0) {
-    SpreadsheetApp.getUi().alert('⚠️ No source sheets (6°1, 5°2, etc)');
-    return;
+  const sourceSheets = ss.getSheets().filter(s => /^\d+°\d+$/.test(s.getName()));
+  if (sourceSheets.length > 0) {
+    ss.setActiveSheet(sourceSheets[0]);
+    SpreadsheetApp.getUi().alert('Classes sources trouvées : ' + sourceSheets.map(s => s.getName()).join(', '));
+  } else {
+    SpreadsheetApp.getUi().alert('Aucune classe source trouvée.');
   }
-  ss.setActiveSheet(sheets[0]);
-  SpreadsheetApp.getUi().alert(`Found: ${sheets.map(s => s.getName()).join(', ')}`);
 }
 
 function legacy_openStructure() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('_STRUCTURE');
-  if (sheet) {
-    SpreadsheetApp.getActiveSpreadsheet().setActiveSheet(sheet);
-    SpreadsheetApp.getUi().alert('✅ _STRUCTURE opened');
-  } else {
-    SpreadsheetApp.getUi().alert('⚠️ _STRUCTURE not found');
-  }
-}
-
-function deverrouillerStructure() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('_STRUCTURE');
-  if (!sheet) {
-    SpreadsheetApp.getUi().alert('⚠️ _STRUCTURE not found');
-    return;
-  }
-  try {
-    const protections = sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET);
-    let count = 0;
-    protections.forEach(p => { if (p.canEdit()) { p.remove(); count++; } });
-    SpreadsheetApp.getUi().alert(`✅ Unlocked (${count} protections)`);
-  } catch (e) {
-    SpreadsheetApp.getUi().alert(`❌ ${e.toString()}`);
-  }
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('_STRUCTURE');
+  if (sheet) ss.setActiveSheet(sheet);
 }
