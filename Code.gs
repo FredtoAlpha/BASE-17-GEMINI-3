@@ -1,14 +1,25 @@
 /**
  * ===================================================================
- * 🚀 BASE-17 ULTIMATE - POINT D'ENTRÉE PRINCIPAL (CONTROLLER)
+ * 🚀 BASE-17 ULTIMATE - POINT D'ENTRÉE PRINCIPAL
  * ===================================================================
- * Ce fichier gère le Menu, les Accès Web et les Lanceurs d'Interfaces.
- * Toute la logique métier complexe a été déplacée dans :
- * - Backend_Eleves.gs
- * - Backend_Finalisation.gs
- * - Backend_Groupes.gs
- * - LEGACY_Pipeline.gs
- * - Phase4_Ultimate.gs
+ * Ce fichier contient SEULEMENT:
+ * - Menu Google Sheets (onOpen)
+ * - Accès Web (doGet)
+ * - Lanceurs d'interfaces (modales)
+ *
+ * TOUTE LA LOGIQUE MÉTIER EST DANS LES BACKEND MODULES:
+ * - Backend_Eleves.gs         (Gestion données élèves)
+ * - Backend_Finalisation.gs   (Formatage onglets FIN)
+ * - Backend_Groupes.gs        (Module Groupes V4)
+ * - Phase4_Ultimate.gs        (Moteur Asymmetric Weighting)
+ * - LEGACY_Pipeline.gs        (Pipeline classique)
+ * - OPTI_Pipeline_Independent.gs (Pipeline OPTI)
+ *
+ * ⚠️ ZONE INTERDITE: Ne pas ajouter de logique métier ici!
+ * Les doublons créent des erreurs "Duplicate function".
+ *
+ * Version: 3.4 (NETTOYÉ - Zéro Doublons)
+ * Date: 19/11/2025
  * ===================================================================
  */
 
@@ -17,33 +28,42 @@
 // ===================================================================
 
 function onOpen() {
-  SpreadsheetApp.getUi()
-    .createMenu('🚀 PILOTAGE CLASSE')
+  try {
+    const ui = SpreadsheetApp.getUi();
+    Logger.log('📋 onOpen() démarré');
 
-    // --- LE CŒUR DU SYSTÈME ---
-    .addItem('📊 Ouvrir la Console V3 (Admin)', 'ouvrirConsolePilotageV3')
-    .addSeparator()
+    // ========== MENU CONSOLE (V3 + Outils) ==========
+    ui.createMenu('🎯 CONSOLE')
+      .addItem('🚀 Console de Pilotage V3 (EXPERT)', 'ouvrirConsolePilotageV3')
+      .addSeparator()
+      .addItem('⚙️ Configuration Structure', 'ouvrirConfigurationStructure')
+      .addItem('⚙️ Configuration Complète', 'ouvrirConfigurationComplete')
+      .addSeparator()
+      .addItem('🔓 Déverrouiller _STRUCTURE', 'deverrouillerStructure')
+      .addToUi();
 
-    // --- LES OUTILS SATELLITES ---
-    .addSubMenu(SpreadsheetApp.getUi().createMenu('🛠️ Outils Spécifiques')
-        .addItem('➕ Intégrer un Nouvel Élève', 'ouvrirModuleNouvelEleve')
-        .addItem('👥 Créer des Groupes (Besoins/LV)', 'ouvrirModuleGroupes'))
-    .addSeparator()
+    // ========== MENU LEGACY (Pipeline Complet) ==========
+    ui.createMenu('⚙️ LEGACY')
+      .addItem('📋 Voir Classes Sources (6°1, 6°2...)', 'legacy_viewSourceClasses')
+      .addItem('📊 Lancer Pipeline Complet', 'legacy_runFullPipeline')
+      .addSeparator()
+      .addItem('⚙️ Configurer _STRUCTURE', 'legacy_openStructure')
+      .addToUi();
 
-    // --- MAINTENANCE ---
-    .addItem('⚙️ Configuration Avancée', 'ouvrirConfigurationStructure')
-    .addItem('🔓 Déverrouiller _STRUCTURE', 'deverrouillerStructure')
-    .addToUi();
+    Logger.log('✅ Menus créés avec succès');
 
-  Logger.log('✅ Menu V3 Ultimate chargé');
+  } catch (error) {
+    Logger.log('❌ ERREUR dans onOpen(): ' + error.toString());
+  }
 }
 
 // ===================================================================
-// 2. ACCÈS WEB (doGet) - INTERFACE PROFESSEURS
+// 2. ACCÈS WEB (Web App)
 // ===================================================================
-// Cette fonction gère l'accès via l'URL du script (Web App).
-// Elle ouvre l'interface "Profs" (Swap) pour qu'ils ne touchent pas au tableur.
 
+/**
+ * Entrée Web App - Affiche InterfaceV2 pour les profs
+ */
 function doGet(e) {
   return HtmlService.createTemplateFromFile('InterfaceV2')
     .evaluate()
@@ -56,97 +76,87 @@ function doGet(e) {
 // ===================================================================
 
 /**
- * Lance la Console de Pilotage V3 (Tour de Contrôle Admin)
+ * Lance la Console de Pilotage V3
  */
 function ouvrirConsolePilotageV3() {
   const html = HtmlService.createHtmlOutputFromFile('ConsolePilotageV3')
     .setWidth(1600)
-    .setHeight(900)
-    .setTitle('Console de Pilotage V3 - Expert Edition');
+    .setHeight(900);
   SpreadsheetApp.getUi().showModalDialog(html, 'Console de Pilotage V3');
 }
 
 /**
- * Lance le Configurateur de Structure (Détail 4°4 = 6 ITA)
+ * Lance le Configurateur de Structure
  */
 function ouvrirConfigurationStructure() {
   const html = HtmlService.createHtmlOutputFromFile('ConfigurationComplete')
     .setWidth(1200)
-    .setHeight(800)
-    .setTitle('⚙️ Configuration Complète');
+    .setHeight(800);
   SpreadsheetApp.getUi().showModalDialog(html, 'Configuration de la Structure');
 }
 
 /**
- * Lance le Module de Gestion des Groupes (V4)
+ * Lance le Configurateur Complet
  */
-function ouvrirModuleGroupes() {
-  const html = HtmlService.createHtmlOutputFromFile('GroupsInterfaceV4')
-    .setWidth(1400)
-    .setHeight(800)
-    .setTitle('Gestion des Groupes');
-  SpreadsheetApp.getUi().showModalDialog(html, 'Module Groupes');
-}
-
-/**
- * Lance le Module d'Intégration (Nouvel Élève)
- */
-function ouvrirModuleNouvelEleve() {
-  const html = HtmlService.createHtmlOutputFromFile('InterfaceV2_NewStudentModule')
-    .setWidth(1000)
-    .setHeight(600)
-    .setTitle('Intégration Nouvel Élève');
-  SpreadsheetApp.getUi().showModalDialog(html, 'Nouvel Élève');
+function ouvrirConfigurationComplete() {
+  const html = HtmlService.createHtmlOutputFromFile('ConfigurationComplete')
+    .setWidth(1200)
+    .setHeight(800);
+  SpreadsheetApp.getUi().showModalDialog(html, 'Configuration Complète');
 }
 
 // ===================================================================
-// 4. FONCTIONS BACKEND & SAFETY NETS
+// 4. WRAPPERS LEGACY (Appels au pipeline)
 // ===================================================================
-// Ces fonctions servent de pont entre les interfaces et les moteurs.
 
 /**
- * Wrapper pour lancer le pipeline complet (Phase 4 Console V3)
+ * Lance le pipeline LEGACY complet
+ * APPELÉ PAR: Menu "⚙️ LEGACY" → "Lancer Pipeline Complet"
+ * EXÉCUTE: LEGACY_Pipeline.gs → Phase4_Ultimate.gs
  */
 function legacy_runFullPipeline() {
   if (typeof legacy_runFullPipeline_PRIME === 'function') {
     return legacy_runFullPipeline_PRIME();
   } else {
-    SpreadsheetApp.getUi().alert("❌ Erreur critique : Le moteur LEGACY_Pipeline (PRIME) est introuvable.");
+    SpreadsheetApp.getUi().alert('❌ Erreur: Moteur LEGACY_Pipeline.gs non trouvé.');
   }
 }
 
 /**
- * Utilitaire pour afficher les classes sources détectées
+ * Affiche les classes sources détectées
+ * Format attendu: 6°1, 5°2, 4°3, etc.
  */
 function legacy_viewSourceClasses() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sourceSheets = ss.getSheets().filter(s => /^\d+°\d+$/.test(s.getName()));
 
   if (sourceSheets.length === 0) {
-    SpreadsheetApp.getUi().alert('⚠️ Aucune classe source trouvée (Format attendu : 6°1, 5°2...).');
+    SpreadsheetApp.getUi().alert('⚠️ Aucune classe source trouvée.\n\nFormat attendu: 6°1, 5°2, 4°3, etc.');
     return;
   }
 
   const classList = sourceSheets.map(s => s.getName()).join(', ');
   ss.setActiveSheet(sourceSheets[0]);
-  SpreadsheetApp.getUi().alert('📋 Classes Sources détectées :\n\n' + classList);
+  SpreadsheetApp.getUi().alert(`📋 Classes Sources trouvées:\n\n${classList}`);
 }
 
 /**
- * Utilitaire pour accéder rapidement à l'onglet structure
+ * Ouvre l'onglet _STRUCTURE
  */
 function legacy_openStructure() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheet = ss.getSheetByName('_STRUCTURE');
+
   if (sheet) {
     ss.setActiveSheet(sheet);
+    SpreadsheetApp.getUi().alert('⚙️ Onglet _STRUCTURE ouvert.');
   } else {
-    SpreadsheetApp.getUi().alert('⚠️ L\'onglet _STRUCTURE n\'existe pas encore. Lancez l\'initialisation.');
+    SpreadsheetApp.getUi().alert('⚠️ Onglet _STRUCTURE non trouvé.');
   }
 }
 
 /**
- * Déverrouillage d'urgence de l'onglet structure
+ * Déverrouille l'onglet _STRUCTURE en urgence
  */
 function deverrouillerStructure() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -159,48 +169,61 @@ function deverrouillerStructure() {
 
   try {
     const protections = sheet.getProtections(SpreadsheetApp.ProtectionType.SHEET);
-    let count = 0;
+    let removed = 0;
     protections.forEach(p => {
-      if (p.canEdit()) { p.remove(); count++; }
+      if (p.canEdit()) {
+        p.remove();
+        removed++;
+      }
     });
-    SpreadsheetApp.getUi().alert(`✅ Onglet déverrouillé (${count} protections retirées).`);
+    SpreadsheetApp.getUi().alert(`✅ Onglet déverrouillé (${removed} protections retirées).`);
   } catch (e) {
-    SpreadsheetApp.getUi().alert('❌ Erreur : ' + e.toString());
+    SpreadsheetApp.getUi().alert(`❌ Erreur: ${e.toString()}`);
   }
 }
 
 // ===================================================================
-// 5. POINT D'ENTRÉE POUR TESTS & DEBUG
+// 5. FONCTIONS DE TEST (DEBUG UNIQUEMENT)
 // ===================================================================
 
 /**
- * Test : Charger les données élèves
+ * Test: Afficher la structure du projet
  */
-function testLoadStudents() {
-  const ctx = { ss: SpreadsheetApp.getActiveSpreadsheet() };
-  const students = loadAllStudentsData(ctx);
-  Logger.log(`✅ ${students.length} élèves chargés`);
-  return students;
-}
-
-/**
- * Test : Calculer les stats globales
- */
-function testGlobalStats() {
-  const ctx = { ss: SpreadsheetApp.getActiveSpreadsheet() };
-  const students = loadAllStudentsData(ctx);
-  const stats = calculateGlobalStudentStats(students);
-  Logger.log(JSON.stringify(stats, null, 2));
-  return stats;
-}
-
-/**
- * Test : Valider un onglet
- */
-function testValidateClass() {
+function testProjectStructure() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const firstSheet = ss.getSheets()[0];
-  const result = validateClassData(firstSheet.getName());
-  Logger.log(JSON.stringify(result, null, 2));
-  return result;
+
+  Logger.log('=== STRUCTURE DU PROJET ===');
+  Logger.log(`Nom: ${ss.getName()}`);
+  Logger.log(`Onglets (${ss.getSheets().length}):`);
+  ss.getSheets().forEach(s => {
+    Logger.log(`  - ${s.getName()}`);
+  });
+  Logger.log('=== FIN ===');
 }
+
+/**
+ * Test: Vérifier les pipelines
+ */
+function testPipelines() {
+  Logger.log('=== VÉRIFICATION PIPELINES ===');
+  Logger.log(`legacy_runFullPipeline_PRIME: ${typeof legacy_runFullPipeline_PRIME}`);
+  Logger.log(`Phase4_Ultimate_Run: ${typeof Phase4_Ultimate_Run}`);
+  Logger.log(`loadAllStudentsData: ${typeof loadAllStudentsData}`);
+  Logger.log(`finalizeClasses: ${typeof finalizeClasses}`);
+  Logger.log('=== FIN ===');
+}
+
+// ===================================================================
+// ⚠️ ZONE INTERDITE - NE PAS AJOUTER DE CODE MÉTIER ICI
+// ===================================================================
+// Les doublons de fonctions causent:
+// - "Duplicate function definition" à la compilation
+// - Erreurs à l'exécution
+//
+// Si vous avez besoin d'ajouter une fonction:
+// 1. Vérifiez qu'elle n'existe pas dans Backend_*.gs
+// 2. Si elle existe, modifiez-la là-bas
+// 3. Si elle est nouvelle, créez un nouveau module (ex: Module_NouveauTrucs.gs)
+//
+// Ce fichier doit rester < 250 lignes.
+// ===================================================================
