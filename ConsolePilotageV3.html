@@ -1465,6 +1465,75 @@
                 transform: translateX(120%);
             }
         }
+
+        /* =====================================================================
+         * CAPACITY GAUGE STYLES (Phase 3)
+         * ===================================================================*/
+        .capacity-gauge {
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .capacity-fill {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 1s ease;
+            border-radius: 4px;
+        }
+
+        .capacity-fill.warning {
+            background: var(--warning);
+        }
+
+        .capacity-fill.error {
+            background: var(--danger);
+        }
+
+        .capacity-fill.info {
+            background: var(--info);
+        }
+
+        /* Strategy Dashboard Stats Grid */
+        .strategy-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: all var(--transition-base);
+        }
+
+        .stat-card:hover {
+            border-color: var(--primary-500);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary-500);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -1506,13 +1575,13 @@
             </div>
 
             <nav class="sidebar-nav">
-                <div class="nav-section-title">Phases du Processus</div>
+                <div class="nav-section-title">Pipeline de Production</div>
 
                 <div class="nav-item">
                     <a href="#" class="nav-link active" data-step="1" role="button" aria-label="Phase 1: Initialisation">
                         <div class="nav-icon-wrapper">
                             <span class="nav-number">1</span>
-                            <i class="nav-icon fas fa-play-circle"></i>
+                            <i class="nav-icon fas fa-rocket"></i>
                         </div>
                         <span class="nav-text">Initialisation</span>
                         <span id="badge-1" class="nav-badge badge-active">En cours</span>
@@ -1520,57 +1589,46 @@
                 </div>
 
                 <div class="nav-item">
-                    <a href="#" class="nav-link" data-step="2" role="button" aria-label="Phase 2: Diagnostic">
+                    <a href="#" class="nav-link" data-step="2" role="button" aria-label="Phase 2: Données Élèves">
                         <div class="nav-icon-wrapper">
                             <span class="nav-number">2</span>
-                            <i class="nav-icon fas fa-stethoscope"></i>
+                            <i class="nav-icon fas fa-users"></i>
                         </div>
-                        <span class="nav-text">Diagnostic</span>
+                        <span class="nav-text">Données Élèves</span>
                         <span id="badge-2" class="nav-badge badge-pending">En attente</span>
                     </a>
                 </div>
 
                 <div class="nav-item">
-                    <a href="#" class="nav-link" data-step="3" role="button" aria-label="Phase 3: Génération">
+                    <a href="#" class="nav-link" data-step="3" role="button" aria-label="Phase 3: Stratégie & Structure">
                         <div class="nav-icon-wrapper">
                             <span class="nav-number">3</span>
-                            <i class="nav-icon fas fa-wand-magic-sparkles"></i>
+                            <i class="nav-icon fas fa-chess-board"></i>
                         </div>
-                        <span class="nav-text">Génération</span>
-                        <span id="badge-3" class="nav-badge badge-pending">En attente</span>
+                        <span class="nav-text">Stratégie & Structure</span>
+                        <span id="badge-3" class="nav-badge badge-pending">À définir</span>
                     </a>
                 </div>
 
                 <div class="nav-item">
-                    <a href="#" class="nav-link" data-step="4" role="button" aria-label="Phase 4: Optimisation">
+                    <a href="#" class="nav-link" data-step="4" role="button" aria-label="Phase 4: Moteur de Répartition">
                         <div class="nav-icon-wrapper">
                             <span class="nav-number">4</span>
-                            <i class="nav-icon fas fa-gauge-high"></i>
+                            <i class="nav-icon fas fa-cogs"></i>
                         </div>
-                        <span class="nav-text">Optimisation</span>
+                        <span class="nav-text">Moteur de Répartition</span>
                         <span id="badge-4" class="nav-badge badge-pending">En attente</span>
                     </a>
                 </div>
 
                 <div class="nav-item">
-                    <a href="#" class="nav-link" data-step="5" role="button" aria-label="Phase 5: Swaps Manuels">
+                    <a href="#" class="nav-link" data-step="5" role="button" aria-label="Phase 5: Pilotage Final">
                         <div class="nav-icon-wrapper">
                             <span class="nav-number">5</span>
-                            <i class="nav-icon fas fa-arrows-rotate"></i>
+                            <i class="nav-icon fas fa-gauge-high"></i>
                         </div>
-                        <span class="nav-text">Swaps Manuels</span>
-                        <span id="badge-5" class="nav-badge badge-pending">En attente</span>
-                    </a>
-                </div>
-
-                <div class="nav-item">
-                    <a href="#" class="nav-link" data-step="6" role="button" aria-label="Phase 6: Finalisation">
-                        <div class="nav-icon-wrapper">
-                            <span class="nav-number">6</span>
-                            <i class="nav-icon fas fa-check-double"></i>
-                        </div>
-                        <span class="nav-text">Finalisation</span>
-                        <span id="badge-6" class="nav-badge badge-pending">En attente</span>
+                        <span class="nav-text">Pilotage Final</span>
+                        <span id="badge-5" class="nav-badge badge-pending">Final</span>
                     </a>
                 </div>
             </nav>
@@ -1921,38 +1979,97 @@
                 </div>
             </div>
 
-            <!-- Phase 3: Génération -->
+            <!-- Phase 3: Stratégie & Structure -->
             <div id="phase-3" class="phase">
                 <div class="content-header">
-                    <h1 class="page-title">Phase 3: Génération</h1>
-                    <p class="page-subtitle">Création automatique des classes avec l'algorithme de répartition</p>
+                    <h1 class="page-title">Phase 3: Stratégie de Répartition</h1>
+                    <p class="page-subtitle">Définissez la structure cible : combien d'élèves et quelles options dans chaque classe ?</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon"><i class="fas fa-chart-pie"></i></div>
+                        <div>
+                            <h2 class="card-title">État de la Structure (_STRUCTURE)</h2>
+                            <p class="card-description" id="structure-summary-text">Chargement des données...</p>
+                        </div>
+                    </div>
+
+                    <div class="strategy-stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-places">0</div>
+                            <div class="stat-label">Places Totales</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-classes">0</div>
+                            <div class="stat-label">Classes Cibles</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="stat-remplissage">0%</div>
+                            <div class="stat-label">Taux Remplissage</div>
+                            <div class="capacity-gauge">
+                                <div id="gauge-fill" class="capacity-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle alert-icon"></i>
+                        <div>C'est ici que vous dites : <strong>"En 4°4, je veux 28 élèves dont 6 ITA et 4 LATIN".</strong></div>
+                    </div>
+
+                    <button id="btn-open-structure-config" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                        <i class="btn-icon fas fa-pen-to-square"></i>
+                        <span>Ouvrir le Configurateur de Structure</span>
+                    </button>
+                </div>
+
+                <div class="card" style="border-left: 4px solid var(--warning);">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 5px;">Validation de la Stratégie</h3>
+                            <p style="font-size: 13px; color: var(--text-secondary);">Une fois la configuration terminée, validez pour débloquer le moteur.</p>
+                        </div>
+                        <button id="btn-validate-strategy" class="btn btn-success">
+                            <i class="fas fa-check"></i> Valider & Verrouiller
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Phase 4: Moteur de Répartition -->
+            <div id="phase-4" class="phase">
+                <div class="content-header">
+                    <h1 class="page-title">Phase 4: Moteur de Répartition</h1>
+                    <p class="page-subtitle">Optimisation intelligente avec Pondération Asymétrique des Extrêmes (ULTIMATE)</p>
                 </div>
 
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon">
-                            <i class="fas fa-wand-magic-sparkles"></i>
+                            <i class="fas fa-cogs"></i>
                         </div>
                         <div>
-                            <h2 class="card-title">Création des Classes</h2>
+                            <h2 class="card-title">OPTIMUM PRIME ULTIMATE</h2>
+                            <p class="card-description">Moteur hybride Jules Codex + Critères Pédagogiques</p>
                         </div>
                     </div>
                     <p class="card-description">
-                        L'algorithme de répartition va créer les onglets ...TEST avec une première version des classes,
-                        en tenant compte de tous les critères configurés (niveau, parité, options, etc.).
+                        <strong>Asymmetric Weighting of Extremes :</strong> Pénalité quadratique pour les têtes manquantes,
+                        pénalité cubique pour l'excès de Niv1. Combine distribution académique et profils d'élèves pour l'équilibre optimal.
                     </p>
-                    <button id="btn-run-generation" class="btn btn-primary">
-                        <i class="btn-icon fas fa-play"></i>
-                        <span>Générer les Classes</span>
+                    <button id="btn-run-ultimate-engine" class="btn btn-primary">
+                        <i class="btn-icon fas fa-rocket"></i>
+                        <span>Lancer le Moteur ULTIMATE</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Phase 4: Optimisation -->
-            <div id="phase-4" class="phase">
+            <!-- Phase 5: Pilotage Final -->
+            <div id="phase-5" class="phase">
                 <div class="content-header">
-                    <h1 class="page-title">Phase 4: Optimisation</h1>
-                    <p class="page-subtitle">Équilibrage automatique des classes avec l'algorithme JULES-VERNE-NAUTILUS</p>
+                    <h1 class="page-title">Phase 5: Pilotage Final & Validation</h1>
+                    <p class="page-subtitle">Contrôle final, ajustements et création des onglets définitifs</p>
                 </div>
 
                 <div class="card">
@@ -1961,72 +2078,29 @@
                             <i class="fas fa-gauge-high"></i>
                         </div>
                         <div>
-                            <h2 class="card-title">Équilibrage Automatique</h2>
+                            <h2 class="card-title">Contrôle & Finalisation</h2>
                         </div>
                     </div>
                     <p class="card-description">
-                        L'algorithme "JULES-VERNE-NAUTILUS" va optimiser l'équilibre des classes en fonction des scores,
-                        de la parité et de tous les paramètres configurés pour obtenir la répartition la plus équitable possible.
+                        Effectuez les derniers ajustements avant la finalisation. Visualisez les résultats,
+                        faites des swaps manuels si nécessaire, puis validez pour créer les onglets définitifs FIN.
                     </p>
-                    <button id="btn-run-optimization" class="btn btn-primary">
-                        <i class="btn-icon fas fa-play"></i>
-                        <span>Lancer l'Optimisation</span>
-                    </button>
-                </div>
-            </div>
 
-            <!-- Phase 5: Swaps Manuels -->
-            <div id="phase-5" class="phase">
-                <div class="content-header">
-                    <h1 class="page-title">Phase 5: Swaps Manuels</h1>
-                    <p class="page-subtitle">Ajustements fins et échanges d'élèves entre les classes</p>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-arrows-rotate"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title">Ajustements Fins</h2>
-                        </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0;">
+                        <button id="btn-open-swap-interface" class="btn btn-secondary">
+                            <i class="btn-icon fas fa-arrows-rotate"></i>
+                            <span>Ajustements Manuels</span>
+                        </button>
+                        <button id="btn-finalize-process" class="btn btn-success">
+                            <i class="btn-icon fas fa-check-double"></i>
+                            <span>Finaliser & Créer FIN</span>
+                        </button>
                     </div>
-                    <p class="card-description">
-                        Ouvre l'Interface V2 dans un nouvel onglet pour effectuer des échanges manuels d'élèves entre les classes.
-                        Les classes ...TEST seront chargées automatiquement pour faciliter les modifications.
-                    </p>
-                    <button id="btn-open-swap-interface" class="btn btn-primary">
-                        <i class="btn-icon fas fa-external-link-alt"></i>
-                        <span>Ouvrir l'Interface de Swap</span>
-                    </button>
-                </div>
-            </div>
 
-            <!-- Phase 6: Finalisation -->
-            <div id="phase-6" class="phase">
-                <div class="content-header">
-                    <h1 class="page-title">Phase 6: Finalisation</h1>
-                    <p class="page-subtitle">Validation finale et création des onglets définitifs</p>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-icon">
-                            <i class="fas fa-check-double"></i>
-                        </div>
-                        <div>
-                            <h2 class="card-title">Action Finale</h2>
-                        </div>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle alert-icon"></i>
+                        <div><strong>⚠️ Attention :</strong> La finalisation créera les onglets définitifs. Vérifiez tout avant.</div>
                     </div>
-                    <p class="card-description">
-                        <strong style="color: var(--danger);">⚠️ Attention :</strong> Cette action va copier les résultats des onglets ...TEST
-                        vers des onglets définitifs ...DEF. Cette opération est <strong>irréversible</strong>.
-                        Assurez-vous que tout est correct avant de continuer.
-                    </p>
-                    <button id="btn-finalize-process" class="btn btn-danger">
-                        <i class="btn-icon fas fa-exclamation-triangle"></i>
-                        <span>Finaliser le Processus</span>
-                    </button>
                 </div>
             </div>
 
