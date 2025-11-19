@@ -64,8 +64,8 @@ function compterEffectifs(isTest) {
 function trouverOngletsSources() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const sheets = ss.getSheets();
-  // Support: 3°1, ECOLE1, GAMARRA°4, etc.
-  const regex = /^(ECOLE\d+|[A-Za-z0-9_-]+°\d+)$/;
+  // Support: 3°1, GAMARRA°4, etc. (toujours avec °)
+  const regex = /^[A-Za-z0-9_-]+°\d+$/;
 
   return sheets.filter(sheet => {
     const name = sheet.getName();

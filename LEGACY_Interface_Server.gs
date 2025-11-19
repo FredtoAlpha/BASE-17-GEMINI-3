@@ -36,9 +36,9 @@ function legacy_getUiContext() {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const allSheets = ss.getSheets();
 
-    // Logique de détection des sources (identique à LEGACY_Menu.gs)
+    // Logique de détection des sources (toujours avec °)
     const sourceSheets = allSheets.filter(function(s) {
-      return /^(ECOLE\d+|[3-6]°\d+)$/.test(s.getName());
+      return /^[A-Za-z0-9_-]+°\d+$/.test(s.getName());
     });
 
     sourceSheets.sort(function(a, b) {
