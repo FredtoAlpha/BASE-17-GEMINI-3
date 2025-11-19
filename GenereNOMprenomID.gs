@@ -1,53 +1,103 @@
 /**
  * ===================================================================
- * 🆔 GÉNÉRATEUR D'IDENTIFIANTS UNIVERSEL
+ * 🆔 GÉNÉRATEUR D'IDENTIFIANTS - VERSION ADAPTATIVE N-1
  * ===================================================================
- * Scanne TOUS les onglets sources (peu importe le format : 6°1, 5e2, CM2)
- * Génère les IDs au format historique : [NOM_ONGLET][1000 + INDEX]
- * Exemples: 6°51001, 5e21001, CM21001, BRESSOLS°51001
+ * Scanne les onglets SOURCE adaptés au NIVEAU en cours.
+ * Génère les IDs au format : [NOM_SOURCE][1000 + INDEX]
  *
- * Principe: DÉTECTION PAR EXCLUSION (prendre tout sauf système/résultats)
+ * LOGIQUE N-1 ADAPTATIVE:
+ * - Si répartition 5° → sources = 6°1, 6°2, 6°3 (classes 6e)
+ * - Si répartition 6° → sources = ECOLE°1, ECOLE°2 (écoles primaires)
+ * - Si répartition 4° → sources = 5°1, 5°2 (classes 5e)
+ * - Etc.
+ *
+ * Exemples d'ID: 6°11001, 6°21002, ECOLE°11001, ECOLE°21002
  */
+
+/**
+ * Détermine le préfixe source en fonction du niveau destination
+ * (même logique que dans Initialisation.gs)
+ */
+function determinerPrefixeSourceGeneration(niveau) {
+  switch (String(niveau).trim()) {
+    case "6°": case "6e": case "CM2": return "ECOLE";
+    case "5°": case "5e": return "6°";
+    case "4°": case "4e": return "5°";
+    case "3°": case "3e": return "4°";
+    default: return null;
+  }
+}
 
 function genererNomPrenomEtID() {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
   const ui = SpreadsheetApp.getUi();
 
-  // ✅ PATTERN UNIVERSEL & ADAPTATIF
-  // Les sources ont TOUJOURS le format: QUELQUECHOSE°CHIFFRE
-  // Fonctionne avec n'importe quel niveau (adaptatif):
-  // - 6°1, 6°2, 6°3 (sources si répartition 5e)
-  // - BRESSOLS°1, GAMARRA°2 (sources si répartition CM2)
+  // 1️⃣ LIRE LE NIVEAU DEPUIS _CONFIG
+  let niveau = null;
+  try {
+    const configSheet = ss.getSheetByName('_CONFIG');
+    if (configSheet) {
+      const configData = configSheet.getDataRange().getValues();
+      // Chercher la ligne "NIVEAU"
+      for (let i = 0; i < configData.length; i++) {
+        if (String(configData[i][0]).trim().toUpperCase() === 'NIVEAU') {
+          niveau = String(configData[i][1]).trim();
+          break;
+        }
+      }
+    }
+  } catch (e) {
+    Logger.log(`Erreur lecture _CONFIG: ${e.message}`);
+  }
+
+  if (!niveau) {
+    ui.alert(`❌ Niveau non trouvé dans _CONFIG! Initialisez d'abord le système.`);
+    return;
+  }
+
+  Logger.log(`📊 Génération IDs pour niveau ${niveau}`);
+
+  // 2️⃣ DÉTERMINER LES SOURCES ADAPTÉES AU NIVEAU
+  const prefixeSource = determinerPrefixeSourceGeneration(niveau);
+  if (!prefixeSource) {
+    ui.alert(`❌ Niveau non supporté: ${niveau}`);
+    return;
+  }
+
+  // 3️⃣ FILTRER LES ONGLETS SOURCES
+  // Pattern: PREFIXE°CHIFFRE
+  const sourcePattern = new RegExp(`^${prefixeSource}°\\d+$`);
   const sheets = ss.getSheets().filter(s => {
     const name = s.getName();
 
-    // 1. PATTERN SOURCE: QUELQUECHOSE°CHIFFRE
-    const sourcePattern = /^[A-Za-z0-9_-]+°\d+$/;
+    // Doit matcher le pattern PRÉFIXE°CHIFFRE
     if (!sourcePattern.test(name)) return false;
 
-    // 2. Exclure onglets système
+    // Exclure système
     if (name.toUpperCase().startsWith('_')) return false;
 
-    // 3. Exclure interfaces
+    // Exclure interfaces
     const upper = name.toUpperCase();
     if (upper === 'ACCUEIL' || upper === 'CONSOLIDATION') return false;
 
-    // 4. Exclure résultats
+    // Exclure résultats
     if (upper.endsWith('TEST') || upper.endsWith('FIN') || upper.endsWith('DEF') || upper.endsWith('CACHE')) return false;
 
     return true;
   });
 
   if (sheets.length === 0) {
-    ui.alert(`⚠️ Aucun onglet source trouvé. Vérifiez vos données.`);
+    ui.alert(`⚠️ Aucun onglet source trouvé au format ${prefixeSource}°X !`);
     return;
   }
 
-  // TRAITEMENT ROBUSTE
+  Logger.log(`✅ ${sheets.length} onglets sources détectés: ${sheets.map(s => s.getName()).join(', ')}`);
+
+  // 4️⃣ TRAITEMENT ROBUSTE
   let totalUpdated = 0;
 
   sheets.forEach(sheet => {
-    const name = sheet.getName(); // Ex: "6°5", "5e2", "CM2", "BRESSOLS°4"
+    const name = sheet.getName();
     const lastRow = sheet.getLastRow();
     if (lastRow < 2) return;
 
@@ -61,10 +111,9 @@ function genererNomPrenomEtID() {
 
     if (colNom === -1 || colPrenom === -1) return;
 
-    // Le préfixe est le nom de l'onglet tel quel (universel)
     const prefix = name.trim();
-
     let countInSheet = 0;
+
     for (let i = 1; i < data.length; i++) {
       const row = data[i];
       const nom = String(row[colNom] || '').trim();
@@ -76,33 +125,41 @@ function genererNomPrenomEtID() {
       // A. Concaténation NOM_PRENOM
       if (colNomPrenom > -1) {
         const fullName = `${nom} ${prenom}`.trim();
-        if (String(row[colNomPrenom]) !== fullName) {
-             sheet.getRange(i + 1, colNomPrenom + 1).setValue(fullName);
+        if (String(row[colNomPrenom] || '').trim() !== fullName) {
+          sheet.getRange(i + 1, colNomPrenom + 1).setValue(fullName);
         }
       }
 
-      // B. Génération ID (Format universel: prefix + base1000)
+      // B. Génération ID
       if (currentId === '') {
-        // Format historique robuste: NomClasse + 1000 + index
-        // Ex: 6°5 -> 6°51001, CM2 -> CM21001
+        // Format: PRÉFIXE + (1000 + index) → Ex: 6°11001, ECOLE°51002
         const suffix = (1000 + countInSheet + 1).toString();
         currentId = `${prefix}${suffix}`;
 
         if (colID > -1) {
-            sheet.getRange(i + 1, colID + 1).setValue(currentId);
+          sheet.getRange(i + 1, colID + 1).setValue(currentId);
         }
       }
+
       countInSheet++;
       totalUpdated++;
     }
+
     Logger.log(`✅ ${name} : ${countInSheet} élèves traités (Format ${prefix}1xxx).`);
   });
 
-  ui.alert(`✅ IDs générés pour ${totalUpdated} élèves dans ${sheets.length} onglets.`);
+  const msg = `✅ IDs générés pour ${totalUpdated} élèves\ndans ${sheets.length} sources (${prefixeSource}°X)\nNiveau: ${niveau}`;
+  ui.alert(msg);
+  Logger.log(msg);
 }
 
 // Wrapper Console V3
 function v3_genererNomPrenomEtID() {
-  try { genererNomPrenomEtID(); return { success: true, message: "IDs et Noms générés (Format Standard)" };  }
-  catch (e) { return { success: false, error: e.toString() }; }
+  try {
+    genererNomPrenomEtID();
+    return { success: true, message: "IDs et noms générés (Adaptatif N-1)" };
+  } catch (e) {
+    Logger.log(`ERREUR genererNomPrenomEtID: ${e.toString()}`);
+    return { success: false, error: e.toString() };
+  }
 }
