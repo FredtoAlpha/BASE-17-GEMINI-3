@@ -69,20 +69,20 @@ function v3_runInitializationWithForm(formData) {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const config = getConfig();
 
-    // 1. Vérifier le mot de passe
-    if (formData.adminPassword !== config.ADMIN_PASSWORD) {
+    // 1. Vérifier le mot de passe (cherche d'abord ADMIN_PASSWORD, sinon ADMIN_PASSWORD_DEFAULT)
+    const expectedPassword = config.ADMIN_PASSWORD || CONFIG.ADMIN_PASSWORD_DEFAULT || "admin123";
+    if (formData.adminPassword !== expectedPassword) {
       return {
         success: false,
         error: "Mot de passe administrateur incorrect"
       };
     }
 
-    // 2. Valider les données
-    const niveauxValides = ["6°", "5°", "4°", "3°"];
-    if (!niveauxValides.includes(formData.niveau)) {
+    // 2. Valider les données (Validation OUVERTE - accepte n'importe quel niveau)
+    if (!formData.niveau || formData.niveau.trim() === "") {
       return {
         success: false,
-        error: "Niveau invalide. Valeurs acceptées: 6°, 5°, 4°, 3°"
+        error: "Niveau scolaire requis"
       };
     }
 
